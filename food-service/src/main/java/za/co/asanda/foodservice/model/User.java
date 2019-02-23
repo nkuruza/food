@@ -58,7 +58,7 @@ public class User implements Serializable{
 
 	@NotEmpty
 	@Column(unique = true, nullable = false)
-	private String cell;
+	private String phone;
 
 	@NotEmpty
 	@Column(nullable = false)
@@ -139,12 +139,12 @@ public class User implements Serializable{
 		this.email = email;
 	}
 
-	public String getCell() {
-		return cell;
+	public String getPhone() {
+		return phone;
 	}
 
-	public void setCell(String cell) {
-		this.cell = cell;
+	public void setCell(String phone) {
+		this.phone = phone;
 	}
 
 	public String getState() {
