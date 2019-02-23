@@ -15,11 +15,10 @@ public class UserProfile implements Serializable {
 	private static final long serialVersionUID = -945477301479409970L;
 
 	@Id @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name = "ID")
     private int id; 
  
-    @Column(name="TYPE", length=15, unique=true, nullable=false)
-    private String type = UserProfileType.USER.getUserProfileType();
+    @Column(length=15, unique=true, nullable=false)
+    private String type = UserProfileType.CUSTOMER.getUserProfileType();
      
     public int getId() {
         return id;

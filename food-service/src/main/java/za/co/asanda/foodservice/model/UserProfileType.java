@@ -2,12 +2,10 @@ package za.co.asanda.foodservice.model;
 
 public enum UserProfileType {
     
+	MERCHANT("MERCHANT"),
+    CUSTOMER("CUSTOMER"),
     DBA("DBA"),
-    ADMIN("ADMIN"),
-    USER("USER"),
-    VIP("VIP"),
-    MECHANIC("MECHANIC"),
-	SUPPLIER("SUPPLIER");
+    ADMIN("ADMIN");
      
     String userProfileType;
      
