@@ -64,6 +64,7 @@ export default class UserForm extends Component<Props>{
         console.log(this.state.value)
         FoodApi.signUp(this.state.value)
             .then(response => {
+                console.log(response);
                 if (response.id > 0){
                     StorageHelper.put("user", response);
                     this.props.navigation.navigate("Home");
