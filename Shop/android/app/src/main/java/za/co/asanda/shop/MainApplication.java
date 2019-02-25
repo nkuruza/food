@@ -1,4 +1,4 @@
-package com.shop;
+package za.co.asanda.shop;
 
 import android.app.Application;
 
