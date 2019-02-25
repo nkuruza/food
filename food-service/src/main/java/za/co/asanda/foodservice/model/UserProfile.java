@@ -7,10 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
 
 @Entity
-@Table(name="USER_PROFILE")
 public class UserProfile implements Serializable {
 	private static final long serialVersionUID = -945477301479409970L;
 

@@ -24,9 +24,9 @@ public class FoodUserDetailsService implements UserDetailsService{
     private UserService userService;
      
     @Transactional(readOnly=true)
-    public UserDetails loadUserByUsername(String ssoId)
+    public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
-        User user = userService.findByUsername(ssoId);
+        User user = userService.findByUsername(username);
         System.out.println("User : "+user);
         if(user==null){
             System.out.println("User not found");

@@ -1,16 +1,17 @@
 
 import { checkStatus } from "../utils/apiUtils";
-import { StorageHelper} from './Storage';
+import { StorageHelper } from './Storage';
 
 var url = "http://192.168.0.155:8080";
 var get = async (endpoint) => {
-    return fetch(`${url}${endpoint}`)
+    /*return fetch(`${url}${endpoint}`)
         .then(checkStatus)
         .then(response => { return response.json() })
-        .catch(e => console.log(e));
+        .catch(e => console.log(e));*/
+    return restCall(endpoint);
 }
 var post = async (endpoint, data) => {
-    let headers = {
+    /*let headers = {
         Accept: 'application/json',
         'Content-Type': 'application/json',
     }
@@ -20,7 +21,34 @@ var post = async (endpoint, data) => {
         body: JSON.stringify(data),
     }).then(checkStatus)
         .then(response => { return response.json() })
-        .catch(e => console.log(e));
+        .catch(e => console.log(e));*/
+        return restCall(endpoint, 'POST', data);
+}
+
+var restCall = async (endpoint, method, data) => {
+    let headers = {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+    }
+    let req = {};
+    StorageHelper.get("Authorization").then(async (auth) => {
+        console.log(auth);
+        if (auth)
+            headers.Authorization = auth.value;
+        req.headers = headers;
+        if (method)
+            req.method = method;
+        if (data)
+            req.body = data;
+        try {
+            let checkStatus = await fetch(`${url}${endpoint}`, req);
+            const response = await checkStatus(checkStatus);
+            return response.json();
+        }
+        catch (e) {
+            return console.log(e);
+        }
+    });
 }
 
 export var FoodApi = {

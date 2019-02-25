@@ -4,6 +4,7 @@ import { TouchableHighlight, Text, View } from 'react-native';
 import styles from '../style.js'
 import { FoodApi } from '../service/FoodApi.js';
 import { StorageHelper} from '../service/Storage';
+import { Base64} from '../utils/Base64'
 
 
 var DeviceInfo = require('react-native-device-info');
@@ -53,6 +54,8 @@ export default class UserForm extends Component<Props>{
             .then( response => {
                 if(response && response.id > 0){
                     StorageHelper.put("user", response);
+                    let cred = Base64.btoa(`${this.state.value.username}:${this.state.value.password}`);
+                    StorageHelper.put("Authorization", {value: `Basic ${cred}`});
                     this.props.navigation.navigate("Home");
                 }
             });
