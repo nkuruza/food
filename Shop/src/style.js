@@ -1,5 +1,5 @@
 
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
     container: {
@@ -25,5 +25,11 @@ export default StyleSheet.create({
     },
     product: {
         backgroundColor: '#ffffff',
+    },
+    itemSeparator: {
+        borderWidth: 1,
+        borderColor: '#222',
+        width: '86%', 
+        marginLeft: '7%'
     }
 });

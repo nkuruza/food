@@ -22,7 +22,7 @@ var post = async (endpoint, data) => {
     }).then(checkStatus)
         .then(response => { return response.json() })
         .catch(e => console.log(e));*/
-        return restCall(endpoint, 'POST', data);
+    return restCall(endpoint, 'POST', data);
 }
 
 var restCall = async (endpoint, method, data) => {
@@ -31,24 +31,22 @@ var restCall = async (endpoint, method, data) => {
         'Content-Type': 'application/json',
     }
     let req = {};
-    StorageHelper.get("Authorization").then(async (auth) => {
-        console.log(auth);
+    let auth = await StorageHelper.get("Authorization");
         if (auth)
             headers.Authorization = auth.value;
         req.headers = headers;
         if (method)
             req.method = method;
         if (data)
-            req.body = data;
-        try {
-            let checkStatus = await fetch(`${url}${endpoint}`, req);
-            const response = await checkStatus(checkStatus);
-            return response.json();
-        }
-        catch (e) {
-            return console.log(e);
-        }
-    });
+            req.body = JSON.stringify(data);
+        return fetch(`${url}${endpoint}`, req).then(checkStatus)
+            .then(response => {
+                console.log(response)
+                console.log(JSON.parse(response._bodyText))
+                 return response.json(); 
+                })
+            .catch(e => console.log(e));
+    //});
 }
 
 export var FoodApi = {

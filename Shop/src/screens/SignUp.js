@@ -33,6 +33,7 @@ var options = {
 }
 
 const Form = t.form.Form;
+var randomString = require('random-string');
 
 export default class UserForm extends Component<Props>{
     static navigationOptions = {
@@ -45,10 +46,23 @@ export default class UserForm extends Component<Props>{
     }
     componentDidMount() {
         var id = DeviceInfo.default.getUniqueID();
-        this.setState({ deviceId: id });
+        this.setState({ deviceId: id, value: this.dummyData() });
         
         //this.getUserByDevice(id);
     }
+
+    dummyData(){
+        return {
+            username: randomString(),
+            password: randomString(),
+            confirmPassword: randomString(),
+            firstName: randomString(),
+            lastName: randomString(),
+            email: randomString(),
+            phone: randomString()
+        }       
+    }
+
     getUserByDevice(id){
         FoodApi.getUserByDevice(id)
             .then( response => {
@@ -56,7 +70,7 @@ export default class UserForm extends Component<Props>{
                     StorageHelper.put("user", response);
                     let cred = Base64.btoa(`${this.state.value.username}:${this.state.value.password}`);
                     StorageHelper.put("Authorization", {value: `Basic ${cred}`});
-                    this.props.navigation.navigate("Home");
+                    this.props.navigation.navigate("Store");
                 }
             });
     }
@@ -70,7 +84,7 @@ export default class UserForm extends Component<Props>{
                 console.log(response);
                 if (response.id > 0){
                     StorageHelper.put("user", response);
-                    this.props.navigation.navigate("Home");
+                    this.props.navigation.navigate("Store");
                 }
             });
     }
