@@ -47,13 +47,15 @@ export default class UserForm extends Component<Props>{
     componentDidMount() {
         var id = DeviceInfo.default.getUniqueID();
         this.setState({ deviceId: id, value: this.dummyData() });
-        //StorageHelper.put("Authorization", null);
+        this.checkAuthentication();
+        //this.getUserByDevice(id);
+    }
+
+    checkAuthentication(){
         StorageHelper.get("Authorization").then(auth => {
             if (auth != null)
                 this.props.navigation.navigate("Store");
         });
-
-        //this.getUserByDevice(id);
     }
 
     dummyData() {

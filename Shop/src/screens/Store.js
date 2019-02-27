@@ -2,14 +2,24 @@ import React, { Component } from 'react';
 import { FlatList, View, TouchableHighlight, Text } from 'react-native';
 import { StoreItem } from '../component/StoreItem';
 import styles from '../style.js';
+import { FoodApi } from '../service/FoodApi';
 
 export default class Store extends Component<Props>{
-    _keyExtractor = (item, index) => `item-${item.id}`;
+    
     
     constructor(props) {
         super(props);
         this.state = { products: [] }
     }
+
+    componentDidMount(){
+        FoodApi.getShopItems(3).then( response => {
+            //console.log(response);
+            this.setState({products: response});
+        })
+    }
+
+    _keyExtractor = (item) => `item-${item.id}`;
 
     _onPressItem = (item) => {
         this.props.navigation.navigate("ViewProduct", { product: item });
@@ -24,7 +34,7 @@ export default class Store extends Component<Props>{
     );
     _renderItem = ({ item }) => (
         <StoreItem
-            player={item}
+            item={item}
             onPressItem={this._onPressItem}
             title={item.name}
         />
