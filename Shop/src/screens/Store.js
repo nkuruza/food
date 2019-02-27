@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { FlatList, View } from 'react-native';
-import { StoreItem } from '../component/StoreItem'
-
+import { FlatList, View, TouchableHighlight, Text } from 'react-native';
+import { StoreItem } from '../component/StoreItem';
+import styles from '../style.js';
 
 export default class Store extends Component<Props>{
     _keyExtractor = (item, index) => `item-${item.id}`;

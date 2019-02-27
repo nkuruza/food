@@ -62,7 +62,6 @@ export default class UserForm extends Component<Props>{
             phone: randomString()
         }       
     }
-
     getUserByDevice(id){
         FoodApi.getUserByDevice(id)
             .then( response => {
