@@ -16,10 +16,17 @@ export default class FoodItem extends Component<Props>{
     constructor(props) {
         super(props);
         this.state = { value: null }
+        this.onChange = this.onChange.bind(this)
     }
+    onChange(value) {
+        this.setState({ value: value });
+    }
+    
     _saveFood = () => {
+        console.log(this.state.value)
         FoodApi.addShopItem(this.state.value).then(response => {
             console.log("Food Saved");
+            console.log(response);
         });
     }
     render() {
@@ -28,8 +35,7 @@ export default class FoodItem extends Component<Props>{
                 <Form ref="form"
                     onChange={this.onChange}
                     value={this.state.value}
-                    type={Product}
-                    options={options} />
+                    type={Product} />
                 <TouchableHighlight style={styles.button} onPress={this._saveFood} underlayColor='#99d9f4'>
                     <Text style={styles.buttonText}>Save</Text>
                 </TouchableHighlight>

@@ -5,15 +5,17 @@ import styles from '../style.js';
 
 export default class Store extends Component<Props>{
     _keyExtractor = (item, index) => `item-${item.id}`;
+    
+    constructor(props) {
+        super(props);
+        this.state = { products: [] }
+    }
 
     _onPressItem = (item) => {
         this.props.navigation.navigate("ViewProduct", { product: item });
     };
 
-    constructor(props) {
-        super(props);
-        this.state = { products: [] }
-    }
+    
     _createItem = () => {
         this.props.navigation.navigate("FoodItem", {mode : "create"});
     }

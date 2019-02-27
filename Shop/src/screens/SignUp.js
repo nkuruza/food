@@ -3,8 +3,8 @@ import t from 'tcomb-form-native';
 import { TouchableHighlight, Text, View } from 'react-native';
 import styles from '../style.js'
 import { FoodApi } from '../service/FoodApi.js';
-import { StorageHelper} from '../service/Storage';
-import { Base64} from '../utils/Base64'
+import { StorageHelper } from '../service/Storage';
+import { Base64 } from '../utils/Base64'
 
 
 var DeviceInfo = require('react-native-device-info');
@@ -47,11 +47,16 @@ export default class UserForm extends Component<Props>{
     componentDidMount() {
         var id = DeviceInfo.default.getUniqueID();
         this.setState({ deviceId: id, value: this.dummyData() });
-        
+        //StorageHelper.put("Authorization", null);
+        StorageHelper.get("Authorization").then(auth => {
+            if (auth != null)
+                this.props.navigation.navigate("Store");
+        });
+
         //this.getUserByDevice(id);
     }
 
-    dummyData(){
+    dummyData() {
         return {
             username: randomString(),
             password: randomString(),
@@ -60,15 +65,16 @@ export default class UserForm extends Component<Props>{
             lastName: randomString(),
             email: randomString(),
             phone: randomString()
-        }       
+        }
     }
-    getUserByDevice(id){
+    getCred() {
+        return Base64.btoa(`${this.state.value.username}:${this.state.value.password}`);
+    }
+    getUserByDevice(id) {
         FoodApi.getUserByDevice(id)
-            .then( response => {
-                if(response && response.id > 0){
+            .then(response => {
+                if (response && response.id > 0) {
                     StorageHelper.put("user", response);
-                    let cred = Base64.btoa(`${this.state.value.username}:${this.state.value.password}`);
-                    StorageHelper.put("Authorization", {value: `Basic ${cred}`});
                     this.props.navigation.navigate("Store");
                 }
             });
@@ -81,8 +87,9 @@ export default class UserForm extends Component<Props>{
         FoodApi.signUp(this.state.value)
             .then(response => {
                 console.log(response);
-                if (response.id > 0){
+                if (response.id > 0) {
                     StorageHelper.put("user", response);
+                    StorageHelper.put("Authorization", { value: `Basic ${this.getCred()}` });
                     this.props.navigation.navigate("Store");
                 }
             });

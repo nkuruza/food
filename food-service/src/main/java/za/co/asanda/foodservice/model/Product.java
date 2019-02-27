@@ -27,7 +27,7 @@ public class Product implements Serializable {
 	private String description;
 	@Column(nullable = false)
 	private Double price;
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	private User owner;
 	
 	public long getId() {

@@ -16,13 +16,17 @@ import za.co.asanda.foodservice.repo.ProductRepo;
 @Transactional
 public class ProductServiceImpl implements ProductService {
 	@Autowired
-	private ProductRepo service;
+	private ProductRepo productRepo;
+	@Autowired
+	private UserService userService;
 
 	@Override
 	public Product addProduct(Product product) {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		
-		return service.save(product);
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		product.setOwner(userService.findByUsername(auth.getName()));
+		product.setId(0);
+		product = productRepo.save(product);
+		return product;
 	}
 
 	@Override
@@ -45,7 +49,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Set<Product> listByOwnerId(long id) {
-		return service.findByOwnerId(id);
+		return productRepo.findByOwnerId(id);
 	}
 
 }
