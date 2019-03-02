@@ -17,13 +17,10 @@ import za.co.asanda.foodservice.repo.ProductRepo;
 public class ProductServiceImpl implements ProductService {
 	@Autowired
 	private ProductRepo productRepo;
-	@Autowired
-	private UserService userService;
-
 	@Override
 	public Product addProduct(Product product) {
-		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		product.setOwner(userService.findByUsername(auth.getName()));
+		//Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		//product.setOwner(userService.findByUsername(auth.getName()));
 		product.setId(0);
 		product = productRepo.save(product);
 		return product;

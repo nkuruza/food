@@ -26,6 +26,14 @@ export default StyleSheet.create({
     product: {
         backgroundColor: '#ffffff',
     },
+    merchant: {
+        height: 40,
+        alignSelf: 'stretch',
+        backgroundColor: '#ddd'
+    },
+    merchantAvi: {
+        borderRadius: '50%'
+    }
     itemSeparator: {
         borderWidth: 1,
         borderColor: '#222',

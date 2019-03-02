@@ -28,7 +28,7 @@ public class Product implements Serializable {
 	@Column(nullable = false)
 	private Double price;
 	@ManyToOne(fetch = FetchType.LAZY)
-	private User owner;
+	private Shop shop;
 	
 	public long getId() {
 		return id;
@@ -54,10 +54,10 @@ public class Product implements Serializable {
 	public void setPrice(double price) {
 		this.price = price;
 	}
-	public User getOwner() {
-		return owner;
+	public Shop getOwner() {
+		return shop;
 	}
-	public void setOwner(User owner) {
-		this.owner = owner;
+	public void setOwner(Shop shop) {
+		this.shop = shop;
 	}
 }

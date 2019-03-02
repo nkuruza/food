@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FlatList, View, TouchableHighlight, Text } from 'react-native';
-import { StoreItem } from '../component/StoreItem';
+import  StoreItem from '../component/StoreItem';
 import styles from '../style.js';
 import { FoodApi } from '../service/FoodApi';
 
@@ -14,7 +14,7 @@ export default class Store extends Component<Props>{
 
     componentDidMount(){
         FoodApi.getShopItems(3).then( response => {
-            //console.log(response);
+            console.log(response);
             this.setState({products: response});
         })
     }
