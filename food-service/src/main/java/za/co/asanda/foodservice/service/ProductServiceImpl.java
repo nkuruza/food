@@ -10,6 +10,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import za.co.asanda.foodservice.model.Product;
+import za.co.asanda.foodservice.model.Shop;
 import za.co.asanda.foodservice.repo.ProductRepo;
 
 @Service("productService")
@@ -17,13 +18,21 @@ import za.co.asanda.foodservice.repo.ProductRepo;
 public class ProductServiceImpl implements ProductService {
 	@Autowired
 	private ProductRepo productRepo;
+	@Autowired
+	private ShopService shopService;
+
 	@Override
-	public Product addProduct(Product product) {
-		//Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-		//product.setOwner(userService.findByUsername(auth.getName()));
+	public Product addProduct(Product product, long shopId) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
+		Shop shop = shopService.findOne(shopId);
+		if (shop != null && !shop.getOwner().getUsername().equals(auth.getName()))
+			return null;
+		product.setShop(shop);
 		product.setId(0);
 		product = productRepo.save(product);
 		return product;
+
 	}
 
 	@Override
@@ -45,8 +54,8 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public Set<Product> listByOwnerId(long id) {
-		return productRepo.findByOwnerId(id);
+	public Set<Product> listByShopId(long id) {
+		return productRepo.findByShopId(id);
 	}
 
 }

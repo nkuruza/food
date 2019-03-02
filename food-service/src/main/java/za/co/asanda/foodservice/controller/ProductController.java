@@ -18,12 +18,12 @@ import za.co.asanda.foodservice.service.ProductService;
 public class ProductController {
 	@Autowired
 	private ProductService productService;
-	@PostMapping("/add")
-	public Product addProduct(@RequestBody Product product) {
-		return productService.addProduct(product);
+	@PostMapping("/add/{id}")
+	public Product addProduct(@RequestBody Product product, @PathVariable("id") long shopId) {
+		return productService.addProduct(product, shopId);
 	}
 	@GetMapping("/list/{id}")
 	public Set<Product> getUserProducts(@PathVariable("id") long id){
-		return productService.listByOwnerId(id);
+		return productService.listByShopId(id);
 	}
 }

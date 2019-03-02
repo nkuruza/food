@@ -7,6 +7,7 @@ import za.co.asanda.foodservice.model.Shop;
 public interface ShopService {
 	Shop saveShop(Shop shop);
 	int removeShop(long id);
+	Shop findOne(long id);
 	List<Shop> listShops();
 	List<Shop> myShops();
 }

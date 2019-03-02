@@ -54,10 +54,10 @@ public class Product implements Serializable {
 	public void setPrice(double price) {
 		this.price = price;
 	}
-	public Shop getOwner() {
+	public Shop getShop() {
 		return shop;
 	}
-	public void setOwner(Shop shop) {
+	public void setShop(Shop shop) {
 		this.shop = shop;
 	}
 }

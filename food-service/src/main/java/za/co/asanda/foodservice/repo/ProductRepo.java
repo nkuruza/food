@@ -7,5 +7,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import za.co.asanda.foodservice.model.Product;
 
 public interface ProductRepo extends JpaRepository<Product, Long> {
-	Set<Product> findByOwnerId(long id);
+	Set<Product> findByShopId(long id);
 }
