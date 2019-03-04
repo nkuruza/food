@@ -1,21 +1,22 @@
 import React, { Component } from 'react';
-import { FlatList, View } from 'react-native';
-import  MerchantItem from '../component/MerchantItem';
+import { FlatList, View, TouchableHighlight, Text } from 'react-native';
+import MerchantItem from '../component/MerchantItem';
 import styles from '../style.js';
 import { FoodApi } from '../service/FoodApi';
 
+type Props = {};
+
 export default class Market extends Component<Props>{
-    
-    
+
     constructor(props) {
         super(props);
-        this.state = { products: [] }
+        this.state = { shops: [] }
     }
 
-    componentDidMount(){
-        FoodApi.getMerchants(3).then( response => {
+    componentDidMount() {
+        FoodApi.listShops().then(response => {
             console.log(response);
-            this.setState({merchants: response});
+            this.setState({ shops: response });
         })
     }
 
@@ -35,9 +36,15 @@ export default class Market extends Component<Props>{
             title={item.name}
         />
     )
+    _merchantLogin = () => {
+        this.props.navigation.navigate("Merchant");
+    }
     render() {
         return (
             <View>
+                <TouchableHighlight style={styles.button} onPress={this._merchantLogin} underlayColor='#99d9f4'>
+                    <Text style={styles.buttonText}>Merchant Login</Text>
+                </TouchableHighlight>
                 <FlatList
                     ItemSeparatorComponent={this._itemSeparator}
                     data={this.state.shops}

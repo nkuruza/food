@@ -2,18 +2,25 @@ package za.co.asanda.foodservice.service;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import za.co.asanda.foodservice.model.Shop;
+import za.co.asanda.foodservice.model.User;
 import za.co.asanda.foodservice.repo.ShopRepo;
 
 @Service("shopService")
 public class ShopServiceImpl implements ShopService {
 	@Autowired
 	private ShopRepo repo;
+	@Autowired
+	private UserService userService;
 
 	@Override
 	public Shop saveShop(Shop shop) {
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		User owner = userService.findByUsername(username);
+		shop.setOwner(owner);
 		return repo.save(shop);
 	}
 

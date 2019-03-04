@@ -1,21 +1,21 @@
 import React, { Component } from 'react';
 import { FlatList, View, TouchableHighlight, Text } from 'react-native';
-import  StoreItem from '../component/StoreItem';
+import StoreItem from '../component/StoreItem';
 import styles from '../style.js';
 import { FoodApi } from '../service/FoodApi';
 
 export default class Store extends Component<Props>{
-    
-    
+
+
     constructor(props) {
         super(props);
         this.state = { products: [] }
     }
 
-    componentDidMount(){
-        FoodApi.getShopItems(3).then( response => {
+    componentDidMount() {
+        FoodApi.getShopItems(3).then(response => {
             console.log(response);
-            this.setState({products: response});
+            this.setState({ products: response });
         })
     }
 
@@ -25,9 +25,9 @@ export default class Store extends Component<Props>{
         this.props.navigation.navigate("ViewProduct", { product: item });
     };
 
-    
+
     _createItem = () => {
-        this.props.navigation.navigate("FoodItem", {mode : "create"});
+        this.props.navigation.navigate("FoodItem", { mode: "create" });
     }
     _itemSeparator = () => (
         <View style={styles.itemSeparator} />

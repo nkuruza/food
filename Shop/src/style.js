@@ -8,6 +8,11 @@ export default StyleSheet.create({
         padding: 20,
         backgroundColor: '#ffffff',
     },
+    titleText: {
+        fontSize: 20,
+        color: '#ccc',
+        alignSelf: 'center'
+    },
     buttonText: {
         fontSize: 18,
         color: 'white',
@@ -29,11 +34,19 @@ export default StyleSheet.create({
     merchant: {
         height: 40,
         alignSelf: 'stretch',
-        backgroundColor: '#ddd'
+        backgroundColor: '#ddd',
+        flex: 1,
+        flexDirection: 'row',
+        padding: 5
     },
     merchantAvi: {
-        borderRadius: '50%'
-    }
+        paddingTop: 5,
+        borderWidth: 1,
+        borderColor: 'red',
+        borderRadius: 15,
+        width: 30,
+        height: 30
+    },
     itemSeparator: {
         borderWidth: 1,
         borderColor: '#222',

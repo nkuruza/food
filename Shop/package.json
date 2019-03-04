@@ -9,10 +9,10 @@
   "dependencies": {
     "random-string": "^0.2.0",
     "react": "16.6.3",
-    "react-native": "0.58.5",
+    "react-native": "^0.58.6",
     "react-native-device-info": "^0.26.4",
-    "react-native-gesture-handler": "^1.0.16",
-    "react-navigation": "^3.3.0",
+    "react-native-gesture-handler": "^1.1.0",
+    "react-navigation": "^3.3.2",
     "tcomb-form-native": "^0.6.20"
   },
   "devDependencies": {

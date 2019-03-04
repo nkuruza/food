@@ -18,7 +18,7 @@ export var FoodApi = {
         return post(`/products/add`, item)
     },
     updateShopItem: async (item) => {
-        return post(`/products/update`, item)
+        return post(`/products/update`, item);
     },
     removeShopItem: async (id) => {
         return get(`/products/remove/${id}`);
@@ -27,7 +27,10 @@ export var FoodApi = {
         return get(`/products/list/${id}`)
     },
     listShops: async () => {
-        return get(`/shops/list`)
+        return get(`/shops/list`);
+    },
+    saveShop: async (shop) => {
+        return post(`/shops/save`, shop);
     }
 }
 
@@ -45,7 +48,7 @@ var restCall = async (endpoint, method, data) => {
     }
     let req = {};
     let auth = await StorageHelper.get("Authorization");
-    console.log(auth);
+    
     if (auth)
         headers.Authorization = auth.value;
     req.headers = headers;
@@ -55,8 +58,6 @@ var restCall = async (endpoint, method, data) => {
         req.body = JSON.stringify(data);
     return fetch(`${url}${endpoint}`, req).then(checkStatus)
         .then(response => {
-            console.log(response)
-            console.log(JSON.parse(response._bodyText))
             return response.json();
         })
         .catch(e => console.log(e));
