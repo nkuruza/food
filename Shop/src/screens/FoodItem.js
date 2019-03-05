@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import t from 'tcomb-form-native';
 import { TouchableHighlight, Text, View } from 'react-native';
-import styles from '../style.js'
+import styles from '../style.js';
 import { FoodApi } from '../service/FoodApi.js';
 
 type Props = {};
@@ -9,7 +9,9 @@ const Form = t.form.Form;
 const Product = t.struct({
     name: t.String,
     description: t.String,
-    price: t.Number
+    price: t.Number,
+    canHaveExtras: t.Boolean,
+    canBeExtra: t.Boolean
 });
 
 export default class FoodItem extends Component<Props>{

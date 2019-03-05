@@ -24,9 +24,7 @@ export default class Store extends Component<Props>{
         this.props.navigation.navigate("ViewProduct", { product: item });
     };
     refresh() {
-        console.log(`refreshing: ${this.state.shopId}`)
         FoodApi.getShopItems(this.state.shopId).then(response => {
-            console.log(response);
             this.setState({ products: response });
         })
     }
@@ -41,7 +39,7 @@ export default class Store extends Component<Props>{
     }
     _itemSeparator = () => (
         <View style={styles.itemSeparator} />
-    );
+    )
     _renderItem = ({ item }) => (
         <StoreItem
             item={item}

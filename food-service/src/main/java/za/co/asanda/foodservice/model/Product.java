@@ -1,6 +1,8 @@
 package za.co.asanda.foodservice.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Product implements Serializable {
@@ -27,13 +30,16 @@ public class Product implements Serializable {
 	private String description;
 	@Column(nullable = false)
 	private Double price;
+	
+	@OneToMany
+	private Collection<Product> subproducts = new ArrayList<Product>();
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Shop shop;
 	
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(long id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	public String getName() {
@@ -48,10 +54,10 @@ public class Product implements Serializable {
 	public void setDescription(String description) {
 		this.description = description;
 	}
-	public double getPrice() {
+	public Double getPrice() {
 		return price;
 	}
-	public void setPrice(double price) {
+	public void setPrice(Double price) {
 		this.price = price;
 	}
 	public Shop getShop() {
@@ -60,4 +66,11 @@ public class Product implements Serializable {
 	public void setShop(Shop shop) {
 		this.shop = shop;
 	}
+	public Collection<Product> getSubproducts() {
+		return subproducts;
+	}
+	public void setSubproducts(Collection<Product> subproducts) {
+		this.subproducts = subproducts;
+	}
+	
 }
