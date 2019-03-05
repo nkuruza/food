@@ -60,7 +60,6 @@ export default class Store extends Component<Props>{
                     data={this.state.products}
                     keyExtractor={this._keyExtractor}
                     renderItem={this._renderItem} />
-
             </View>
 
         )
