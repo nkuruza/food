@@ -23,7 +23,8 @@ public class ShopController {
 	}
 	@GetMapping("/mine")
 	public List<Shop> listMine(){
-		return service.myShops();
+		List<Shop> shops = service.myShops();
+		return shops;
 	}
 	@PostMapping("/save")
 	public Shop saveShop(@RequestBody Shop shop) {

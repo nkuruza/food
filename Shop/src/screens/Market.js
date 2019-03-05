@@ -15,7 +15,7 @@ export default class Market extends Component<Props>{
 
     componentDidMount() {
         FoodApi.listShops().then(response => {
-            console.log(response);
+            //console.log(response);
             this.setState({ shops: response });
         })
     }

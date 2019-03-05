@@ -38,13 +38,13 @@ public class ShopServiceImpl implements ShopService {
 
 	@Override
 	public List<Shop> myShops() {
-		// TODO Auto-generated method stub
-		return null;
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		User user = userService.findByUsername(username);
+		return repo.findByOwnerId(user.getId());
 	}
 
 	@Override
 	public Shop findOne(long id) {
-		// TODO Auto-generated method stub
 		return repo.getOne(id);
 	}
 

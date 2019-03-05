@@ -29,6 +29,9 @@ export var FoodApi = {
     listShops: async () => {
         return get(`/shops/list`);
     },
+    listMyShops: async () => {
+        return get(`/shops/mine`)
+    },
     saveShop: async (shop) => {
         return post(`/shops/save`, shop);
     }
