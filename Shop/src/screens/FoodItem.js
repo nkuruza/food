@@ -15,18 +15,23 @@ const Product = t.struct({
 export default class FoodItem extends Component<Props>{
     constructor(props) {
         super(props);
-        this.state = { value: null }
+        this.state = { value: null, shopId: 0 }
         this.onChange = this.onChange.bind(this)
+    }
+    componentDidMount() {
+        let shopId = this.props.navigation.getParam('shopId');
+        this.setState({ shopId: shopId });
     }
     onChange(value) {
         this.setState({ value: value });
     }
-    
+
     _saveFood = () => {
         console.log(this.state.value)
-        FoodApi.addShopItem(this.state.value).then(response => {
-            console.log("Food Saved");
+        FoodApi.addShopItem(this.state.shopId, this.state.value).then(response => {
             console.log(response);
+            this.props.navigation.state.params.onGoBack();
+            this.props.navigation.goBack();
         });
     }
     render() {

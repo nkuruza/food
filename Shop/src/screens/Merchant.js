@@ -23,7 +23,7 @@ export default class Merchant extends Component<Props>{
     _keyExtractor = (item) => `item-${item.id}`;
 
     _onPressItem = (item) => {
-        //this.props.navigation.navigate("Store", { Store: item });
+        this.props.navigation.navigate("Store", { store: item });
     }
 
     _itemSeparator = () => (

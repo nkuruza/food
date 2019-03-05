@@ -13,10 +13,9 @@ export default class Store extends Component<Props>{
     }
 
     componentDidMount() {
-        FoodApi.getShopItems(3).then(response => {
-            console.log(response);
-            this.setState({ products: response });
-        })
+        let store = this.props.navigation.getParam('store');
+        console.log(store);
+        this.setState({ shopId: store.id }, () => { this.refresh() });
     }
 
     _keyExtractor = (item) => `item-${item.id}`;
@@ -24,10 +23,21 @@ export default class Store extends Component<Props>{
     _onPressItem = (item) => {
         this.props.navigation.navigate("ViewProduct", { product: item });
     };
-
+    refresh() {
+        console.log(`refreshing: ${this.state.shopId}`)
+        FoodApi.getShopItems(this.state.shopId).then(response => {
+            console.log(response);
+            this.setState({ products: response });
+        })
+    }
 
     _createItem = () => {
-        this.props.navigation.navigate("FoodItem", { mode: "create" });
+        this.props.navigation.navigate("FoodItem", {
+            shopId: this.state.shopId,
+            onGoBack: () => {
+                this.refresh();
+            }
+        });
     }
     _itemSeparator = () => (
         <View style={styles.itemSeparator} />

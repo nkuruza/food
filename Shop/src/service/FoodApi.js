@@ -14,8 +14,8 @@ export var FoodApi = {
     getUserByDevice: async (deviceId) => {
         return get(`/users/by-device/${deviceId}`)
     },
-    addShopItem: async (item) => {
-        return post(`/products/add`, item)
+    addShopItem: async (shopId, item) => {
+        return post(`/products/add/${shopId}`, item)
     },
     updateShopItem: async (item) => {
         return post(`/products/update`, item);
@@ -24,6 +24,7 @@ export var FoodApi = {
         return get(`/products/remove/${id}`);
     },
     getShopItems: async (id) => {
+        console.log(id)
         return get(`/products/list/${id}`)
     },
     listShops: async () => {
