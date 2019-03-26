@@ -5,12 +5,23 @@ import styles from '../style.js';
 import { FoodApi } from '../service/FoodApi';
 import { StorageHelper } from '../service/Storage';
 
-export default class Store extends Component<Props>{
 
+
+export default class Store extends Component<Props>{
+    static navigationOptions = ({ navigation }) => {
+        return {
+            headerRight: (
+                <View style={{ width: 20, height: 20, borderRadius: 10 }}>
+                    <Text>{navigation.getParam('numCartItems')}</Text>
+                </View>
+            )
+        }
+    }
 
     constructor(props) {
         super(props);
         this.state = { products: [], store: {}, user: {}, cart: [] }
+        this.props.navigation.setParams({ numCartItems: 0 });
     }
 
     componentDidMount() {
@@ -23,20 +34,25 @@ export default class Store extends Component<Props>{
     _keyExtractor = (item) => `item-${item.id}`;
 
     _onPressItem = (item) => {
-        this.props.navigation.navigate("ViewProduct", { product: item });
+        this.props.navigation.navigate("Product", {
+            item: item, addToCart: (item) => {
+                this.addToCart(item)
+            }
+        });
     };
 
     refresh() {
         FoodApi.getShopItems(this.state.store.id).then(response => {
             StorageHelper.put('food-items', response);
             this.setState({ products: response });
-        })
+        });
     }
 
     addToCart(orderLine) {
         let cart = this.state.cart;
         cart.push(orderLine);
-        this.setState({ cart: cart })
+        this.setState({ cart: cart });
+        this.props.navigation.setParams({ numCartItems: cart.length });
     }
 
     isMyShop() {
@@ -50,7 +66,7 @@ export default class Store extends Component<Props>{
                 this.refresh();
             },
             addToCart: (item) => {
-
+                this.addToCart(item);
             }
         });
     }

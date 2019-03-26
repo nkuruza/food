@@ -1,19 +1,30 @@
 import React, { Component } from 'react';
+import { FlatList, View, TouchableHighlight, Text } from 'react-native';
+import styles from '../style.js';
 
 type Props = {};
 
 export default class Product extends Component<Props>{
     constructor(props) {
         super(props);
-        this.state = { shops: [] };
     }
     componentDidMount() {
-        
+
+    }
+    _addToCart = () => {
+        let item = this.props.navigation.state.params.item;
+        console.log(item)
+        this.props.navigation.state.params.addToCart({ product: item, qty: 1 });
+        this.props.navigation.pop();
     }
     render() {
+        let item = this.props.navigation.state.params.item;
         return (
             <View>
-                
+                <Text>{item.name}</Text>
+                <TouchableHighlight style={styles.button} onPress={this._addToCart} underlayColor='#99d9f4'>
+                    <Text style={styles.buttonText}>Add to cart</Text>
+                </TouchableHighlight>
             </View>
         )
     }
