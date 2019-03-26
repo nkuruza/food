@@ -25,7 +25,6 @@ export var FoodApi = {
         return get(`/products/remove/${id}`);
     },
     getShopItems: async (id) => {
-        console.log(id)
         return get(`/products/list/${id}`)
     },
     listShops: async () => {

@@ -10,13 +10,14 @@ export default class Store extends Component<Props>{
 
     constructor(props) {
         super(props);
-        this.state = { products: [] }
+        this.state = { products: [], store: {}, user: {}, cart: [] }
     }
 
     componentDidMount() {
         let store = this.props.navigation.getParam('store');
-        console.log(store);
-        this.setState({ shopId: store.id }, () => { this.refresh() });
+        StorageHelper.get("user").then(user => {
+            this.setState({ user: user, store: store, shopId: store.id }, () => { this.refresh() });
+        });
     }
 
     _keyExtractor = (item) => `item-${item.id}`;
@@ -24,18 +25,32 @@ export default class Store extends Component<Props>{
     _onPressItem = (item) => {
         this.props.navigation.navigate("ViewProduct", { product: item });
     };
+
     refresh() {
-        FoodApi.getShopItems(this.state.shopId).then(response => {
+        FoodApi.getShopItems(this.state.store.id).then(response => {
             StorageHelper.put('food-items', response);
             this.setState({ products: response });
         })
     }
 
+    addToCart(orderLine) {
+        let cart = this.state.cart;
+        cart.push(orderLine);
+        this.setState({ cart: cart })
+    }
+
+    isMyShop() {
+        return this.state.store.owner && this.state.store.owner.id == this.state.user.id;
+    }
+
     _createItem = () => {
         this.props.navigation.navigate("FoodItem", {
-            shopId: this.state.shopId,
+            shopId: this.state.store.id,
             onGoBack: () => {
                 this.refresh();
+            },
+            addToCart: (item) => {
+
             }
         });
     }
@@ -52,9 +67,13 @@ export default class Store extends Component<Props>{
     render() {
         return (
             <View>
-                <TouchableHighlight style={styles.button} onPress={this._createItem} underlayColor='#99d9f4'>
-                    <Text style={styles.buttonText}>Create</Text>
-                </TouchableHighlight>
+                {
+                    this.isMyShop() &&
+                    <TouchableHighlight style={styles.button} onPress={this._createItem} underlayColor='#99d9f4'>
+                        <Text style={styles.buttonText}>Create</Text>
+                    </TouchableHighlight>
+                }
+
                 <FlatList
                     ItemSeparatorComponent={this._itemSeparator}
                     data={this.state.products}

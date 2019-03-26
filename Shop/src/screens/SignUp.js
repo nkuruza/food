@@ -37,7 +37,7 @@ var randomString = require('random-string');
 
 export default class SignUp extends Component<Props>{
     static navigationOptions = {
-        title: 'Welcome',
+        title: 'Sign Up',
     };
     constructor(props) {
         super(props);
@@ -54,7 +54,7 @@ export default class SignUp extends Component<Props>{
     checkAuthentication(){
         StorageHelper.get("Authorization").then(auth => {
             if (auth != null)
-                this.props.navigation.navigate("Store");
+                this.props.navigation.navigate("Merchant");
         });
     }
 

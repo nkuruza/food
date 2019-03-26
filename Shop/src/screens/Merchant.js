@@ -43,6 +43,14 @@ export default class Merchant extends Component<Props>{
     _createShop = () => {
         this.props.navigation.navigate("ShopForm");
     }
+    _logout = () => {
+        StorageHelper.remove('Authorization').then(()=>{
+            StorageHelper.remove("user")
+            
+        }).then(() => {
+            this.props.navigation.popToTop();
+        })
+    }
     _keyExtractor = (item) => `item-${item.id}`;
 
     _onPressItem = (item) => {
@@ -62,6 +70,9 @@ export default class Merchant extends Component<Props>{
     render() {
         return (
             <View>
+                <TouchableHighlight style={styles.button} onPress={this._logout} underlayColor='#99d9f4'>
+                    <Text style={styles.buttonText}>Logout</Text>
+                </TouchableHighlight>
                 <TouchableHighlight style={styles.button} onPress={this._createShop} underlayColor='#99d9f4'>
                     <Text style={styles.buttonText}>Create Shop</Text>
                 </TouchableHighlight>
