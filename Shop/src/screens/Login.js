@@ -3,52 +3,37 @@ import t from 'tcomb-form-native';
 import { TouchableHighlight, Text, View } from 'react-native';
 import styles from '../style.js'
 import { FoodApi } from '../service/FoodApi.js';
-import { StorageHelper } from '../service/Storage';
-import { Base64 } from '../utils/Base64'
-
-
-var DeviceInfo = require('react-native-device-info');
+import { StorageHelper } from '../service/Storage.js';
 
 type Props = {};
-const User = t.struct({
+const LoginForm = t.struct({
     username: t.String,
-    password: t.String,
-    confirmPassword: t.String,
-    firstName: t.String,
-    lastName: t.String,
-    email: t.String,
-    phone: t.String
+    password: t.String
 });
 var options = {
-    label: 'User Details',
+    label: 'Login',
     auto: 'placeholders',
     fields: {
         password: {
-            secureTextEntry: true
-        },
-        confirmPassword: {
             secureTextEntry: true
         }
     }
 }
 
 const Form = t.form.Form;
-var randomString = require('random-string');
 
-export default class SignUp extends Component<Props>{
+export default class Login extends Component<Props>{
     static navigationOptions = {
-        title: 'Welcome',
+        title: 'Login',
     };
     constructor(props) {
         super(props);
-        this.state = { value: null, deviceId: null };
+        this.state = { value: null };
         this.onChange = this.onChange.bind(this)
     }
     componentDidMount() {
-        var id = DeviceInfo.default.getUniqueID();
-        this.setState({ deviceId: id, value: this.dummyData() });
+        this.setState({ value: null });
         this.checkAuthentication();
-        //this.getUserByDevice(id);
     }
 
     checkAuthentication(){
@@ -57,36 +42,15 @@ export default class SignUp extends Component<Props>{
                 this.props.navigation.navigate("Store");
         });
     }
-
-    dummyData() {
-        return {
-            username: randomString(),
-            password: randomString(),
-            confirmPassword: randomString(),
-            firstName: randomString(),
-            lastName: randomString(),
-            email: randomString(),
-            phone: randomString()
-        }
-    }
     getCred() {
         return Base64.btoa(`${this.state.value.username}:${this.state.value.password}`);
     }
-    getUserByDevice(id) {
-        FoodApi.getUserByDevice(id)
-            .then(response => {
-                if (response && response.id > 0) {
-                    StorageHelper.put("user", response);
-                    this.props.navigation.navigate("Store");
-                }
-            });
-    }
+    
     onChange(value) {
         this.setState({ value: value });
     }
-    onPress = () => {
-        console.log(this.state.value)
-        FoodApi.signUp(this.state.value)
+    _loginPress = () => {
+        FoodApi.login(this.state.value)
             .then(response => {
                 console.log(response);
                 if (response.id > 0) {
@@ -96,16 +60,22 @@ export default class SignUp extends Component<Props>{
                 }
             });
     }
+    _signupPress = () =>{
+        this.props.navigation.navigate("SignUp")
+    }
     render() {
         return (
             <View style={styles.container}>
                 <Form ref="form"
                     onChange={this.onChange}
                     value={this.state.value}
-                    type={User}
+                    type={LoginForm}
                     options={options} />
-                <TouchableHighlight style={styles.button} onPress={this.onPress} underlayColor='#99d9f4'>
-                    <Text style={styles.buttonText}>Save</Text>
+                <TouchableHighlight style={styles.button} onPress={this._signupPress} underlayColor='#99d9f4'>
+                    <Text style={styles.buttonText}>Sign Up</Text>
+                </TouchableHighlight>
+                <TouchableHighlight style={styles.button} onPress={this._loginPress} underlayColor='#99d9f4'>
+                    <Text style={styles.buttonText}>Login</Text>
                 </TouchableHighlight>
             </View>
         );

@@ -3,18 +3,41 @@ import { FlatList, View, TouchableHighlight, Text } from 'react-native';
 import styles from '../style.js';
 import { FoodApi } from '../service/FoodApi';
 import MerchantItem from '../component/MerchantItem.js';
+import { StorageHelper } from '../service/Storage.js';
 
 type Props = {};
 
 export default class Merchant extends Component<Props>{
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state = {shops: []};
+        this.state = { shops: [] };
     }
-    componentDidMount(){
+    componentDidMount() {
+        StorageHelper.get("Authorization").then(auth => {
+            if (auth)
+                this.listShops();
+            else
+                this.props.navigation.navigate("Login")
+        });
+    }
+    unauthorized() {
+        StorageHelper.remove('Authorization').then(removed => {
+            this.props.navigation.navigate("Login", { screen: "Merchant" })
+        })
+
+    }
+    listShops() {
         FoodApi.listMyShops().then(response => {
             console.log(response);
-            this.setState({shops: response})
+            this.setState({ shops: response })
+        }).catch(e => {
+            if (e.response.status === 401) {
+                this.unauthorized();
+            }
+            else {
+                console.log(e);
+            }
+
         });
     }
     _createShop = () => {

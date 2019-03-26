@@ -1,6 +1,7 @@
 
 import { checkStatus } from "../utils/apiUtils";
 import { StorageHelper } from './Storage';
+import { Common } from "../utils/Common";
 
 var url = "http://192.168.0.155:8080";
 
@@ -9,7 +10,7 @@ export var FoodApi = {
         return post(`/users/add`, user);
     },
     login: async (user) => {
-        return post(`/users/login`, user)
+        return get(`/users/me`)
     },
     getUserByDevice: async (deviceId) => {
         return get(`/users/by-device/${deviceId}`)
@@ -41,11 +42,11 @@ export var FoodApi = {
 var get = async (endpoint) => {
     return restCall(endpoint);
 }
-var post = async (endpoint, data) => {
-    return restCall(endpoint, 'POST', data);
+var post = async (endpoint, data, form) => {
+    return restCall(endpoint, 'POST', data, form || null);
 }
 
-var restCall = async (endpoint, method, data) => {
+var restCall = async (endpoint, method, data, form) => {
     let headers = {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -59,10 +60,10 @@ var restCall = async (endpoint, method, data) => {
     if (method)
         req.method = method;
     if (data)
-        req.body = JSON.stringify(data);
+        req.body = form ? Common.serializeJSON(data) : JSON.stringify(data);
     return fetch(`${url}${endpoint}`, req).then(checkStatus)
         .then(response => {
             return response.json();
         })
-        .catch(e => console.log(e));
+        //.catch(e => console.log(e));
 }

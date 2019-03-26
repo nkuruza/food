@@ -16,6 +16,15 @@ export var StorageHelper = {
         } catch (error) {
             console.log(error.message);
         }
+    },
+    remove: async (key) => {
+        try {
+            await AsyncStorage.removeItem(key);
+            return true;
+        }
+        catch (exception) {
+            return false;
+        }
     }
 
 }
