@@ -29,7 +29,7 @@ public class ProductServiceImpl implements ProductService {
 		if (shop != null && !shop.getOwner().getUsername().equals(auth.getName()))
 			return null;
 		product.setShop(shop);
-		product.setId(0);
+		product.setId(0L);
 		product = productRepo.save(product);
 		return product;
 

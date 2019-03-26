@@ -5,6 +5,9 @@ import FoodItem from './screens/FoodItem';
 import Market from './screens/Market';
 import Merchant from './screens/Merchant';
 import ShopForm from './screens/ShopForm';
+import Login from './screens/Login';
+import Cart from './screens/Cart';
+import Product from './screens/Product';
 
 
 const MainNavigator = createStackNavigator({
@@ -13,7 +16,10 @@ const MainNavigator = createStackNavigator({
   Store: { screen: Store },
   FoodItem: { screen: FoodItem },
   Merchant: { screen: Merchant },
-  ShopForm: { screen: ShopForm }
+  ShopForm: { screen: ShopForm },
+  Login: { screen: Login },
+  Product: { screen: Product },
+  Cart: { screen: Cart }
 });
 
 const App = createAppContainer(MainNavigator);

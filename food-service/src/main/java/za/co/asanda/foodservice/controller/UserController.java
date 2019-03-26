@@ -34,4 +34,8 @@ public class UserController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		return authentication.getName();
 	}
+	@GetMapping("/me")
+	public User whoAmI() {
+		return userService.findByUsername(getUsername());
+	}
 }
