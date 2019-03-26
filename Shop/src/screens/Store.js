@@ -3,6 +3,7 @@ import { FlatList, View, TouchableHighlight, Text } from 'react-native';
 import StoreItem from '../component/StoreItem';
 import styles from '../style.js';
 import { FoodApi } from '../service/FoodApi';
+import { StorageHelper } from '../service/Storage';
 
 export default class Store extends Component<Props>{
 
@@ -25,6 +26,7 @@ export default class Store extends Component<Props>{
     };
     refresh() {
         FoodApi.getShopItems(this.state.shopId).then(response => {
+            StorageHelper.put('food-items', response);
             this.setState({ products: response });
         })
     }

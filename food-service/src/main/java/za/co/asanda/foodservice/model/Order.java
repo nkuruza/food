@@ -10,8 +10,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "orders")
 public class Order implements Serializable {
 	private static final long serialVersionUID = -1873113138732500381L;
 	@Id
