@@ -3,6 +3,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { FlatList, TouchableHighlight, Text, View } from 'react-native';
 import CartItem from '../component/CartItem';
 import styles from '../style.js';
+import { FoodApi } from '../service/FoodApi';
 type Props = {};
 
 export default class Cart extends Component<Props>{
@@ -16,7 +17,8 @@ export default class Cart extends Component<Props>{
     _keyExtractor = (item) => `item-${item.product.id}`;
 
     _onPressItem = (item) => {
-        //this.props.navigation.navigate("Store", { store: item });
+        //console.log("pressed");
+        //console.log(item);
     }
     _itemSeparator = () => (
         <View style={styles.itemSeparator} />
@@ -25,15 +27,16 @@ export default class Cart extends Component<Props>{
         <CartItem
             item={item}
             onPressItem={this._onPressItem}
-            title={item.name}
         />
     )
+    _placeOrder = () => {
+        FoodApi.placeOrder
+    }
     render() {
         let total = 0;
-        console.log(this.state.data)
 
-        for(item of this.state.data)
-            total += item.product.price;
+        for (item of this.state.data)
+            total += (item.product.price * item.qty);
         return (
             <ScrollView>
                 <FlatList
@@ -41,7 +44,7 @@ export default class Cart extends Component<Props>{
                     data={this.state.data}
                     keyExtractor={this._keyExtractor}
                     renderItem={this._renderItem} />
-                <TouchableHighlight style={styles.button}>
+                <TouchableHighlight onPress={this._placeOrder} style={styles.button}>
                     <Text style={styles.buttonText}>Place Order for R {total}</Text>
                 </TouchableHighlight>
             </ScrollView>

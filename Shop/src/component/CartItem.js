@@ -1,6 +1,7 @@
 import React from 'react';
 import { Text, View, TouchableOpacity, Image } from 'react-native';
 import styles from '../style.js';
+import { Common } from '../utils/Common.js';
 
 export default class CartItem extends React.PureComponent {
     _onPress = () => {
@@ -21,7 +22,7 @@ export default class CartItem extends React.PureComponent {
                     <Text> X {this.props.item.qty}</Text>
                 </View>
                 <View style={styles.cartItemPrice}>
-                    <Text>R {this.props.item.product.price * this.props.item.qty}</Text>
+                    <Text>{Common.formatMoney(this.props.item.product.price * this.props.item.qty)}</Text>
                 </View>
             </TouchableOpacity>
         )

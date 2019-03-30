@@ -35,6 +35,9 @@ export var FoodApi = {
     },
     saveShop: async (shop) => {
         return post(`/shops/save`, shop);
+    },
+    placeOrder: async (order) => {
+        return post(`/orders/place`, order);
     }
 }
 
@@ -67,5 +70,4 @@ var restCall = async (endpoint, method, data, form) => {
         .then(response => {
             return response.json();
         })
-    //.catch(e => console.log(e));
 }
