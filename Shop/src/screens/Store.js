@@ -11,8 +11,10 @@ export default class Store extends Component<Props>{
     static navigationOptions = ({ navigation }) => {
         return {
             headerRight: (
-                <View style={{ width: 20, height: 20, borderRadius: 10 }}>
-                    <Text>{navigation.getParam('numCartItems')}</Text>
+                <View style={styles.headerRight}>
+                    <TouchableHighlight onPress={navigation.getParam('viewCart')} style={styles.headerButton}>
+                        <Text>{navigation.getParam('numCartItems')}</Text>
+                    </TouchableHighlight>
                 </View>
             )
         }
@@ -22,6 +24,7 @@ export default class Store extends Component<Props>{
         super(props);
         this.state = { products: [], store: {}, user: {}, cart: [] }
         this.props.navigation.setParams({ numCartItems: 0 });
+        this.props.navigation.setParams({ viewCart: this._viewCart })
     }
 
     componentDidMount() {
@@ -57,6 +60,13 @@ export default class Store extends Component<Props>{
 
     isMyShop() {
         return this.state.store.owner && this.state.store.owner.id == this.state.user.id;
+    }
+
+    _viewCart = () => {
+        console.log("private")
+        this.props.navigation.navigate('Cart', {
+            cart: this.state.cart
+        })
     }
 
     _createItem = () => {

@@ -3,7 +3,7 @@ import { checkStatus } from "../utils/apiUtils";
 import { StorageHelper } from './Storage';
 import { Common } from "../utils/Common";
 
-var url = "http://192.168.0.155:8080";
+var url = "http://10.0.2.2:8080";
 
 export var FoodApi = {
     signUp: async (user) => {
@@ -46,23 +46,26 @@ var post = async (endpoint, data, form) => {
 }
 
 var restCall = async (endpoint, method, data, form) => {
+    let contentType = form ? 'application/x-www-form-urlencoded' : 'application/json';
+    let body = form ? Common.serializeJSON(data) : JSON.stringify(data);
+
     let headers = {
         Accept: 'application/json',
-        'Content-Type': 'application/json',
+        'Content-Type': contentType, //multipart/form-data
     }
     let req = {};
     let auth = await StorageHelper.get("Authorization");
-    
+
     if (auth)
         headers.Authorization = auth.value;
     req.headers = headers;
     if (method)
         req.method = method;
     if (data)
-        req.body = form ? Common.serializeJSON(data) : JSON.stringify(data);
+        req.body = body;
     return fetch(`${url}${endpoint}`, req).then(checkStatus)
         .then(response => {
             return response.json();
         })
-        //.catch(e => console.log(e));
+    //.catch(e => console.log(e));
 }
