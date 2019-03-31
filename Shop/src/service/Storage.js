@@ -4,6 +4,7 @@ export var StorageHelper = {
     put: async (key, value) => {
         try {
             var jsonOfItem = await AsyncStorage.setItem(key, JSON.stringify(value));
+            //console.log(jsonOfItem);
             return jsonOfItem;
         } catch (error) {
             console.log(error.message);

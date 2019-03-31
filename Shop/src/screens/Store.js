@@ -4,6 +4,7 @@ import StoreItem from '../component/StoreItem';
 import styles from '../style.js';
 import { FoodApi } from '../service/FoodApi';
 import { StorageHelper } from '../service/Storage';
+import { CartService } from '../service/CartService';
 
 
 
@@ -23,7 +24,7 @@ export default class Store extends Component<Props>{
     constructor(props) {
         super(props);
         this.state = { products: [], store: {}, user: {}, cart: [] }
-        this.props.navigation.setParams({ numCartItems: 0 });
+        //this.props.navigation.setParams({ numCartItems: 0 });
         this.props.navigation.setParams({ viewCart: this._viewCart })
     }
 
@@ -38,8 +39,9 @@ export default class Store extends Component<Props>{
 
     _onPressItem = (item) => {
         this.props.navigation.navigate("Product", {
-            item: item, addToCart: (item) => {
-                this.addToCart(item)
+            item: item, addToCart: (item, qty) => {
+                console.log(qty)
+                this.addToCart(item, qty)
             }
         });
     };
@@ -51,21 +53,29 @@ export default class Store extends Component<Props>{
         });
     }
 
-    addToCart(orderLine) {
-        let cart = this.state.cart;
-        cart.push(orderLine);
-        this.setState({ cart: cart });
-        this.props.navigation.setParams({ numCartItems: cart.length });
+
+
+    addToCart(product, qty) {
+        console.log(product)
+        console.log(qty)
+        CartService.add(product, qty).then(() => {
+            return CartService.count()
+        }).then(num => {
+            console.log(num)
+            this.props.navigation.setParams({ numCartItems: num });
+        });
+        
+
     }
 
     isMyShop() {
-        return this.state.store.owner && this.state.store.owner.id == this.state.user.id;
+        //console.log(this.state.store);
+        return this.state.store.owner && this.state.user && this.state.store.owner.id == this.state.user.id;
     }
 
     _viewCart = () => {
-        console.log("private")
         this.props.navigation.navigate('Cart', {
-            cart: this.state.cart
+            cart: Array.from(this.state.cart.values())
         })
     }
 
@@ -75,8 +85,8 @@ export default class Store extends Component<Props>{
             onGoBack: () => {
                 this.refresh();
             },
-            addToCart: (item) => {
-                this.addToCart(item);
+            addToCart: (item, qty) => {
+                this.addToCart(item, qty);
             }
         });
     }

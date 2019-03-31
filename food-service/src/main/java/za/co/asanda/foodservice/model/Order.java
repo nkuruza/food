@@ -10,7 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -24,12 +23,13 @@ public class Order implements Serializable {
 	private Collection<OrderLine> orderLines = new ArrayList<OrderLine>();
 	private Date dateCreated;
 	private Date dateCompleted;
-	@OneToOne
+	@ManyToOne
 	private User customer;
 	@ManyToOne
 	private OrderStatus status;
 	@ManyToOne
 	private Shop shop;
+	
 	public Long getId() {
 		return id;
 	}

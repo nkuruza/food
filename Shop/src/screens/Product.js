@@ -13,8 +13,7 @@ export default class Product extends Component<Props>{
     }
     _addToCart = () => {
         let item = this.props.navigation.state.params.item;
-        console.log(item)
-        this.props.navigation.state.params.addToCart({ product: item, qty: 1 });
+        this.props.navigation.state.params.addToCart(item, 1);
         this.props.navigation.pop();
     }
     render() {
