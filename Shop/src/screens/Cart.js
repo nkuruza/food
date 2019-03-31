@@ -5,6 +5,7 @@ import CartItem from '../component/CartItem';
 import styles from '../style.js';
 import { FoodApi } from '../service/FoodApi';
 import { CartService } from '../service/CartService';
+import { StorageHelper } from '../service/Storage';
 type Props = {};
 
 export default class Cart extends Component<Props>{
@@ -21,25 +22,25 @@ export default class Cart extends Component<Props>{
     }
     constructor(props) {
         super(props);
-        this.state = { data: [] };
+        this.state = { data: [], user: null };
         this.props.navigation.setParams({ clearCart: this._clearCart })
     }
     componentDidMount() {
-        //let data = this.props.navigation.getParam('cart'); this.setState({ data: data });
         this.refresh();
     }
 
-    refresh(){
-        let data = CartService.getCart().then(data => {
-            console.log(data);
+    refresh() {
+        CartService.getCart().then(data => {
             this.setState({ data: data });
         });
+        StorageHelper.get("user").then(user => {
+            this.setState({ user: user })
+        })
     }
     _keyExtractor = (item) => `item-${item.product.id}`;
 
     _onPressItem = (item) => {
-        //console.log("pressed");
-        //console.log(item);
+
     }
     _itemSeparator = () => (
         <View style={styles.itemSeparator} />
@@ -51,11 +52,21 @@ export default class Cart extends Component<Props>{
         />
     )
     _placeOrder = () => {
-
-        //FoodApi.placeOrder
+        CartService.getCart().then(lines => {
+            let order = {
+                shop: lines[0].product.shop,
+                orderLines: lines,
+                customer: this.state.user
+            }
+            return FoodApi.placeOrder(order)
+        }).then(response => {
+            console.log(response);
+        });
     }
     _clearCart = () => {
-        CartService.clearCart();
+        CartService.clearCart().then((s) => {
+            this.refresh();
+        });
     }
     render() {
         let total = 0;

@@ -40,7 +40,6 @@ export default class Store extends Component<Props>{
     _onPressItem = (item) => {
         this.props.navigation.navigate("Product", {
             item: item, addToCart: (item, qty) => {
-                console.log(qty)
                 this.addToCart(item, qty)
             }
         });

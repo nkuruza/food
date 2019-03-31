@@ -83,7 +83,7 @@ export default StyleSheet.create({
     headerButton: {
         flexDirection: 'row',
         flex: 1,
-        width: 20, height: 20,
+        width: 40, height: 20,
         borderRadius: 10,
     }
 });
