@@ -60,7 +60,7 @@ export default class Cart extends Component<Props>{
             }
             return FoodApi.placeOrder(order)
         }).then(response => {
-            console.log(response);
+            this.props.navigation.navigate("CustomerOrder", { order: response });
         });
     }
     _clearCart = () => {
