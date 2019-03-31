@@ -5,11 +5,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -19,12 +20,17 @@ public class Order implements Serializable {
 	@Id
 	@GeneratedValue
 	private Long id;
-	@OneToMany
+	@OneToMany(cascade = CascadeType.ALL)
 	private Collection<OrderLine> orderLines = new ArrayList<OrderLine>();
 	private Date dateCreated;
 	private Date dateCompleted;
-	@OneToOne
+	@ManyToOne
 	private User customer;
+	@ManyToOne
+	private OrderStatus status;
+	@ManyToOne
+	private Shop shop;
+	
 	public Long getId() {
 		return id;
 	}
@@ -54,6 +60,18 @@ public class Order implements Serializable {
 	}
 	public void setCustomer(User customer) {
 		this.customer = customer;
+	}
+	public OrderStatus getStatus() {
+		return status;
+	}
+	public void setStatus(OrderStatus status) {
+		this.status = status;
+	}
+	public Shop getShop() {
+		return shop;
+	}
+	public void setShop(Shop shop) {
+		this.shop = shop;
 	}
 	
 }
