@@ -79,5 +79,10 @@ public class UserServiceImpl implements UserService{
 		User user = findByUsername(sso);
         return ( user == null || ((id != null) && (user.getId() == id.longValue())));
 	}
+
+	@Override
+	public String encodePassword(String password) {
+		return passwordEncoder.encode(password);
+	}
  
 }

@@ -4,6 +4,7 @@ import { TouchableHighlight, Text, View } from 'react-native';
 import styles from '../style.js'
 import { FoodApi } from '../service/FoodApi.js';
 import { StorageHelper } from '../service/Storage.js';
+import { Base64 } from '../utils/Base64'
 
 type Props = {};
 const LoginForm = t.struct({
@@ -36,7 +37,7 @@ export default class Login extends Component<Props>{
         this.checkAuthentication();
     }
 
-    checkAuthentication(){
+    checkAuthentication() {
         StorageHelper.get("Authorization").then(auth => {
             if (auth != null)
                 this.props.navigation.navigate("Store");
@@ -45,22 +46,23 @@ export default class Login extends Component<Props>{
     getCred() {
         return Base64.btoa(`${this.state.value.username}:${this.state.value.password}`);
     }
-    
+
     onChange(value) {
         this.setState({ value: value });
     }
     _loginPress = () => {
-        FoodApi.login(this.state.value)
-            .then(response => {
-                console.log(response);
-                if (response.id > 0) {
-                    StorageHelper.put("user", response);
-                    StorageHelper.put("Authorization", { value: `Basic ${this.getCred()}` });
-                    this.props.navigation.navigate("Store");
-                }
-            });
+        StorageHelper.put("Authorization", { value: `Basic ${this.getCred()}` }).then(() => {
+            return FoodApi.login(this.state.value);
+        }).then(response => {
+            console.log(response);
+            if (response.id > 0) {
+                StorageHelper.put("user", response);
+
+                this.props.navigation.navigate("Store");
+            }
+        });
     }
-    _signupPress = () =>{
+    _signupPress = () => {
         this.props.navigation.navigate("SignUp")
     }
     render() {
