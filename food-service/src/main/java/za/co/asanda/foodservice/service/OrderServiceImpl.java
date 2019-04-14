@@ -1,6 +1,6 @@
 package za.co.asanda.foodservice.service;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,18 +21,16 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public Order placeOrder(Order o) {
-		o.setDateCreated(new Date());
+		o.setDateCreated(LocalDateTime.now());
 		o.setStatus(orderStatusRepo.findOneByType(OrderStatusType.PLACED.name()));
 		for(OrderLine line : o.getOrderLines()) 
 			line.setUnitPrice(line.getProduct().getPrice());
-		
 		return repo.save(o);
 	}
 
 	@Override
 	public List<Order> listOrdersByShop(Long shopId) {
-		// TODO Auto-generated method stub
-		return null;
+		return repo.findByShopId(shopId);
 	}
 
 	@Override
