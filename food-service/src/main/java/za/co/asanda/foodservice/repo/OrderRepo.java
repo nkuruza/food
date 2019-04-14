@@ -8,4 +8,5 @@ import za.co.asanda.foodservice.model.Order;
 
 public interface OrderRepo extends JpaRepository<Order, Long> {
 	List<Order> findByShopId(long shopId);
+	List<Order> findByShopOwnerId(long ownerId);
 }

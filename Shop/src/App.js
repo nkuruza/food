@@ -9,6 +9,7 @@ import Login from './screens/Login';
 import Cart from './screens/Cart';
 import Product from './screens/Product';
 import CustomerOrder from './screens/CustomerOrder';
+import Orders from './screens/Orders';
 
 
 const MainNavigator = createStackNavigator({
@@ -21,7 +22,8 @@ const MainNavigator = createStackNavigator({
   Login: { screen: Login },
   Product: { screen: Product },
   Cart: { screen: Cart },
-  CustomerOrder: {screen: CustomerOrder}
+  CustomerOrder: {screen: CustomerOrder},
+  Orders: {screen: Orders}
 });
 
 const App = createAppContainer(MainNavigator);

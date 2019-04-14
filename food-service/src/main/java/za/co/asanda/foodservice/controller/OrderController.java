@@ -26,4 +26,8 @@ public class OrderController {
 	public List<Order> shopOrders(@PathVariable("id") long shopId){
 		return orderService.listOrdersByShop(shopId);
 	}
+	@GetMapping("/mine")
+	public List<Order> ownerOrders(){
+		return orderService.listMyShopsOrders();
+	}
 }
