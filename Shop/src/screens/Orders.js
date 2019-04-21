@@ -28,13 +28,14 @@ export default class Orders extends Component<Props>{
             onPressItem={this._onPressItem}
         />
     )
-    render(){
+    render() {
+        console.log(this.state.data)
         return (<ScrollView>
-                <FlatList
-                    ItemSeparatorComponent={this._itemSeparator}
-                    data={this.state.data}
-                    keyExtractor={this._keyExtractor}
-                    renderItem={this._renderItem} />
-            </ScrollView>)
+            <FlatList
+                ItemSeparatorComponent={this._itemSeparator}
+                data={this.state.data}
+                keyExtractor={this._keyExtractor}
+                renderItem={this._renderItem} />
+        </ScrollView>)
     }
 }

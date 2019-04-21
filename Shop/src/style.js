@@ -94,6 +94,6 @@ export default StyleSheet.create({
         
     },
     orderCustomer: {
-
+        fontSize: 12
     }
 });
