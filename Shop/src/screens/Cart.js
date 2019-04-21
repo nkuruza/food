@@ -22,7 +22,7 @@ export default class Cart extends Component<Props>{
     }
     constructor(props) {
         super(props);
-        this.state = { data: props.data, user: null };
+        this.state = { data: [], user: null };
         this.props.navigation.setParams({ clearCart: this._clearCart })
     }
     componentDidMount() {
@@ -52,15 +52,20 @@ export default class Cart extends Component<Props>{
         />
     )
     _placeOrder = () => {
+        navigator.geolocation.getCurrentPosition((loc) => {
+            console.log(loc);
+        })
+
         CartService.getCart().then(lines => {
             let order = {
                 shop: lines[0].product.shop,
                 orderLines: lines,
                 customer: this.state.user
             }
-            return FoodApi.placeOrder(order)
+            return CartService.clearCart();//FoodApi.placeOrder(order)
         }).then(response => {
-            this.props.navigation.navigate("CustomerOrder", { order: response });
+            CartService.clearCart();
+            //this.props.navigation.navigate("CustomerOrder", { order: response });
         });
     }
     _clearCart = () => {

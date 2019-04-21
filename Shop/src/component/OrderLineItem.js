@@ -8,9 +8,8 @@ export default class OrderLineItem extends React.PureComponent {
         this.props.onPressItem(this.props.item);
     }
     render() {
-        //console.log(this.props.item)
         return (
-            <View>
+            <View style={{ flexDirection: 'row' }}>
                 <View style={styles.cartItemImage}>
                     <Image style={styles.imgX4} source={require('../img/roast.png')} />
                 </View>

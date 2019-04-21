@@ -91,9 +91,42 @@ export default StyleSheet.create({
         flex: 1,
     },
     orderItemDetails: {
-        
+
     },
     orderCustomer: {
-        fontSize: 12
-    }
+        fontSize: 12,
+        flex: 2
+    },
+    orderHeader: {
+        height: 30,
+        flexDirection: 'row'
+    },
+    orderHeaderButton: {
+        marginLeft: 5,
+        marginRight: 5,
+        padding: 5,
+        backgroundColor: '#48BBEC',
+        borderColor: '#48BBEC',
+        borderWidth: 1,
+        borderRadius: 5,
+        alignSelf: 'stretch',
+        justifyContent: 'center'
+    },
+    orderStatus: {
+        padding: 5
+    },
+    placed: {
+        backgroundColor: '#dd2222'
+    },
+    viewed: {
+        backgroundColor: '#22ddff'
+    },
+    accepted: {
+        backgroundColor: '#22dd22'
+    },
+    preparing: {
+        backgroundColor: '#22ff22'
+    },
+    ready: {},
+    customerAccepted: {}
 });
