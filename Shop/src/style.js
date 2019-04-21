@@ -85,5 +85,15 @@ export default StyleSheet.create({
         flex: 1,
         width: 40, height: 20,
         borderRadius: 10,
+    },
+    orderItem: {
+        flexDirection: 'row',
+        flex: 1,
+    },
+    orderItemDetails: {
+        
+    },
+    orderCustomer: {
+
     }
 });

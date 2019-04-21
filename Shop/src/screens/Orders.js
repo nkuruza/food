@@ -6,17 +6,35 @@ import styles from '../style.js';
 import { FoodApi } from '../service/FoodApi';
 import { CartService } from '../service/CartService';
 import { StorageHelper } from '../service/Storage';
+import OrderItem from '../component/OrderItem';
 type Props = {};
 
 export default class Orders extends Component<Props>{
     constructor(props) {
         super(props);
         this.state = { data: [], user: null };
-        this.props.navigation.setParams({ clearCart: this._clearCart })
     }
     componentDidMount() {
         StorageHelper.get("orders").then(orders => {
-
+            this.setState({ data: orders });
         })
+    }
+    _itemSeparator = () => (
+        <View style={styles.itemSeparator} />
+    )
+    _renderItem = ({ item }) => (
+        <OrderItem
+            item={item}
+            onPressItem={this._onPressItem}
+        />
+    )
+    render(){
+        return (<ScrollView>
+                <FlatList
+                    ItemSeparatorComponent={this._itemSeparator}
+                    data={this.state.data}
+                    keyExtractor={this._keyExtractor}
+                    renderItem={this._renderItem} />
+            </ScrollView>)
     }
 }

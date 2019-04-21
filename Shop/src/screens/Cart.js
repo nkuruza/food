@@ -22,7 +22,7 @@ export default class Cart extends Component<Props>{
     }
     constructor(props) {
         super(props);
-        this.state = { data: [], user: null };
+        this.state = { data: props.data, user: null };
         this.props.navigation.setParams({ clearCart: this._clearCart })
     }
     componentDidMount() {
