@@ -12,11 +12,9 @@ export default class Cart extends Component<Props>{
     static navigationOptions = ({ navigation }) => {
         return {
             headerRight: (
-                <View style={styles.headerRight}>
-                    <TouchableHighlight onPress={navigation.getParam('clearCart')} style={styles.headerButton}>
-                        <Text>Clear</Text>
-                    </TouchableHighlight>
-                </View>
+                <TouchableHighlight onPress={navigation.getParam('clearCart')} style={styles.headerButton}>
+                    <Text>Clear</Text>
+                </TouchableHighlight>
             )
         }
     }

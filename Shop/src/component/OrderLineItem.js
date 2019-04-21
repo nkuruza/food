@@ -10,19 +10,8 @@ export default class OrderLineItem extends React.PureComponent {
     render() {
         return (
             <View style={{ flexDirection: 'row' }}>
-                <View style={styles.cartItemImage}>
-                    <Image style={styles.imgX4} source={require('../img/roast.png')} />
-                </View>
-                <View style={styles.cartItemText}>
-                    <Text style={styles.cartItemTitle}>{this.props.item.product.name}</Text>
-                    <Text style={styles.cartItemDesc}>{this.props.item.product.description}</Text>
-                </View>
-                <View style={styles.cartItemQty}>
-                    <Text> X {this.props.item.qty}</Text>
-                </View>
-                <View style={styles.cartItemPrice}>
-                    <Text>{Common.formatMoney(this.props.item.product.price * this.props.item.qty)}</Text>
-                </View>
+                <Text style={styles.cartItemTitle}>{this.props.item.product.name}</Text>
+                <Text style={{flex: 1}}> X {this.props.item.qty}</Text>
             </View>
         )
     }

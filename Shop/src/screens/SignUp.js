@@ -48,7 +48,6 @@ export default class SignUp extends Component<Props>{
         var id = DeviceInfo.default.getUniqueID();
         this.setState({ deviceId: id, value: this.dummyData() });
         this.checkAuthentication();
-        //this.getUserByDevice(id);
     }
 
     checkAuthentication(){

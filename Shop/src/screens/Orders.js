@@ -29,7 +29,7 @@ export default class Orders extends Component<Props>{
     getTotal(lines) {
         let total = 0;
         for (line of lines)
-            total += line.unitPrice;
+            total += (line.unitPrice * line.qty);
         return total;
     }
 
@@ -38,12 +38,16 @@ export default class Orders extends Component<Props>{
     )
     _renderSectionHeader = ({ section }) => (
         <View style={styles.orderHeader}>
-            <Text style={{ fontWeight: 'bold', flex: 2 }}>{section.customer.firstName}</Text>
-            <Text style={{ fontWeight: 'bold', flex: 2 }}>R {Common.formatMoney(this.getTotal(section.orderLines))}</Text>
+            <Text style={styles.orderCustomer}>{section.customer.firstName}</Text>
             <Text style={{ ...statusStyles[section.status.id - 1], ...styles.orderStatus }}>{section.status.type}</Text>
-            <TouchableHighlight style={styles.orderHeaderButton}><Text>View</Text></TouchableHighlight>
         </View>
 
+    )
+    _renderSectionFooter = ({ section }) => (
+        <View style={styles.orderFooter}>
+            <Text style={styles.orderTotal}>R {Common.formatMoney(this.getTotal(section.orderLines))}</Text>
+            <TouchableHighlight style={styles.orderFooterButton}><Text style={{ alignSelf: 'center' }}>View</Text></TouchableHighlight>
+        </View>
     )
     _renderItem = ({ item, index, section }) => (
         <OrderLineItem
@@ -52,12 +56,11 @@ export default class Orders extends Component<Props>{
         />
     )
     render() {
-        console.log(this.state.data)
-
         return (
             <SectionList
                 renderItem={this._renderItem}
                 renderSectionHeader={this._renderSectionHeader}
+                renderSectionFooter={this._renderSectionFooter}
                 sections={this.state.data}
                 keyExtractor={(item, index) => "item" + index}
             />

@@ -52,6 +52,9 @@ export default StyleSheet.create({
         height: 30,
         flex: 2,
     },
+    cartItemTitle: {
+
+    },
     cartItemText: {
         flex: 4,
         flexDirection: 'column'
@@ -94,14 +97,23 @@ export default StyleSheet.create({
 
     },
     orderCustomer: {
-        fontSize: 12,
+        fontSize: 26,
         flex: 2
     },
-    orderHeader: {
-        height: 30,
-        flexDirection: 'row'
+    orderTotal: {  
+        flex: 3
     },
-    orderHeaderButton: {
+    orderHeader: {
+        flexDirection: 'row',
+        backgroundColor: '#eeeeee',
+    },
+    orderFooter: {
+        flexDirection: 'row',
+        flex: 1,
+        paddingBottom: 10,
+        justifyContent: 'center',
+    },
+    orderFooterButton: {
         marginLeft: 5,
         marginRight: 5,
         padding: 5,
@@ -110,7 +122,8 @@ export default StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5,
         alignSelf: 'stretch',
-        justifyContent: 'center'
+        justifyContent: 'center',
+        flex: 1
     },
     orderStatus: {
         padding: 5
