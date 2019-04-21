@@ -9,5 +9,6 @@ public interface OrderService {
 	Order placeOrder(Order o);
 	List<Order> listOrdersByShop(Long shopId);
 	List<Order> listPlacedOrders();
+	List<Order> listMyShopsOrders();
 	Order updateOrderStatus(Order o, OrderStatusType ost);
 }

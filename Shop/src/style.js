@@ -52,6 +52,9 @@ export default StyleSheet.create({
         height: 30,
         flex: 2,
     },
+    cartItemTitle: {
+
+    },
     cartItemText: {
         flex: 4,
         flexDirection: 'column'
@@ -85,5 +88,58 @@ export default StyleSheet.create({
         flex: 1,
         width: 40, height: 20,
         borderRadius: 10,
-    }
+    },
+    orderItem: {
+        flexDirection: 'row',
+        flex: 1,
+    },
+    orderItemDetails: {
+
+    },
+    orderCustomer: {
+        fontSize: 26,
+        flex: 2
+    },
+    orderTotal: {  
+        flex: 3
+    },
+    orderHeader: {
+        flexDirection: 'row',
+        backgroundColor: '#eeeeee',
+    },
+    orderFooter: {
+        flexDirection: 'row',
+        flex: 1,
+        paddingBottom: 10,
+        justifyContent: 'center',
+    },
+    orderFooterButton: {
+        marginLeft: 5,
+        marginRight: 5,
+        padding: 5,
+        backgroundColor: '#48BBEC',
+        borderColor: '#48BBEC',
+        borderWidth: 1,
+        borderRadius: 5,
+        alignSelf: 'stretch',
+        justifyContent: 'center',
+        flex: 1
+    },
+    orderStatus: {
+        padding: 5
+    },
+    placed: {
+        backgroundColor: '#dd2222'
+    },
+    viewed: {
+        backgroundColor: '#22ddff'
+    },
+    accepted: {
+        backgroundColor: '#22dd22'
+    },
+    preparing: {
+        backgroundColor: '#22ff22'
+    },
+    ready: {},
+    customerAccepted: {}
 });

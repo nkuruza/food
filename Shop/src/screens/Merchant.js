@@ -10,12 +10,14 @@ type Props = {};
 export default class Merchant extends Component<Props>{
     constructor(props) {
         super(props);
-        this.state = { shops: [] };
+        this.state = { shops: [], orders: [] };
     }
     componentDidMount() {
         StorageHelper.get("Authorization").then(auth => {
-            if (auth)
+            if (auth) {
                 this.listShops();
+                this.listMyShopOrders();
+            }
             else
                 this.props.navigation.navigate("Login")
         });
@@ -26,9 +28,15 @@ export default class Merchant extends Component<Props>{
         })
 
     }
+    listMyShopOrders() {
+        FoodApi.myShopOrders().then(response => {
+            this.setState({ orders: response })
+            StorageHelper.put("orders", response);
+            console.log(response);
+        });
+    }
     listShops() {
         FoodApi.listMyShops().then(response => {
-            console.log(response);
             this.setState({ shops: response })
         }).catch(e => {
             if (e.response.status === 401) {
@@ -44,9 +52,9 @@ export default class Merchant extends Component<Props>{
         this.props.navigation.navigate("ShopForm");
     }
     _logout = () => {
-        StorageHelper.remove('Authorization').then(()=>{
+        StorageHelper.remove('Authorization').then(() => {
             StorageHelper.remove("user")
-            
+
         }).then(() => {
             this.props.navigation.popToTop();
         })
@@ -55,6 +63,10 @@ export default class Merchant extends Component<Props>{
 
     _onPressItem = (item) => {
         this.props.navigation.navigate("Store", { store: item });
+    }
+    _viewOrders = () => {
+        
+        this.props.navigation.navigate("Orders");
     }
 
     _itemSeparator = () => (
@@ -76,7 +88,10 @@ export default class Merchant extends Component<Props>{
                 <TouchableHighlight style={styles.button} onPress={this._createShop} underlayColor='#99d9f4'>
                     <Text style={styles.buttonText}>Create Shop</Text>
                 </TouchableHighlight>
-                <Text style={styles.titleText}></Text>
+                <TouchableHighlight onPress={this._viewOrders}>
+                    <Text style={styles.titleText}>{this.state.orders.length} orders</Text>
+                </TouchableHighlight>
+
                 <FlatList
                     ItemSeparatorComponent={this._itemSeparator}
                     data={this.state.shops}

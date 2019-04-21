@@ -1,10 +1,9 @@
 package za.co.asanda.foodservice.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,8 +21,8 @@ public class Order implements Serializable {
 	private Long id;
 	@OneToMany(cascade = CascadeType.ALL)
 	private Collection<OrderLine> orderLines = new ArrayList<OrderLine>();
-	private Date dateCreated;
-	private Date dateCompleted;
+	private LocalDateTime dateCreated;
+	private LocalDateTime dateCompleted;
 	@ManyToOne
 	private User customer;
 	@ManyToOne
@@ -43,16 +42,16 @@ public class Order implements Serializable {
 	public void setOrderLines(Collection<OrderLine> orderLines) {
 		this.orderLines = orderLines;
 	}
-	public Date getDateCreated() {
+	public LocalDateTime getDateCreated() {
 		return dateCreated;
 	}
-	public void setDateCreated(Date dateCreated) {
+	public void setDateCreated(LocalDateTime dateCreated) {
 		this.dateCreated = dateCreated;
 	}
-	public Date getDateCompleted() {
+	public LocalDateTime getDateCompleted() {
 		return dateCompleted;
 	}
-	public void setDateCompleted(Date dateCompleted) {
+	public void setDateCompleted(LocalDateTime dateCompleted) {
 		this.dateCompleted = dateCompleted;
 	}
 	public User getCustomer() {
@@ -73,5 +72,4 @@ public class Order implements Serializable {
 	public void setShop(Shop shop) {
 		this.shop = shop;
 	}
-	
 }

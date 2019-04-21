@@ -38,6 +38,9 @@ export var FoodApi = {
     },
     placeOrder: async (order) => {
         return post(`/orders/place`, order);
+    },
+    myShopOrders: async() => {
+        return get(`/orders/mine`);
     }
 }
 

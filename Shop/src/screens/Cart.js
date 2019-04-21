@@ -12,11 +12,9 @@ export default class Cart extends Component<Props>{
     static navigationOptions = ({ navigation }) => {
         return {
             headerRight: (
-                <View style={styles.headerRight}>
-                    <TouchableHighlight onPress={navigation.getParam('clearCart')} style={styles.headerButton}>
-                        <Text>Clear</Text>
-                    </TouchableHighlight>
-                </View>
+                <TouchableHighlight onPress={navigation.getParam('clearCart')} style={styles.headerButton}>
+                    <Text>Clear</Text>
+                </TouchableHighlight>
             )
         }
     }
@@ -52,15 +50,20 @@ export default class Cart extends Component<Props>{
         />
     )
     _placeOrder = () => {
+        navigator.geolocation.getCurrentPosition((loc) => {
+            console.log(loc);
+        })
+
         CartService.getCart().then(lines => {
             let order = {
                 shop: lines[0].product.shop,
                 orderLines: lines,
                 customer: this.state.user
             }
-            return FoodApi.placeOrder(order)
+            return CartService.clearCart();//FoodApi.placeOrder(order)
         }).then(response => {
-            console.log(response);
+            CartService.clearCart();
+            //this.props.navigation.navigate("CustomerOrder", { order: response });
         });
     }
     _clearCart = () => {
