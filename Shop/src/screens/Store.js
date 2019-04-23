@@ -31,7 +31,7 @@ export default class Store extends Component<Props>{
     componentDidMount() {
         let store = this.props.navigation.getParam('store');
         StorageHelper.get("user").then(user => {
-            this.setState({ user: user, store: store, shopId: store.id }, () => { this.refresh() });
+            this.setState({ user: user, store: store, shopId: store.id }, () => { this.getShopItems() });
         });
     }
 
@@ -45,7 +45,7 @@ export default class Store extends Component<Props>{
         });
     };
 
-    refresh() {
+    getShopItems() {
         FoodApi.getShopItems(this.state.store.id).then(response => {
             StorageHelper.put('food-items', response);
             this.setState({ products: response });
@@ -63,8 +63,6 @@ export default class Store extends Component<Props>{
             console.log(num)
             this.props.navigation.setParams({ numCartItems: num });
         });
-        
-
     }
 
     isMyShop() {
@@ -82,13 +80,16 @@ export default class Store extends Component<Props>{
         this.props.navigation.navigate("FoodItem", {
             shopId: this.state.store.id,
             onGoBack: () => {
-                this.refresh();
+                this.getShopItems();
             },
             addToCart: (item, qty) => {
                 this.addToCart(item, qty);
             }
         });
     }
+    /**
+     * This needs to move somewhere safe...
+     */
     _itemSeparator = () => (
         <View style={styles.itemSeparator} />
     )

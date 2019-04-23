@@ -17,10 +17,9 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotEmpty;
 
-
 @Entity
 @Table(name = "app_user")
-public class User implements Serializable{
+public class User implements Serializable {
 
 	/**
 	 * 
@@ -39,7 +38,6 @@ public class User implements Serializable{
 	@Column(nullable = false)
 	private String password;
 
-	@NotEmpty
 	@Transient
 	private String confirmPassword;
 
@@ -50,7 +48,6 @@ public class User implements Serializable{
 	@NotEmpty
 	@Column(nullable = false)
 	private String lastName;
-	
 
 	@NotEmpty
 	@Column(unique = true, nullable = false)
@@ -65,14 +62,16 @@ public class User implements Serializable{
 	private String state = State.ACTIVE.getState();
 
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable(name = "APP_USER_USER_PROFILE", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = { @JoinColumn(name = "USER_PROFILE_ID") })
+	@JoinTable(name = "APP_USER_USER_PROFILE", joinColumns = { @JoinColumn(name = "USER_ID") }, inverseJoinColumns = {
+			@JoinColumn(name = "USER_PROFILE_ID") })
 	private Set<UserProfile> userProfiles = new HashSet<UserProfile>();
-	
-	
+
+	private Double lat;
+	private Double lon;
+
 	@Column(nullable = false)
 	private boolean verified = false;
-	
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -163,13 +162,32 @@ public class User implements Serializable{
 		this.userProfiles = userProfiles;
 	}
 
-
 	public boolean isVerified() {
 		return verified;
 	}
 
 	public void setVerified(boolean verified) {
 		this.verified = verified;
+	}
+
+	public Double getLat() {
+		return lat;
+	}
+
+	public void setLat(Double lat) {
+		this.lat = lat;
+	}
+
+	public Double getLon() {
+		return lon;
+	}
+
+	public void setLon(Double lon) {
+		this.lon = lon;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
 	@Override
@@ -202,10 +220,9 @@ public class User implements Serializable{
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", ssoId=" + username + ", password=" + password
-				+ ", firstName=" + firstName + ", lastName=" + lastName
-				+ ", email=" + email + ", state=" + state + ", userProfiles="
-				+ userProfiles + "]";
+		return "User [id=" + id + ", ssoId=" + username + ", password=" + password + ", firstName=" + firstName
+				+ ", lastName=" + lastName + ", email=" + email + ", state=" + state + ", userProfiles=" + userProfiles
+				+ "]";
 	}
 
 }

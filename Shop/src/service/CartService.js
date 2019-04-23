@@ -22,6 +22,7 @@ export var CartService = {
         let items = [];
         for (key in cart)
             items.push(cart[key]);
+            console.log(items)
         return items;
     },
     count: async () => {

@@ -126,7 +126,8 @@ export default StyleSheet.create({
         flex: 1
     },
     orderStatus: {
-        padding: 5
+        padding: 5,
+        flex: 1
     },
     placed: {
         backgroundColor: '#dd2222'
