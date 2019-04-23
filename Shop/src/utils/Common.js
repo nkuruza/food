@@ -1,6 +1,6 @@
 export var Common = {
     serializeJSON: (data) => {
-        return Object.keys(data).map(function (keyName) {
+        return Object.keys(data).map((keyName) => {
             return encodeURIComponent(keyName) + '=' + encodeURIComponent(data[keyName])
         }).join('&');
     },

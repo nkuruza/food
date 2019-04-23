@@ -49,18 +49,30 @@ export default class Cart extends Component<Props>{
             onPressItem={this._onPressItem}
         />
     )
-    _placeOrder = () => {
-        navigator.geolocation.getCurrentPosition((loc) => {
-            console.log(loc);
-        })
+    getLocation: Promise<Position> = async () => {
+        return new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition((loc) => {
+                resolve(loc)
+            }
+            )
+        });
 
-        CartService.getCart().then(lines => {
+    }
+    _placeOrder = () => {
+        let coords: Position = {};
+        let customer = this.state.user;
+        this.getLocation().then(loc => {
+            customer.lon = loc.coords.latitude;
+            customer.lat = loc.coords.longitude;
+            return CartService.getCart();
+        }).then(lines => {
+            console.log(lines);
             let order = {
                 shop: lines[0].product.shop,
                 orderLines: lines,
-                customer: this.state.user
+                customer: customer
             }
-            return CartService.clearCart();//FoodApi.placeOrder(order)
+            return FoodApi.placeOrder(order);
         }).then(response => {
             CartService.clearCart();
             //this.props.navigation.navigate("CustomerOrder", { order: response });
