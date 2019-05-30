@@ -20,7 +20,8 @@ export default class Cart extends Component<Props>{
     }
     constructor(props) {
         super(props);
-        this.state = { data: [], user: null };
+        let shopId = this.props.navigation.getParam('shopId');
+        this.state = { data: [], user: null, shopId: shopId };
         this.props.navigation.setParams({ clearCart: this._clearCart })
     }
     componentDidMount() {
@@ -28,7 +29,7 @@ export default class Cart extends Component<Props>{
     }
 
     refresh() {
-        CartService.getCart().then(data => {
+        CartService.getCart(this.state.shopId).then(data => {
             this.setState({ data: data });
         });
         StorageHelper.get("user").then(user => {
@@ -64,7 +65,7 @@ export default class Cart extends Component<Props>{
         this.getLocation().then(loc => {
             customer.lon = loc.coords.latitude;
             customer.lat = loc.coords.longitude;
-            return CartService.getCart();
+            return CartService.getCart(this.state.shopId);
         }).then(lines => {
             console.log(lines);
             let order = {

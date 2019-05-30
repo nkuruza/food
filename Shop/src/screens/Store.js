@@ -31,7 +31,7 @@ export default class Store extends Component<Props>{
     componentDidMount() {
         let store = this.props.navigation.getParam('store');
         StorageHelper.get("user").then(user => {
-            this.setState({ user: user, store: store, shopId: store.id }, () => { this.getShopItems() });
+            this.setState({ user: user, store: store, shopId: store.id }, () => { this.getShopItems() });       // TODO shopId should be a prop
         });
     }
 
@@ -52,13 +52,11 @@ export default class Store extends Component<Props>{
         });
     }
 
-
-
     addToCart(product, qty) {
         console.log(product)
         console.log(qty)
         CartService.add(product, qty).then(() => {
-            return CartService.count()
+            return CartService.count(this.state.store.id)
         }).then(num => {
             console.log(num)
             this.props.navigation.setParams({ numCartItems: num });
@@ -66,13 +64,13 @@ export default class Store extends Component<Props>{
     }
 
     isMyShop() {
-        //console.log(this.state.store);
         return this.state.store.owner && this.state.user && this.state.store.owner.id == this.state.user.id;
     }
 
     _viewCart = () => {
         this.props.navigation.navigate('Cart', {
-            cart: Array.from(this.state.cart.values())
+            cart: Array.from(this.state.cart.values()),
+            shopId: this.state.store.id
         })
     }
 

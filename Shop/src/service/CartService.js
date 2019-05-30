@@ -2,7 +2,7 @@ import { StorageHelper } from "./Storage";
 
 export var CartService = {
     add: async (product, qty) => {
-        let cart = await StorageHelper.get('CART');
+        let cart = await StorageHelper.get('CART' + product.shop.id);
         let key = 'item' + product.id;
         if (cart == null || (cart.size > 0 && cart.values().next().value.shop.id != product.shop.id))
             cart = new Map();
@@ -13,28 +13,30 @@ export var CartService = {
             cart[key] = { product: product, qty: qty };
 
 
-        let stored = await StorageHelper.put('CART', cart);
+        let stored = await StorageHelper.put('CART' + product.shop.id, cart);
         return stored;
     },
-    getCart: async () => {
-        let cart = await StorageHelper.get('CART');
-        
+    getCart: async (shopId) => {
+        console.log(shopId)
+        let cart = await StorageHelper.get('CART' + shopId);
+        console.log(cart);
         let items = [];
         for (key in cart)
             items.push(cart[key]);
             console.log(items)
         return items;
     },
-    count: async () => {
-        let cart = await StorageHelper.get('CART');
+    count: async (shopId) => {
+        let cart = await StorageHelper.get('CART' + shopId);
+        console.log(cart);
         let total = 0;
         for (key in cart)
             total += cart[key].qty;
         //console.log(total)
         return total;
     },
-    clearCart: async () => {
-        let s = await StorageHelper.remove('CART')
+    clearCart: async (shopId) => {
+        let s = await StorageHelper.remove('CART' + shopId)
         return s;
     }
 }
