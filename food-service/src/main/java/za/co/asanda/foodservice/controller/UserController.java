@@ -32,7 +32,7 @@ public class UserController {
 	}
 	@GetMapping("/username")
 	public String getUsername() {
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();   // TODO move this to service
 		return authentication.getName();
 	}
 	@GetMapping("/me")
