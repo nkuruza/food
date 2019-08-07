@@ -1,6 +1,0 @@
-{
-  "name": "Shop",
-  "displayName": "Shop",
-  "apiServer": "192.168.0.155:8080",
-  "apiProtocol": "http"
-}
