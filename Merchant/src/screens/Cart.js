@@ -6,6 +6,8 @@ import styles from '../style.js';
 import { FoodApi } from '../service/FoodApi';
 import { CartService } from '../service/CartService';
 import { StorageHelper } from '../service/Storage';
+import Geolocation from '@react-native-community/geolocation';
+
 type Props = {};
 
 export default class Cart extends Component<Props>{
@@ -52,10 +54,9 @@ export default class Cart extends Component<Props>{
     )
     getLocation: Promise<Position> = async () => {
         return new Promise((resolve, reject) => {
-            navigator.geolocation.getCurrentPosition((loc) => {
-                resolve(loc)
-            }
-            )
+            Geolocation.getCurrentPosition( loc => {
+                resolve(loc);
+            })
         });
 
     }
@@ -63,6 +64,7 @@ export default class Cart extends Component<Props>{
         let coords: Position = {};
         let customer = this.state.user;
         this.getLocation().then(loc => {
+            console.log(loc);
             customer.lon = loc.coords.latitude;
             customer.lat = loc.coords.longitude;
             return CartService.getCart(this.state.shopId);
@@ -75,12 +77,14 @@ export default class Cart extends Component<Props>{
             }
             return FoodApi.placeOrder(order);
         }).then(response => {
-            CartService.clearCart();
-            //this.props.navigation.navigate("CustomerOrder", { order: response });
+            console.log("ORDER SUCCESS");
+            console.log(response);
+            this._clearCart();
+            this.props.navigation.navigate("CustomerOrder", { order: response });
         });
     }
     _clearCart = () => {
-        CartService.clearCart().then((s) => {
+        CartService.clearCart(this.state.shopId).then((s) => {
             this.refresh();
         });
     }
