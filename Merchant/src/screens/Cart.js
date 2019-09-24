@@ -63,12 +63,7 @@ export default class Cart extends Component<Props>{
     _placeOrder = () => {
         let coords: Position = {};
         let customer = this.state.user;
-        this.getLocation().then(loc => {
-            console.log(loc);
-            customer.lon = loc.coords.latitude;
-            customer.lat = loc.coords.longitude;
-            return CartService.getCart(this.state.shopId);
-        }).then(lines => {
+        CartService.getCart(this.state.shopId).then(lines => {
             console.log(lines);
             let order = {
                 shop: lines[0].product.shop,
