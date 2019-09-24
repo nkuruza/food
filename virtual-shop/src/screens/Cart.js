@@ -6,7 +6,6 @@ import styles from '../style.js';
 import { FoodApi } from '../service/FoodApi';
 import { CartService } from '../service/CartService';
 import { StorageHelper } from '../service/Storage';
-import Geolocation from '@react-native-community/geolocation';
 
 type Props = {};
 
@@ -52,14 +51,7 @@ export default class Cart extends Component<Props>{
             onPressItem={this._onPressItem}
         />
     )
-    getLocation: Promise<Position> = async () => {
-        return new Promise((resolve, reject) => {
-            Geolocation.getCurrentPosition( loc => {
-                resolve(loc);
-            })
-        });
-
-    }
+    
     _placeOrder = () => {
         let coords: Position = {};
         let customer = this.state.user;

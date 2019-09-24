@@ -7,7 +7,7 @@ import { StorageHelper } from '../service/Storage';
 import { Base64 } from '../utils/Base64'
 
 
-var DeviceInfo = require('react-native-device-info');
+
 
 type Props = {};
 const User = t.struct({
@@ -44,8 +44,7 @@ export default class SignUp extends Component<Props>{
         this.onChange = this.onChange.bind(this)
     }
     componentDidMount() {
-        var id = DeviceInfo.default.getUniqueID();
-        this.setState({ deviceId: id, value: {} });
+        this.setState({ value: {} });
         this.checkAuthentication();
     }
 

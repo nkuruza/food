@@ -1,4 +1,5 @@
-import { createStackNavigator, createAppContainer } from 'react-navigation';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 import SignUp from './src/screens/SignUp';
 import Store from './src/screens/Store';
 import FoodItem from './src/screens/FoodItem';
