@@ -2,18 +2,21 @@ import React, { Component } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { SectionList, FlatList, TouchableHighlight, Text, View } from 'react-native';
 import CartItem from '../component/CartItem';
-import styles from '../style.js';
-import { FoodApi } from '../service/FoodApi';
-import { CartService } from '../service/CartService';
+import styles from '../style';
+//import { FoodApi } from '../service/FoodApi';
+//import { CartService } from '../service/CartService';
 import { StorageHelper } from '../service/Storage';
-import OrderItem from '../component/OrderItem';
+//import OrderItem from '../component/OrderItem';
 import OrderLineItem from '../component/OrderLineItem';
-import { Common } from '../utils/Common';
-type Props = {};
+import { Common, Props } from '../utils/Common';
+import { OrderLine } from '../model/OrderLine';
+import { User } from '../model/User';
+import { Order } from '../model/Order';
+
 
 const statusStyles = [styles.placed, styles.viewed, styles.accepted, styles.preparing, styles.ready, styles.customerAccepted]
 
-export default class Orders extends Component<Props>{
+export default class Orders extends Component<Props,{data:any[], user: User}>{
     constructor(props) {
         super(props);
         this.state = { data: [], user: null };
@@ -26,10 +29,10 @@ export default class Orders extends Component<Props>{
         })
     }
 
-    getTotal(lines) {
+    getTotal(lines:OrderLine[]) {
         let total = 0;
-        for (line of lines)
-            total += (line.unitPrice * line.qty);
+        for (let i = 0; i < lines.length; i++)
+            total += (lines[i].unitPrice * lines[i].qty);
         return total;
     }
 
@@ -49,6 +52,11 @@ export default class Orders extends Component<Props>{
             <TouchableHighlight style={styles.orderFooterButton}><Text style={{ alignSelf: 'center' }}>View</Text></TouchableHighlight>
         </View>
     )
+
+    _onPressItem(){
+
+    }
+
     _renderItem = ({ item, index, section }) => (
         <OrderLineItem
             item={item}

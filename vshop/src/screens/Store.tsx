@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { FlatList, View, TouchableHighlight, Text } from 'react-native';
 import StoreItem from '../component/StoreItem';
-import styles from '../style.js';
+import styles from '../style';
 import { FoodApi } from '../service/FoodApi';
 import { StorageHelper } from '../service/Storage';
 import { CartService } from '../service/CartService';

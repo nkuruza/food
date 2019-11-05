@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { FlatList, View, TouchableHighlight, Text } from 'react-native';
-import styles from '../style.js';
+import styles from '../style';
 
 type Props = {};
 

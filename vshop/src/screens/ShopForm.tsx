@@ -1,24 +1,18 @@
 import React, { Component } from 'react';
 import { FlatList, View, TouchableHighlight, Text } from 'react-native';
-import styles from '../style.js';
+import styles from '../style';
 import { FoodApi } from '../service/FoodApi';
-import t from 'tcomb-form-native';
+import { Props } from '../utils/Common'
 
 
-type Props = {};
-const Shop = t.struct({
-    name: t.String,
-    address: t.String
-});
-const Form = t.form.Form;
 export default class ShopForm extends Component<Props>{
-    constructor(props){
+    constructor(props:Props){
         super(props);
         this.state = {value : null}
         this.onChange = this.onChange.bind(this)
     }
     _onPress = () => {
-        FoodApi.saveShop(this.state.value)
+        //FoodApi.saveShop(this.state.value)
     }
     onChange(value) {
         this.setState({ value: value });
@@ -27,10 +21,7 @@ export default class ShopForm extends Component<Props>{
     render() {
         return (
             <View>
-                <Form ref="form"
-                    onChange={this.onChange}
-                    value={this.state.value}
-                    type={Shop} />
+                
                 <TouchableHighlight style={styles.button} onPress={this._onPress} underlayColor='#99d9f4'>
                     <Text style={styles.buttonText}>Save</Text>
                 </TouchableHighlight>

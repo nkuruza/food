@@ -23,8 +23,8 @@ const MainNavigator = createStackNavigator({
   Login: { screen: Login },
   Product: { screen: Product },
   Cart: { screen: Cart },
-  CustomerOrder: {screen: CustomerOrder},
-  Orders: {screen: Orders}
+  CustomerOrder: { screen: CustomerOrder },
+  Orders: { screen: Orders }
 });
 
 const App = createAppContainer(MainNavigator);

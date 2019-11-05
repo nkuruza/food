@@ -1,6 +1,6 @@
 import React from 'react';
 import { Text, View, TouchableOpacity, Image } from 'react-native';
-import styles from '../style.js';
+import styles from '../style';
 
 export default class MerchantItem extends React.PureComponent {
     _onPress = () => {

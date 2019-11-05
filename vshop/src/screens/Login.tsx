@@ -1,39 +1,21 @@
 import React, { Component } from 'react';
-import t from 'tcomb-form-native';
-import { TouchableHighlight, Text, View } from 'react-native';
-import styles from '../style.js'
-import { FoodApi } from '../service/FoodApi.js';
-import { StorageHelper } from '../service/Storage.js';
+import { TouchableHighlight, Text, View, TextInput } from 'react-native';
+import styles from '../style'
+import { FoodApi } from '../service/FoodApi';
+import { StorageHelper } from '../service/Storage';
 import { Base64 } from '../utils/Base64'
 
-type Props = {};
-const LoginForm = t.struct({
-    username: t.String,
-    password: t.String
-});
-var options = {
-    label: 'Login',
-    auto: 'placeholders',
-    fields: {
-        password: {
-            secureTextEntry: true
-        }
-    }
-}
-
-const Form = t.form.Form;
-
-export default class Login extends Component<Props>{
+export default class Login extends Component{
     static navigationOptions = {
         title: 'Login',
     };
     constructor(props) {
         super(props);
-        this.state = { value: null };
+        this.state = { username:'', password: '' };
         this.onChange = this.onChange.bind(this)
     }
     componentDidMount() {
-        this.setState({ value: null });
+        this.setState({ username:'', password: '' });
         this.checkAuthentication();
     }
 
@@ -44,14 +26,11 @@ export default class Login extends Component<Props>{
         });
     }
     getCred() {
-        return Base64.btoa(`${this.state.value.username}:${this.state.value.password}`);
+        return Base64.btoa(`${this.state.username}:${this.state.password}`);
     }
 
-    onChange(value) {
-        this.setState({ value: value });
-    }
     _loginPress = () => {
-        StorageHelper.put("Authorization", { value: `Basic ${this.getCred()}` }).then(() => {
+        /*StorageHelper.put("Authorization", { value: `Basic ${this.getCred()}` }).then(() => {
             return FoodApi.login(this.state.value);
         }).then(response => {
             console.log(response);
@@ -60,7 +39,7 @@ export default class Login extends Component<Props>{
 
                 this.props.navigation.navigate("Store");
             }
-        });
+        });*/
     }
     _signupPress = () => {
         this.props.navigation.navigate("SignUp")
@@ -68,11 +47,8 @@ export default class Login extends Component<Props>{
     render() {
         return (
             <View style={styles.container}>
-                <Form ref="form"
-                    onChange={this.onChange}
-                    value={this.state.value}
-                    type={LoginForm}
-                    options={options} />
+                <TextInput value={this.state.username}></TextInput>
+                <TextInput secureTextEntry="true" value={this.state.password}></TextInput>
                 <TouchableHighlight style={styles.button} onPress={this._signupPress} underlayColor='#99d9f4'>
                     <Text style={styles.buttonText}>Sign Up</Text>
                 </TouchableHighlight>

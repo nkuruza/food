@@ -55,6 +55,9 @@ export default StyleSheet.create({
     cartItemTitle: {
 
     },
+    cartItemDesc: {
+
+    },
     cartItemText: {
         flex: 4,
         flexDirection: 'column'

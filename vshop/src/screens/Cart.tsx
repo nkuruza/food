@@ -2,14 +2,15 @@ import React, { Component } from 'react';
 import { ScrollView } from 'react-native-gesture-handler';
 import { FlatList, TouchableHighlight, Text, View } from 'react-native';
 import CartItem from '../component/CartItem';
-import styles from '../style.js';
+import styles from '../style';
 import { FoodApi } from '../service/FoodApi';
 import { CartService } from '../service/CartService';
 import { StorageHelper } from '../service/Storage';
+import { User } from '../model/User';
+import { Shop } from '../model/Shop';
+import { Cart } from '../model/Cart';
 
-type Props = {};
-
-export default class Cart extends Component<Props>{
+export default class CartScreen extends Component<{navigation:any, shop: Shop, cart: Cart},{user: User}>{
     static navigationOptions = ({ navigation }) => {
         return {
             headerRight: (
@@ -22,7 +23,6 @@ export default class Cart extends Component<Props>{
     constructor(props) {
         super(props);
         let shopId = this.props.navigation.getParam('shopId');
-        this.state = { data: [], user: null, shopId: shopId };
         this.props.navigation.setParams({ clearCart: this._clearCart })
     }
     componentDidMount() {
@@ -30,12 +30,7 @@ export default class Cart extends Component<Props>{
     }
 
     refresh() {
-        CartService.getCart(this.state.shopId).then(data => {
-            this.setState({ data: data });
-        });
-        StorageHelper.get("user").then(user => {
-            this.setState({ user: user })
-        })
+        
     }
     _keyExtractor = (item) => `item-${item.product.id}`;
 

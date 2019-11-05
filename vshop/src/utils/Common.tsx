@@ -4,7 +4,12 @@ export var Common = {
             return encodeURIComponent(keyName) + '=' + encodeURIComponent(data[keyName])
         }).join('&');
     },
-    formatMoney: (money) => {
+    formatMoney: (money:number) => {
         return money.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
     }
+}
+export interface Props {
+    navigation: any,
+    item: any,
+    onPressItem: any
 }

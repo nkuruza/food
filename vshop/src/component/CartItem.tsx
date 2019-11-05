@@ -1,9 +1,9 @@
 import React from 'react';
 import { Text, View, TouchableOpacity, Image } from 'react-native';
-import styles from '../style.js';
-import { Common } from '../utils/Common.js';
+import styles from '../style';
+import { Common } from '../utils/Common';
 
-export default class CartItem extends React.PureComponent {
+export default class CartItem extends React.PureComponent<{onPressItem:any, item: any}> {
     _onPress = () => {
         this.props.onPressItem(this.props.item);
     }

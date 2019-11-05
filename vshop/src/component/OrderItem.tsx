@@ -1,13 +1,18 @@
 import React from 'react';
 import { Text, View, TouchableOpacity, Image, FlatList } from 'react-native';
-import styles from '../style.js';
-import { Common } from '../utils/Common.js';
-import Cart from '../screens/Cart.js';
-import OrderLineItem from './OrderLineItem.js';
+import styles from '../style';
+import { Common, Props } from '../utils/Common';
+import Cart from '../screens/Cart';
+import OrderLineItem from './OrderLineItem';
 
-export default class OrderItem extends React.PureComponent {
+
+export default class OrderItem extends React.PureComponent<Props> {
     _onPress = () => {
         this.props.onPressItem(this.props.item);
+    }
+
+    _onPressItem = () => {
+        
     }
     _renderItem = ({ item }) => {
         <OrderLineItem
