@@ -33,7 +33,7 @@ export default class Market extends Component<Props>{
         let tokens = await login.login()
         await defaultTokenStorage.saveTokens(tokens)
         let token = tokens.access_token
-        console.log("****token******")
+        console.log(token)
         await defaultTokenStorage.showUser()
     }
 
