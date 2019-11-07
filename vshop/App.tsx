@@ -13,6 +13,7 @@ import CustomerOrder from './src/screens/CustomerOrder';
 import Orders from './src/screens/Orders';
 
 
+
 const MainNavigator = createStackNavigator({
   Market: { screen: Market },
   SignUp: { screen: SignUp },

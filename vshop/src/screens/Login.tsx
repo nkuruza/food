@@ -12,7 +12,7 @@ export default class Login extends Component{
     constructor(props) {
         super(props);
         this.state = { username:'', password: '' };
-        this.onChange = this.onChange.bind(this)
+        //this.onChange = this.onChange.bind(this)
     }
     componentDidMount() {
         this.setState({ username:'', password: '' });
@@ -48,7 +48,7 @@ export default class Login extends Component{
         return (
             <View style={styles.container}>
                 <TextInput value={this.state.username}></TextInput>
-                <TextInput secureTextEntry="true" value={this.state.password}></TextInput>
+                <TextInput secureTextEntry={true} value={this.state.password}></TextInput>
                 <TouchableHighlight style={styles.button} onPress={this._signupPress} underlayColor='#99d9f4'>
                     <Text style={styles.buttonText}>Sign Up</Text>
                 </TouchableHighlight>

@@ -5,6 +5,8 @@ import { FoodApi } from '../service/FoodApi';
 import MerchantItem from '../component/MerchantItem';
 import { StorageHelper } from '../service/Storage';
 
+
+
 type Props = {};
 
 export default class Merchant extends Component<Props>{
@@ -13,14 +15,15 @@ export default class Merchant extends Component<Props>{
         this.state = { shops: [], orders: [] };
     }
     componentDidMount() {
-        StorageHelper.get("Authorization").then(auth => {
+        /*StorageHelper.get("Authorization").then(auth => {
             if (auth) {
                 this.listShops();
                 this.listMyShopOrders();
             }
             else
                 this.props.navigation.navigate("Login")
-        });
+        });*/
+        //let keycloak = Keycloak();
     }
     unauthorized() {
         StorageHelper.remove('Authorization').then(removed => {
@@ -65,7 +68,7 @@ export default class Merchant extends Component<Props>{
         this.props.navigation.navigate("Store", { store: item });
     }
     _viewOrders = () => {
-        
+
         this.props.navigation.navigate("Orders");
     }
 
