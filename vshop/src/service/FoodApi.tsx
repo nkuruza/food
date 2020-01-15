@@ -1,7 +1,7 @@
 
 import { checkStatus } from "../utils/apiUtils";
 import { StorageHelper } from './Storage';
-import { Common } from "../utils/Common";
+import { Common, MediaType } from "../utils/Common";
 
 var url = "https://dev.asandasystems.co.za/food-service";
 
@@ -52,20 +52,23 @@ var post = async (endpoint: string, data: any, form: boolean) => {
 }
 
 var restCall = async (endpoint: string, method?: string, data?: any, form?: boolean) => {
-    let contentType = form ? 'application/x-www-form-urlencoded' : 'application/json';
-    let body = form ? Common.serializeJSON(data) : JSON.stringify(data);
+    let contentType = MediaType.APPLICATION_JSON;
+    let body = JSON.stringify(data);
+    if(form){
+        contentType = 'application/x-www-form-urlencoded';
+        Common.serializeJSON(data);
+    }
     let headers = {
-        Accept: 'application/json',
+        Accept: MediaType.APPLICATION_JSON,
         'Content-Type': contentType,
         Authorization: null
     }
     let req = {
         method: method,
         headers: headers,
-        body: null,
-        //method: method
+        body: null
     };
-    let auth = await StorageHelper.get("Authorization");
+    let auth = await StorageHelper.get("Authorization");    //TODO retrieve from KC
 
     if (auth)
         headers.Authorization = auth.value;

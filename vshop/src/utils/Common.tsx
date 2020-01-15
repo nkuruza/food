@@ -13,3 +13,7 @@ export interface Props {
     item: any,
     onPressItem: any
 }
+export var MediaType = {
+    APPLICATION_JSON: 'application/json',
+    APPLICATION_WWW_FORM: ''
+}
