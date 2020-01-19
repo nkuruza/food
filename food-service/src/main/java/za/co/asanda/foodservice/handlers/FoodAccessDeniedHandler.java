@@ -1,4 +1,4 @@
-package za.co.asanda.foodservice.config;
+package za.co.asanda.foodservice.handlers;
 
 import java.io.IOException;
 

@@ -27,12 +27,12 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private UserProfileRepository userProfileRepo;
     
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    //@Autowired
+    //private PasswordEncoder passwordEncoder;
  
      
     public User save(User user){
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        //user.setPassword(passwordEncoder.encode(user.getPassword()));
         user.setConfirmPassword(user.getPassword());
         Set<UserProfile> userProfiles = new HashSet<UserProfile>();
         for(UserProfile pro : user.getUserProfiles()){
@@ -82,7 +82,7 @@ public class UserServiceImpl implements UserService{
 
 	@Override
 	public String encodePassword(String password) {
-		return passwordEncoder.encode(password);
+		return ""; //passwordEncoder.encode(password);
 	}
  
 }
