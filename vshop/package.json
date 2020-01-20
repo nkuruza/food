@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "expo": "^35.0.0",
+    "expo-app-auth": "^7.0.0",
+    "expo-jwt": "^1.2.0",
     "expo-login-keycloak": "^1.0.10",
     "patch-package": "^6.2.0",
     "react": "16.8.3",

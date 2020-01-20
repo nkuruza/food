@@ -18,19 +18,20 @@ export var CartService = {
     },
     getCart: async (shopId) => {
         console.log(shopId)
+
         let cart = await StorageHelper.get('CART' + shopId);
         console.log(cart);
         let items = [];
-        for (key in cart)
+        for (let key in cart)
             items.push(cart[key]);
-            console.log(items)
+        console.log(items)
         return items;
     },
     count: async (shopId) => {
         let cart = await StorageHelper.get('CART' + shopId);
         console.log(cart);
         let total = 0;
-        for (key in cart)
+        for (let key in cart)
             total += cart[key].qty;
         return total;
     },

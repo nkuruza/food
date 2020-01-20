@@ -11,10 +11,12 @@ import Cart from './src/screens/Cart';
 import Product from './src/screens/Product';
 import CustomerOrder from './src/screens/CustomerOrder';
 import Orders from './src/screens/Orders';
+import Home from './src/screens/Home';
 
 
 
 const MainNavigator = createStackNavigator({
+  Home: { screen: Home },
   Market: { screen: Market },
   SignUp: { screen: SignUp },
   Store: { screen: Store },

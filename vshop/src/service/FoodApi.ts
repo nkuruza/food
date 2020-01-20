@@ -2,8 +2,11 @@
 import { checkStatus } from "../utils/apiUtils";
 import { StorageHelper } from './Storage';
 import { Common, MediaType } from "../utils/Common";
+import { AuthenticationApi } from "./Authentication";
 
 var url = "https://dev.asandasystems.co.za/food-service";
+
+const authApi = AuthenticationApi.getInstance();
 
 export var FoodApi = {
     signUp: async (user) => {
@@ -68,10 +71,12 @@ var restCall = async (endpoint: string, method?: string, data?: any, form?: bool
         headers: headers,
         body: null
     };
-    let auth = await StorageHelper.get("Authorization");    //TODO retrieve from KC
+    let auth = await authApi.getCachedAuth();
+
+    console.log("auth", auth)
 
     if (auth)
-        headers.Authorization = auth.value;
+        headers.Authorization = "Bearer " + auth.accessToken;
 
 
     if (data)

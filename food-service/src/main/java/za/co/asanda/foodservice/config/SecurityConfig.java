@@ -55,13 +55,14 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		super.configure(http);
-		http.authorizeRequests().antMatchers("/users/username").authenticated().antMatchers("/shops/save")
-				.hasRole("MERCHANT")
-				.anyRequest().permitAll()
-				.and().exceptionHandling()
-					.accessDeniedHandler(accessDeniedHandler)
-					.authenticationEntryPoint(unauthorizedHandler)
-				.and().csrf().disable();
+		http.authorizeRequests()
+				.antMatchers("/orders/place").hasRole("CUSTOMER")
+				.antMatchers("/shops/save").hasRole("MERCHANT")
+				.anyRequest().authenticated()
+			.and().exceptionHandling()
+				.accessDeniedHandler(accessDeniedHandler)
+				.authenticationEntryPoint(unauthorizedHandler)
+			.and().csrf().disable();
 	}
 	@Bean
 	public AuthenticationFailureHandler asandaAuthenticationFailureHandler() {

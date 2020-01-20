@@ -1,26 +1,26 @@
 const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
 export var Base64 = {
-  btoa: (input:string = '')  => {
+  btoa: (input: string = '') => {
     let str = input;
     let output = '';
 
     for (let block = 0, charCode, i = 0, map = chars;
-    str.charAt(i | 0) || (map = '=', i % 1);
-    output += map.charAt(63 & block >> 8 - i % 1 * 8)) {
+      str.charAt(i | 0) || (map = '=', i % 1);
+      output += map.charAt(63 & block >> 8 - i % 1 * 8)) {
 
-      charCode = str.charCodeAt(i += 3/4);
+      charCode = str.charCodeAt(i += 3 / 4);
 
       if (charCode > 0xFF) {
         throw new Error("'btoa' failed: The string to be encoded contains characters outside of the Latin1 range.");
       }
-      
+
       block = block << 8 | charCode;
     }
-    
+
     return output;
   },
 
-  atob: (input:string = '') => {
+  atob: (input: string = '') => {
     let str = input.replace(/=+$/, '');
     let output = '';
 
@@ -37,5 +37,15 @@ export var Base64 = {
     }
 
     return output;
+  },
+
+  parseJwt: (token) => {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(atob(base64).split('').map(function (c) {
+      return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
   }
 };

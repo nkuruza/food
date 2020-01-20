@@ -3,7 +3,7 @@ import { FlatList, View, TouchableHighlight, Text } from 'react-native';
 import MerchantItem from '../component/MerchantItem';
 import styles from '../style';
 import { FoodApi } from '../service/FoodApi';
-import { LoginApi } from '../service/LoginApi';
+import { AuthenticationApi } from '../service/Authentication';
 
 
 type Props = {};
@@ -16,6 +16,18 @@ export default class Market extends Component<Props>{
     }
 
     componentDidMount() {
+
+        let auth: AuthenticationApi = new AuthenticationApi();
+
+        auth.signIn().then(token => {
+            //console.log('Token', token);
+            //console.log(auth.getUserInfo());
+            auth.getUserInfo().then(info => {
+                console.log('got user info', info)
+            })
+            console.log('got user info')
+        })
+
         FoodApi.listShops().then(response => {
             this.setState({ shops: response });
         })
@@ -43,9 +55,6 @@ export default class Market extends Component<Props>{
     render() {
         return (
             <View>
-                <TouchableHighlight style={styles.button} onPress={this._merchantLogin} underlayColor='#99d9f4'>
-                    <Text style={styles.buttonText}>Merchant Login</Text>
-                </TouchableHighlight>
                 <FlatList
                     ItemSeparatorComponent={this._itemSeparator}
                     data={this.state.shops}

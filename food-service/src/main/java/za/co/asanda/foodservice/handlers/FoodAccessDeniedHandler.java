@@ -17,7 +17,7 @@ public class FoodAccessDeniedHandler implements AccessDeniedHandler {
 	public void handle(HttpServletRequest request, HttpServletResponse response,
 			AccessDeniedException accessDeniedException) throws IOException, ServletException {
 		response.getOutputStream().print("Oops, you're not allowed to access that :p");
-        response.setStatus(403);
+		response.setStatus(403);
 	}
 
 }
