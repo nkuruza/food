@@ -32,8 +32,8 @@ public class OrderServiceImpl implements OrderService {
 		for (OrderLine line : o.getOrderLines())
 			line.setUnitPrice(line.getProduct().getPrice());
 		User customer = userService.findById(o.getCustomer().getId());
-		customer.setLat(o.getCustomer().getLat());
-		customer.setLon(o.getCustomer().getLon());
+		//customer.setLat(o.getCustomer().getLat());
+		//customer.setLon(o.getCustomer().getLon());
 		o.setCustomer(customer);
 		return repo.save(o);
 	}

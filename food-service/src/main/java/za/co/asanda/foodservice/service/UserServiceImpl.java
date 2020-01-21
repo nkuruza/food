@@ -1,16 +1,10 @@
 package za.co.asanda.foodservice.service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-
 import za.co.asanda.foodservice.model.User;
-import za.co.asanda.foodservice.model.UserProfile;
-import za.co.asanda.foodservice.repo.UserProfileRepository;
 import za.co.asanda.foodservice.repo.UserRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,23 +16,11 @@ public class UserServiceImpl implements UserService{
  
     @Autowired
     private UserRepository userRepo;
-    
-    
-    @Autowired
-    private UserProfileRepository userProfileRepo;
-    
-    //@Autowired
-    //private PasswordEncoder passwordEncoder;
+
  
      
     public User save(User user){
-        //user.setPassword(passwordEncoder.encode(user.getPassword()));
-        user.setConfirmPassword(user.getPassword());
-        Set<UserProfile> userProfiles = new HashSet<UserProfile>();
-        for(UserProfile pro : user.getUserProfiles()){
-        	userProfiles.add(userProfileRepo.getOne(pro.getId()));
-        }
-        user.setUserProfiles(userProfiles);
+        
         return userRepo.save(user);
     }
  
@@ -55,11 +37,7 @@ public class UserServiceImpl implements UserService{
 		User entity = userRepo.findById(user.getId()).get();
         if(entity!=null){
             entity.setUsername(user.getUsername());
-            entity.setPassword(user.getPassword());
-            entity.setFirstName(user.getFirstName());
-            entity.setLastName(user.getLastName());
-            entity.setEmail(user.getEmail());
-            entity.setUserProfiles(user.getUserProfiles());
+            
         }
 	}
 
