@@ -1,4 +1,4 @@
-package za.co.asanda.foodservice.config;
+package za.co.asanda.foodservice.handlers;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

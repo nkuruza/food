@@ -1,9 +1,11 @@
 package za.co.asanda.foodservice.controller;
 
+import java.util.Iterator;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import za.co.asanda.foodservice.model.User;
+import za.co.asanda.foodservice.service.ApiKeyService;
 import za.co.asanda.foodservice.service.UserService;
 
 @RestController
@@ -20,6 +23,9 @@ import za.co.asanda.foodservice.service.UserService;
 public class UserController {
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	ApiKeyService apiKeyService;
 	
 	@GetMapping("/list")
 	public List<User> getAllUsers(){
@@ -33,7 +39,13 @@ public class UserController {
 	@GetMapping("/username")
 	public String getUsername() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		return authentication.getName();
+		String roles = "";
+		Iterator<? extends GrantedAuthority> it = authentication.getAuthorities().iterator();
+		
+		while (it.hasNext()) {
+			roles += it.next().getAuthority();
+		}
+		return authentication.getName() + "roles: " + roles;
 	}
 	@GetMapping("/me")
 	public User whoAmI() {
@@ -42,5 +54,9 @@ public class UserController {
 	@GetMapping("/encode/{password}")
 	public String encode(@PathVariable("password") String password) {
 		return userService.encodePassword(password);
+	}
+	@GetMapping("/mapkey")
+	public String getMapKey() {
+		return apiKeyService.getByName("googlemaps");
 	}
 }

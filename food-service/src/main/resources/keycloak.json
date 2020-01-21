@@ -1,0 +1,10 @@
+{
+  "realm": "virtual-shop",
+  "auth-server-url": "https://auth.asandasystems.co.za/auth",
+  "ssl-required": "external",
+  "resource": "vshop-server",
+  "public-client": true,
+  "verify-token-audience": true,
+  "use-resource-role-mappings": true,
+  "confidential-port": 0
+}
