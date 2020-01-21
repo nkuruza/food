@@ -27,7 +27,7 @@ export class AuthenticationApi {
     async signIn() {
         const authState = await AppAuth.authAsync(config);
         await this.cacheAuth(authState);
-        console.log('signInAsync', authState);
+        //console.log('signInAsync', authState);
         return authState;
     }
 
@@ -39,7 +39,7 @@ export class AuthenticationApi {
     async getCachedAuth() {
         const value = await AsyncStorage.getItem(StorageKey);
         const authState = JSON.parse(value);
-        console.log('getCachedAuthAsync', authState);
+        //console.log('getCachedAuthAsync', authState);
         if (authState) {
             try{
                 if (this.checkIfTokenExpired(authState)) {
@@ -64,7 +64,7 @@ export class AuthenticationApi {
     async refreshAuth({ refreshToken }) {
         try{
             const authState = await AppAuth.refreshAsync(config, refreshToken);
-            console.log('refreshAuth', authState);
+            //console.log('refreshAuth', authState);
             await this.cacheAuth(authState);
             return authState;
         }

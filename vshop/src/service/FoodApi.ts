@@ -76,7 +76,7 @@ var restCall = async (endpoint: string, method?: string, data?: any, form?: bool
     };
     let auth = await authApi.getCachedAuth();
 
-    console.log("auth", auth)
+    //console.log("auth", auth)
 
     if (auth)
         headers.Authorization = "Bearer " + auth.accessToken;

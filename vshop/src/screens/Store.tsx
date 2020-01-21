@@ -81,8 +81,8 @@ export default class Store extends AuthenticatedScreen {
     }
 
     _viewCart = () => {
+        console.log(this.state.cart.values());
         this.props.navigation.navigate('Cart', {
-            cart: Array.from(this.state.cart.values()),
             shopId: this.state.shop.id
         })
     }
