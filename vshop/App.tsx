@@ -12,11 +12,13 @@ import Product from './src/screens/Product';
 import CustomerOrder from './src/screens/CustomerOrder';
 import Orders from './src/screens/Orders';
 import Home from './src/screens/Home';
+import UserDetails from './src/screens/UserDetails';
 
 
 
 const MainNavigator = createStackNavigator({
   Home: { screen: Home },
+  UserDetails: {screen: UserDetails},
   Market: { screen: Market },
   SignUp: { screen: SignUp },
   Store: { screen: Store },

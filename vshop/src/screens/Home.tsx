@@ -6,11 +6,12 @@ import { FoodApi } from '../service/FoodApi';
 import { AuthenticationApi } from '../service/Authentication';
 import { Base64 } from '../utils/Base64';
 import { Props } from '../utils/Common';
+import AuthenticatedScreen from './AuthenticatedScreen';
 
 
 
 
-export default class Home extends Component<Props>{
+export default class Home extends AuthenticatedScreen{
 
     constructor(props) {
         super(props);
@@ -18,26 +19,10 @@ export default class Home extends Component<Props>{
     }
 
     componentDidMount() {
-
-        let auth: AuthenticationApi = AuthenticationApi.getInstance();
-
-        auth.signIn().then(token => {
-            //console.log('Token', token);
-            //console.log(auth.getUserInfo());
-            let user = Base64.parseJwt(token.accessToken);
-            console.log('user', user);
-            console.log('user1', user.resource_access["vshop-server"].roles[0]);
-            if (user.resource_access["vshop-server"].roles[0] == "ROLE_MERCHANT")
-                this.props.navigation.navigate("Merchant");
-            else
-                this.props.navigation.navigate("Market");
-
-        })
-
-        FoodApi.listShops().then(response => {
-            this.setState({ shops: response });
-        })
+        super.componentDidMount();
     }
+
+    
 
     _keyExtractor = (item) => `item-${item.id}`;
 
@@ -68,15 +53,9 @@ export default class Home extends Component<Props>{
                 <TouchableHighlight style={styles.button} onPress={this._merchantLogin} underlayColor='#99d9f4'>
                     <Text style={styles.buttonText}>Merchant Login</Text>
                 </TouchableHighlight>
-                <TouchableHighlight style={styles.button} onPress={this._merchantLogin} underlayColor='#99d9f4'>
+                <TouchableHighlight style={styles.button} onPress={this._customerLogin} underlayColor='#99d9f4'>
                     <Text style={styles.buttonText}>Customer Login</Text>
                 </TouchableHighlight>
-                <FlatList
-                    ItemSeparatorComponent={this._itemSeparator}
-                    data={this.state.shops}
-                    keyExtractor={this._keyExtractor}
-                    renderItem={this._renderItem} />
-
             </View>
 
         )

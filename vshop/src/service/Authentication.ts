@@ -41,11 +41,18 @@ export class AuthenticationApi {
         const authState = JSON.parse(value);
         console.log('getCachedAuthAsync', authState);
         if (authState) {
-            if (this.checkIfTokenExpired(authState)) {
-                return this.refreshAuth(authState);
-            } else {
-                return authState;
+            try{
+                if (this.checkIfTokenExpired(authState)) {
+                    return this.refreshAuth(authState);
+                } else {
+                    return authState;
+                }
             }
+            catch(error){
+                console.log("getCachedAuth", error)
+                throw error;
+            }
+            
         }
         return null;
     }
@@ -55,14 +62,21 @@ export class AuthenticationApi {
     }
 
     async refreshAuth({ refreshToken }) {
-        const authState = await AppAuth.refreshAsync(config, refreshToken);
-        console.log('refreshAuthAsync', authState);
-        await this.cacheAuth(authState);
-        return authState;
+        try{
+            const authState = await AppAuth.refreshAsync(config, refreshToken);
+            console.log('refreshAuth', authState);
+            await this.cacheAuth(authState);
+            return authState;
+        }
+        catch(error){
+            console.log('error', error)
+            throw error;
+        }
+        
     }
 
 
-    async signOutAsync({ accessToken }) {
+    async signOut({ accessToken }) {
         try {
             await AppAuth.revokeAsync(config, {
                 token: accessToken,

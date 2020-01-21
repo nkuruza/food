@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import za.co.asanda.foodservice.model.User;
+import za.co.asanda.foodservice.service.ApiKeyService;
 import za.co.asanda.foodservice.service.UserService;
 
 @RestController
@@ -22,6 +23,9 @@ import za.co.asanda.foodservice.service.UserService;
 public class UserController {
 	@Autowired
 	UserService userService;
+	
+	@Autowired
+	ApiKeyService apiKeyService;
 	
 	@GetMapping("/list")
 	public List<User> getAllUsers(){
@@ -50,5 +54,9 @@ public class UserController {
 	@GetMapping("/encode/{password}")
 	public String encode(@PathVariable("password") String password) {
 		return userService.encodePassword(password);
+	}
+	@GetMapping("/mapkey")
+	public String getMapKey() {
+		return apiKeyService.getByName("googlemaps");
 	}
 }

@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import { TouchableHighlight, Text, View } from 'react-native';
+import { TouchableHighlight, Text, View, Switch, ScrollView } from 'react-native';
 import styles from '../style';
-import { FoodApi } from '../service/FoodApi';
-import { ScrollView, FlatList, Switch } from 'react-native-gesture-handler';
 import { StorageHelper } from '../service/Storage';
 import { Props } from '../utils/Common';
 

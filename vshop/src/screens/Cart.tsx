@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import { ScrollView } from 'react-native-gesture-handler';
-import { FlatList, TouchableHighlight, Text, View } from 'react-native';
+import { FlatList, TouchableHighlight, Text, View, ScrollView } from 'react-native';
 import CartItem from '../component/CartItem';
 import styles from '../style';
 import { FoodApi } from '../service/FoodApi';
 import { CartService } from '../service/CartService';
-import { StorageHelper } from '../service/Storage';
 import { User } from '../model/User';
 import { Shop } from '../model/Shop';
 import { Cart } from '../model/Cart';

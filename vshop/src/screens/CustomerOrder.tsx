@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { TouchableHighlight, Text, View } from 'react-native';
-import { ScrollView, FlatList } from 'react-native-gesture-handler';
+import {  Text, View, ScrollView, FlatList } from 'react-native';
 import CartItem from '../component/CartItem';
 import styles from '../style';
 

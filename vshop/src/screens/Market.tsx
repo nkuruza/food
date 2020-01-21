@@ -8,6 +8,8 @@ import { AuthenticationApi } from '../service/Authentication';
 
 type Props = {};
 
+let AUTH: AuthenticationApi = AuthenticationApi.getInstance();
+
 export default class Market extends Component<Props>{
 
     constructor(props) {
@@ -17,20 +19,19 @@ export default class Market extends Component<Props>{
 
     componentDidMount() {
 
-        let auth: AuthenticationApi = new AuthenticationApi();
+        AUTH.getCachedAuth().then(token => {
+            if (token) this.completeSignIn();
+            else
+                AUTH.signIn().then(token => {
+                    if (token) this.completeSignIn();
+                });
+        });
+    }
 
-        auth.signIn().then(token => {
-            //console.log('Token', token);
-            //console.log(auth.getUserInfo());
-            auth.getUserInfo().then(info => {
-                console.log('got user info', info)
-            })
-            console.log('got user info')
-        })
-
+    completeSignIn() {
         FoodApi.listShops().then(response => {
             this.setState({ shops: response });
-        })
+        });
     }
 
     _keyExtractor = (item) => `item-${item.id}`;
