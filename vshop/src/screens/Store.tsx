@@ -8,10 +8,14 @@ import { CartService } from '../service/CartService';
 import { Shop } from '../model/Shop';
 import { User } from '../model/User';
 import { Product } from '../model/Product';
+import AuthenticatedScreen from './AuthenticatedScreen';
 
 
 
-export default class Store extends Component<{ navigation: any }, { cart: [], shop: Shop, user: User }> {
+export default class Store extends AuthenticatedScreen {
+    signInComplete(): void {
+        //throw new Error("Method not implemented.");
+    }
     static navigationOptions = ({ navigation }) => {
         return {
             headerRight: (

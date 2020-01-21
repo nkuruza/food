@@ -4,29 +4,25 @@ import styles from '../style';
 import { FoodApi } from '../service/FoodApi';
 import MerchantItem from '../component/MerchantItem';
 import { StorageHelper } from '../service/Storage';
-import { LoginApi } from '../service/LoginApi';
+import AuthenticatedScreen from './AuthenticatedScreen';
 
 
 
 type Props = {};
 
-export default class Merchant extends Component<Props>{
+export default class Merchant extends AuthenticatedScreen {
+    signInComplete(): void {
+
+        this.listShops();
+        this.listMyShopOrders();
+    }
     constructor(props) {
         super(props);
         this.state = { shops: [], orders: [] };
     }
     componentDidMount() {
-        LoginApi.getUser().then(user => {
-            if (user == null)
-                this.unauthorized;
-            else {
-                this.listShops();
-                this.listMyShopOrders();
-            }
-        });
-    }
-    unauthorized() {
-        LoginApi.login();
+        super.componentDidMount();
+
     }
     listMyShopOrders() {
         FoodApi.myShopOrders().then(response => {
@@ -40,7 +36,7 @@ export default class Merchant extends Component<Props>{
             this.setState({ shops: response })
         }).catch(e => {
             if (e.response.status === 401) {
-                this.unauthorized();
+                console.log('unauthorized')
             }
             else {
                 console.log(e);
@@ -52,12 +48,7 @@ export default class Merchant extends Component<Props>{
         this.props.navigation.navigate("ShopForm");
     }
     _logout = () => {
-        StorageHelper.remove('Authorization').then(() => {
-            StorageHelper.remove("user")
-
-        }).then(() => {
-            this.props.navigation.popToTop();
-        })
+        super.logout();
     }
     _keyExtractor = (item) => `item-${item.id}`;
 

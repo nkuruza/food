@@ -2,16 +2,12 @@ import React, { Component, } from 'react';
 import { FlatList, View, TouchableHighlight, Text } from 'react-native';
 import MerchantItem from '../component/MerchantItem';
 import styles from '../style';
-import { FoodApi } from '../service/FoodApi';
-import { AuthenticationApi } from '../service/Authentication';
-import { Base64 } from '../utils/Base64';
-import { Props } from '../utils/Common';
 import AuthenticatedScreen from './AuthenticatedScreen';
 
 
 
 
-export default class Home extends AuthenticatedScreen{
+export default class Home extends AuthenticatedScreen {
 
     constructor(props) {
         super(props);
@@ -22,7 +18,15 @@ export default class Home extends AuthenticatedScreen{
         super.componentDidMount();
     }
 
-    
+    signInComplete() {
+        console.log("Sign in complete", this.roles)
+        if (this.roles[0] == "ROLE_MERCHANT")
+            this.props.navigation.navigate("Merchant");
+        else if (this.roles[0] == "ROLE_CUSTOMER")
+            this.props.navigation.navigate("Market");
+        else
+            console.log("Fuck")
+    }
 
     _keyExtractor = (item) => `item-${item.id}`;
 

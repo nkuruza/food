@@ -4,13 +4,13 @@ import MerchantItem from '../component/MerchantItem';
 import styles from '../style';
 import { FoodApi } from '../service/FoodApi';
 import { AuthenticationApi } from '../service/Authentication';
+import AuthenticatedScreen from './AuthenticatedScreen';
 
 
-type Props = {};
 
 let AUTH: AuthenticationApi = AuthenticationApi.getInstance();
 
-export default class Market extends Component<Props>{
+export default class Market extends AuthenticatedScreen{
 
     constructor(props) {
         super(props);
