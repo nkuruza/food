@@ -44,6 +44,9 @@ export var FoodApi = {
     },
     myShopOrders: async () => {
         return get(`/orders/mine`);
+    },
+    mapKey: async () => {
+        return get("/users/mapkey")
     }
 }
 
