@@ -35,6 +35,7 @@ export default class CartScreen extends AuthenticatedScreen{
         this.props.navigation.setParams({ clearCart: this._clearCart })
     }
     componentDidMount() {
+        super.componentDidMount();
         this.refresh();
     }
 
@@ -58,9 +59,8 @@ export default class CartScreen extends AuthenticatedScreen{
 
     _placeOrder = () => {
         let coords: Position = {};
-        let customer = this.state.user;
+        let customer = this.user;
         CartService.getCart(this.state.shopId).then(lines => {
-            console.log("_placeOrder:lines", lines);
             let order = {
                 shop: lines[0].product.shop,
                 orderLines: lines,
@@ -68,10 +68,10 @@ export default class CartScreen extends AuthenticatedScreen{
             }
             return FoodApi.placeOrder(order);
         }).then(response => {
-            console.log("ORDER SUCCESS");
-            console.log(response);
             this._clearCart();
             this.props.navigation.navigate("CustomerOrder", { order: response });
+        }).catch(error => {
+            console.log("fucking error")
         });
     }
     _clearCart = () => {
@@ -81,7 +81,6 @@ export default class CartScreen extends AuthenticatedScreen{
     }
     render() {
         let total = 0;
-        //console.log(this.state.data)
         if (this.state.data)
             for (item of this.state.data)
                 total += (item.product.price * item.qty);

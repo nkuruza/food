@@ -1,10 +1,10 @@
 
 import { checkStatus } from "../utils/apiUtils";
-import { StorageHelper } from './Storage';
 import { Common, MediaType } from "../utils/Common";
 import { AuthenticationApi } from "./Authentication";
 
-var url = "https://dev.asandasystems.co.za/food-service";
+//var url = "https://dev.asandasystems.co.za/food-service";
+var url = "http://192.168.1.2:8081";
 
 const authApi = AuthenticationApi.getInstance();
 
@@ -12,7 +12,10 @@ export var FoodApi = {
     signUp: async (user) => {
         return post(`/users/add`, user, null);
     },
-    login: async (user) => {
+    newUser: async (user) => {
+        return post(`/users/new`, user, null);
+    },
+    whoami: async () => {
         return get(`/users/me`)
     },
     getUserByDevice: async (deviceId) => {
@@ -76,7 +79,6 @@ var restCall = async (endpoint: string, method?: string, data?: any, form?: bool
     };
     let auth = await authApi.getCachedAuth();
 
-    //console.log("auth", auth)
 
     if (auth)
         headers.Authorization = "Bearer " + auth.accessToken;
@@ -87,5 +89,8 @@ var restCall = async (endpoint: string, method?: string, data?: any, form?: bool
     return fetch(`${url}${endpoint}`, req).then(checkStatus)
         .then(response => {
             return response.json();
-        })
+        }).catch(error =>{
+            console.log("ERROR", error)
+            throw error;
+        });
 }

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { FlatList, View, TouchableHighlight, Text } from 'react-native';
+import { FlatList, View, TouchableHighlight, Text, ToastAndroid } from 'react-native';
 import styles from '../style';
 import { FoodApi } from '../service/FoodApi';
 import MerchantItem from '../component/MerchantItem';
@@ -37,6 +37,7 @@ export default class Merchant extends AuthenticatedScreen {
         }).catch(e => {
             if (e.response.status === 401) {
                 console.log('unauthorized')
+                ToastAndroid.show("You are not allowed to list shops", ToastAndroid.LONG)
             }
             else {
                 console.log(e);
@@ -45,7 +46,11 @@ export default class Merchant extends AuthenticatedScreen {
         });
     }
     _createShop = () => {
-        this.props.navigation.navigate("ShopForm");
+        this.props.navigation.navigate("ShopForm", {
+            listShops: () => {
+                this.listShops();
+            }
+        });
     }
     _logout = () => {
         super.logout();

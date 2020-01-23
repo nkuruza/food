@@ -11,6 +11,7 @@ import CustomerOrder from './src/screens/CustomerOrder';
 import Orders from './src/screens/Orders';
 import Home from './src/screens/Home';
 import UserDetails from './src/screens/UserDetails';
+import LocationSelector from './src/screens/Map';
 
 
 
@@ -25,7 +26,8 @@ const MainNavigator = createStackNavigator({
   Product: { screen: Product },
   Cart: { screen: Cart },
   CustomerOrder: { screen: CustomerOrder },
-  Orders: { screen: Orders }
+  Orders: { screen: Orders },
+  Map: { screen: LocationSelector }
 });
 
 const App = createAppContainer(MainNavigator);

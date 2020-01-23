@@ -13,19 +13,32 @@ export default class Home extends AuthenticatedScreen {
         super(props);
         this.state = { shops: [] }
     }
-
+    willFocusSubscription:any
     componentDidMount() {
         super.componentDidMount();
+
+        this.willFocusSubscription = this.props.navigation.addListener(
+            'willFocus',
+            () => {
+                super.signIn();
+            }
+        );
+    }
+
+    componentWillUnmount() {
+        this.willFocusSubscription.remove();
     }
 
     signInComplete() {
-        console.log("Sign in complete", this.roles)
+        if (this.roles.length == 0) this.props.navigation.navigate("UserDetails");
+
         if (this.roles[0] == "ROLE_MERCHANT")
             this.props.navigation.navigate("Merchant");
         else if (this.roles[0] == "ROLE_CUSTOMER")
             this.props.navigation.navigate("Market");
         else
             console.log("Fuck")
+
     }
 
     _keyExtractor = (item) => `item-${item.id}`;

@@ -11,6 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "orders")
@@ -26,6 +27,7 @@ public class Order implements Serializable {
 	@ManyToOne
 	private User customer;
 	@ManyToOne
+	@NotNull
 	private OrderStatus status;
 	@ManyToOne
 	private Shop shop;

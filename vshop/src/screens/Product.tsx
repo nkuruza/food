@@ -4,7 +4,7 @@ import styles from '../style';
 
 type Props = {};
 
-export default class Product extends Component<Props>{
+export default class Product extends Component<any>{
     constructor(props) {
         super(props);
     }

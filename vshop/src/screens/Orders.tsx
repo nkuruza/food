@@ -16,7 +16,7 @@ import { Order } from '../model/Order';
 
 const statusStyles = [styles.placed, styles.viewed, styles.accepted, styles.preparing, styles.ready, styles.customerAccepted]
 
-export default class Orders extends Component<Props,{data:any[], user: User}>{
+export default class Orders extends Component<Props, { data: any[], user: User }>{
     constructor(props) {
         super(props);
         this.state = { data: [], user: null };
@@ -29,7 +29,7 @@ export default class Orders extends Component<Props,{data:any[], user: User}>{
         })
     }
 
-    getTotal(lines:OrderLine[]) {
+    getTotal(lines: OrderLine[]) {
         let total = 0;
         for (let i = 0; i < lines.length; i++)
             total += (lines[i].unitPrice * lines[i].qty);
@@ -39,13 +39,16 @@ export default class Orders extends Component<Props,{data:any[], user: User}>{
     _itemSeparator = () => (
         <View style={styles.itemSeparator} />
     )
-    _renderSectionHeader = ({ section }) => (
-        <View style={styles.orderHeader}>
-            <Text style={styles.orderCustomer}>{section.customer.firstName}</Text>
-            <Text style={{ ...statusStyles[section.status.id - 1], ...styles.orderStatus }}>{section.status.type}</Text>
-        </View>
+    _renderSectionHeader = ({ section }) => {
+        (
 
-    )
+            <View style={styles.orderHeader}>
+                <Text style={styles.orderCustomer}>{section.customer.firstName}</Text>
+                <Text style={{ ...statusStyles[section.status.id - 1], ...styles.orderStatus }}>{section.status.type}</Text>
+            </View>
+
+        )
+    }
     _renderSectionFooter = ({ section }) => (
         <View style={styles.orderFooter}>
             <Text style={styles.orderTotal}>R {Common.formatMoney(this.getTotal(section.orderLines))}</Text>
@@ -53,7 +56,7 @@ export default class Orders extends Component<Props,{data:any[], user: User}>{
         </View>
     )
 
-    _onPressItem(){
+    _onPressItem() {
 
     }
 
@@ -64,6 +67,7 @@ export default class Orders extends Component<Props,{data:any[], user: User}>{
         />
     )
     render() {
+        console.log("DATA", this.state.data);
         return (
             <SectionList
                 renderItem={this._renderItem}

@@ -146,8 +146,13 @@ export default StyleSheet.create({
     },
     ready: {},
     customerAccepted: {},
-    mapStyle: {
-      width: Dimensions.get('window').width,
-      height: Dimensions.get('window').height,
+    map: {
+     width: "100%",
+     height: "80%",
+     paddingBottom: 100
     },
+    mapThumbnail: {
+        width: 100,
+        height: 100,
+      },
 });

@@ -2,10 +2,11 @@ import { Component } from "react";
 import { Props } from "../utils/Common";
 import { AuthenticationApi } from "../service/Authentication";
 import { Base64 } from "../utils/Base64";
+import { FoodApi } from "../service/FoodApi";
 
 let AUTH: AuthenticationApi = AuthenticationApi.getInstance();
 
-export default abstract class AuthenticatedScreen extends Component<Props,any>{
+export default abstract class AuthenticatedScreen extends Component<Props, any>{
 
     protected user: any;
     protected roles: string[] = [];
@@ -26,14 +27,25 @@ export default abstract class AuthenticatedScreen extends Component<Props,any>{
         });
     }
 
+    async refreshToken() {
+        let token = await AUTH.forceRefreshAuth();
+        this.completeSignIn(token.accessToken);
+    }
+
+
     completeSignIn(token) {
         let user = this.user = Base64.parseJwt(token);
         this.token = token;
 
+        FoodApi.whoami().then(u => {
+            this.user.id = u.id;
+        })
+
         if (user.resource_access["vshop-server"])
             this.roles = user.resource_access["vshop-server"].roles;
         else
-            this.props.navigation.navigate("UserDetails");
+            this.roles = [];
+
         this.signInComplete();
     }
     hasRole(role: string): boolean {
@@ -42,12 +54,15 @@ export default abstract class AuthenticatedScreen extends Component<Props,any>{
                 return true;
         return false;
     }
-    getRole(){
+    getRole() {
         return this.roles.length > 0 ? this.roles[0] : null;
     }
-    abstract signInComplete():void;
+    abstract signInComplete(): void;
 
-    logout(){
-        AUTH.signOut(this.token);
+    logout() {
+        AUTH.getCachedAuth().then(token => {
+            AUTH.signOut(token);
+        })
+
     }
 }

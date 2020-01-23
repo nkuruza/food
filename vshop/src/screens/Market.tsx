@@ -3,14 +3,19 @@ import { FlatList, View, TouchableHighlight, Text } from 'react-native';
 import MerchantItem from '../component/MerchantItem';
 import styles from '../style';
 import { FoodApi } from '../service/FoodApi';
-import { AuthenticationApi } from '../service/Authentication';
 import AuthenticatedScreen from './AuthenticatedScreen';
 
 
 
-let AUTH: AuthenticationApi = AuthenticationApi.getInstance();
+
 
 export default class Market extends AuthenticatedScreen{
+    signInComplete(): void {
+        FoodApi.listShops().then(response => {
+            this.setState({ shops: response });
+            console.log(response)
+        });
+    }
 
     constructor(props) {
         super(props);
@@ -18,26 +23,13 @@ export default class Market extends AuthenticatedScreen{
     }
 
     componentDidMount() {
-
-        AUTH.getCachedAuth().then(token => {
-            if (token) this.completeSignIn();
-            else
-                AUTH.signIn().then(token => {
-                    if (token) this.completeSignIn();
-                });
-        });
-    }
-
-    completeSignIn() {
-        FoodApi.listShops().then(response => {
-            this.setState({ shops: response });
-        });
+        super.componentDidMount();
     }
 
     _keyExtractor = (item) => `item-${item.id}`;
 
     _onPressItem = (item) => {
-        this.props.navigation.navigate("Store", { shop: item, user: { id: 0 } });
+        this.props.navigation.navigate("Store", { store: item, user: { id: 0 } });
     }
 
     _itemSeparator = () => (
@@ -56,6 +48,7 @@ export default class Market extends AuthenticatedScreen{
     render() {
         return (
             <View>
+                <Text>Marekt, yay</Text>
                 <FlatList
                     ItemSeparatorComponent={this._itemSeparator}
                     data={this.state.shops}

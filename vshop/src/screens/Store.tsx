@@ -13,9 +13,7 @@ import AuthenticatedScreen from './AuthenticatedScreen';
 
 
 export default class Store extends AuthenticatedScreen {
-    signInComplete(): void {
-        //throw new Error("Method not implemented.");
-    }
+    
     static navigationOptions = ({ navigation }) => {
         return {
             headerRight: (
@@ -28,19 +26,23 @@ export default class Store extends AuthenticatedScreen {
         }
     }
 
+    signInComplete(): void {
+        console.log("Checking user");
+        console.log("USER", this.user)
+    }
+
     constructor(props) {
         super(props);
         //this.props.navigation.setParams({ numCartItems: 0 });
         this.props.navigation.setParams({ viewCart: this._viewCart })
         this.state = {
-            shop: this.props.navigation.getParam('shop'),
-            user: this.props.navigation.getParam('user'),
+            shop: this.props.navigation.getParam('store'),
             cart:[]
         };
     }
 
     componentDidMount() {
-        let user = this.props.navigation.getParam('user');        
+        super.componentDidMount();       
         this.getShopItems();
     }
 
@@ -66,18 +68,16 @@ export default class Store extends AuthenticatedScreen {
     }
 
     addToCart(product, qty) {
-        console.log(product)
-        console.log(qty)
         CartService.add(product, qty).then(() => {
             return CartService.count(this.state.shop.id)
         }).then(num => {
-            console.log(num)
             this.props.navigation.setParams({ numCartItems: num });
         });
     }
 
     isMyShop() {
-        return this.state.shop.owner && this.state.user && this.state.shop.owner.id == this.state.user.id;
+        console.log(this.state)
+        return this.state.shop.owner && this.user && this.state.shop.owner.username == this.user.preferred_username;
     }
 
     _viewCart = () => {
