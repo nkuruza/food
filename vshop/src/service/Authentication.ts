@@ -39,7 +39,6 @@ export class AuthenticationApi {
     async getCachedAuth() {
         const value = await AsyncStorage.getItem(StorageKey);
         const authState = JSON.parse(value);
-        //console.log('getCachedAuthAsync', authState);
         if (authState) {
             try{
                 if (this.checkIfTokenExpired(authState)) {
@@ -59,6 +58,12 @@ export class AuthenticationApi {
 
     checkIfTokenExpired({ accessTokenExpirationDate }) {
         return new Date(accessTokenExpirationDate) < new Date();
+    }
+
+    async forceRefreshAuth(){
+        const value = await AsyncStorage.getItem(StorageKey);
+        const authState = JSON.parse(value);
+        return this.refreshAuth(authState);
     }
 
     async refreshAuth({ refreshToken }) {
