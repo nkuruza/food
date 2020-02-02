@@ -27,8 +27,7 @@ export default class Store extends AuthenticatedScreen {
     }
 
     signInComplete(): void {
-        console.log("Checking user");
-        console.log("USER", this.user)
+
     }
 
     constructor(props) {
@@ -106,9 +105,8 @@ export default class Store extends AuthenticatedScreen {
     )
     _renderItem = ({ item }) => (
         <StoreItem
-            item={item}
-            onPressItem={this._onPressItem}
-            title={item.name}
+            product={item}
+            onProductItemAction={this._onPressItem}
         />
     );
     render() {

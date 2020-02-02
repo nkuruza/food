@@ -6,7 +6,7 @@ import { FoodApi } from "../service/FoodApi";
 
 let AUTH: AuthenticationApi = AuthenticationApi.getInstance();
 
-export default abstract class AuthenticatedScreen extends Component<Props, any>{
+export default abstract class AuthenticatedScreen extends Component<any, any>{
 
     protected user: any;
     protected roles: string[] = [];

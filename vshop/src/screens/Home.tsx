@@ -1,6 +1,5 @@
 import React, { Component, } from 'react';
 import { FlatList, View, TouchableHighlight, Text } from 'react-native';
-import MerchantItem from '../component/MerchantItem';
 import styles from '../style';
 import AuthenticatedScreen from './AuthenticatedScreen';
 
@@ -20,7 +19,7 @@ export default class Home extends AuthenticatedScreen {
         this.willFocusSubscription = this.props.navigation.addListener(
             'willFocus',
             () => {
-                super.signIn();
+                //super.signIn();
             }
         );
     }
@@ -49,13 +48,6 @@ export default class Home extends AuthenticatedScreen {
 
     _itemSeparator = () => (
         <View style={styles.itemSeparator} />
-    )
-    _renderItem = ({ item }) => (
-        <MerchantItem
-            item={item}
-            onPressItem={this._onPressItem}
-            title={item.name}
-        />
     )
     _merchantLogin = () => {
         this.props.navigation.navigate("Merchant");

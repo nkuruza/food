@@ -2,22 +2,25 @@ import React, { Component } from 'react';
 import {  Text, View, ScrollView, FlatList } from 'react-native';
 import CartItem from '../component/CartItem';
 import styles from '../style';
+import AuthenticatedScreen from './AuthenticatedScreen';
 
 
-type Props = {};
-
-export default class CustomerOrder extends React.Component {
+export default class CustomerOrder extends AuthenticatedScreen {
+    signInComplete(): void {
+        //throw new Error("Method not implemented.");
+    }
     constructor(props) {
         super(props);
         this.state = { order: { shop: {} } };
     }
     componentDidMount() {
+        super.componentDidMount();
         let order = this.props.navigation.getParam("order");
-        console.log(order)
+        console.log(order);
         this.setState({ order: order });
     }
     _itemSeparator = () => (
-        <View style={styles.itemSeparator} />
+        <View style={styles.itemSeparator} /> 
     )
     _renderItem = ({ item }) => (
         <CartItem

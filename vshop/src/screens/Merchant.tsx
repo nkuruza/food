@@ -1,20 +1,19 @@
 import React, { Component } from 'react';
-import { FlatList, View, TouchableHighlight, Text, ToastAndroid } from 'react-native';
+import { FlatList, View, TouchableHighlight, Text, ToastAndroid, ScrollView } from 'react-native';
 import styles from '../style';
 import { FoodApi } from '../service/FoodApi';
-import MerchantItem from '../component/MerchantItem';
 import { StorageHelper } from '../service/Storage';
 import AuthenticatedScreen from './AuthenticatedScreen';
+import MerchantShop from '../component/MerchantShop';
+import { Shop } from '../model/Shop';
+import { Order } from '../model/Order';
 
-
-
-type Props = {};
 
 export default class Merchant extends AuthenticatedScreen {
     signInComplete(): void {
-
+        console.log("about to list shops")
         this.listShops();
-        this.listMyShopOrders();
+        this.listMyShopOrders()
     }
     constructor(props) {
         super(props);
@@ -28,23 +27,54 @@ export default class Merchant extends AuthenticatedScreen {
         FoodApi.myShopOrders().then(response => {
             this.setState({ orders: response })
             StorageHelper.put("orders", response);
-            console.log(response);
+            for (let order of response) {
+                this.addOrder(order);
+            }
         });
     }
+
+    addOrder(order: any) {
+        let shops = this.state.shops
+
+        for (let shop of shops) {
+            console.log(shop)
+            if (order.shop.id == shop.id) {
+                if (!shop.orders)
+                    shop.orders = [];
+                shop.orders.push(order)
+            }
+        }
+        this.setState({ shops: shops })
+        console.log("SHOPS", shops)
+    }
+
     listShops() {
         FoodApi.listMyShops().then(response => {
-            this.setState({ shops: response })
-        }).catch(e => {
-            if (e.response.status === 401) {
-                console.log('unauthorized')
-                ToastAndroid.show("You are not allowed to list shops", ToastAndroid.LONG)
-            }
-            else {
-                console.log(e);
-            }
 
-        });
+            this.setState({ shops: response });
+        })
+
+            .catch(e => {
+                if (e.response.status === 401) {
+                    console.log('unauthorized')
+                    ToastAndroid.show("You are not allowed to list shops", ToastAndroid.LONG)
+                }
+                else {
+                    console.log(e);
+                }
+
+            });
     }
+
+    getShopOrders(id: number): Order[] {
+        let orders: Order[] = [];
+        for (let order of this.state.orders) {
+            if (order.shop.id == id)
+                orders.push(order)
+        }
+        return orders;
+    }
+
     _createShop = () => {
         this.props.navigation.navigate("ShopForm", {
             listShops: () => {
@@ -57,35 +87,33 @@ export default class Merchant extends AuthenticatedScreen {
     }
     _keyExtractor = (item) => `item-${item.id}`;
 
-    _onPressItem = (item) => {
-        this.props.navigation.navigate("Store", { store: item });
-    }
-    _viewOrders = () => {
 
-        this.props.navigation.navigate("Orders");
+    _onItemAction = (shop: Shop, action: string) => {
+        console.log("ACTION")
+        if (action == "orders")
+            this.props.navigation.navigate("Orders", { shopId: shop.id });
+        else if (action == "view")
+            this.props.navigation.navigate("Store", { store: shop });
+
+        console.log("ACTION")
     }
 
     _itemSeparator = () => (
         <View style={styles.itemSeparator} />
     )
     _renderItem = ({ item }) => (
-        <MerchantItem
-            item={item}
-            onPressItem={this._onPressItem}
-            title={item.name}
+        <MerchantShop
+        role={super.getRole()}
+            orders={this.getShopOrders(item.id)}
+            shop={item}
+            onMerchantShopItemAction={this._onItemAction}
         />
     )
     render() {
         return (
-            <View>
-                <TouchableHighlight style={styles.button} onPress={this._logout} underlayColor='#99d9f4'>
-                    <Text style={styles.buttonText}>Logout</Text>
-                </TouchableHighlight>
+            <ScrollView>
                 <TouchableHighlight style={styles.button} onPress={this._createShop} underlayColor='#99d9f4'>
                     <Text style={styles.buttonText}>Create Shop</Text>
-                </TouchableHighlight>
-                <TouchableHighlight onPress={this._viewOrders}>
-                    <Text style={styles.titleText}>{this.state.orders.length} orders</Text>
                 </TouchableHighlight>
 
                 <FlatList
@@ -93,7 +121,7 @@ export default class Merchant extends AuthenticatedScreen {
                     data={this.state.shops}
                     keyExtractor={this._keyExtractor}
                     renderItem={this._renderItem} />
-            </View>
+            </ScrollView>
         )
     }
 }

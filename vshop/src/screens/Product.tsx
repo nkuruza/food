@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { FlatList, View, TouchableHighlight, Text } from 'react-native';
+import { FlatList, View, TouchableHighlight, Text, Image } from 'react-native';
 import styles from '../style';
-
-type Props = {};
+import NumberInput from '../component/NumberInput'
 
 export default class Product extends Component<any>{
     constructor(props) {
@@ -21,6 +20,12 @@ export default class Product extends Component<any>{
         return (
             <View>
                 <Text>{item.name}</Text>
+                <Image source={require('../img/roast.png')} style={styles.productImage} />
+                <Text>{item.description}</Text>
+                <View style={{ flexDirection: "row" }}>
+                    <Text>X</Text>
+                    <NumberInput></NumberInput>
+                </View>
                 <TouchableHighlight style={styles.button} onPress={this._addToCart} underlayColor='#99d9f4'>
                     <Text style={styles.buttonText}>Add to cart</Text>
                 </TouchableHighlight>

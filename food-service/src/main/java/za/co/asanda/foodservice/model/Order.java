@@ -11,7 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "orders")
@@ -27,50 +26,62 @@ public class Order implements Serializable {
 	@ManyToOne
 	private User customer;
 	@ManyToOne
-	@NotNull
 	private OrderStatus status;
 	@ManyToOne
 	private Shop shop;
-	
+
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 	public Collection<OrderLine> getOrderLines() {
 		return orderLines;
 	}
+
 	public void setOrderLines(Collection<OrderLine> orderLines) {
 		this.orderLines = orderLines;
 	}
+
 	public LocalDateTime getDateCreated() {
 		return dateCreated;
 	}
+
 	public void setDateCreated(LocalDateTime dateCreated) {
 		this.dateCreated = dateCreated;
 	}
+
 	public LocalDateTime getDateCompleted() {
 		return dateCompleted;
 	}
+
 	public void setDateCompleted(LocalDateTime dateCompleted) {
 		this.dateCompleted = dateCompleted;
 	}
+
 	public User getCustomer() {
 		return customer;
 	}
+
 	public void setCustomer(User customer) {
 		this.customer = customer;
 	}
+
 	public OrderStatus getStatus() {
 		return status;
 	}
+
 	public void setStatus(OrderStatus status) {
 		this.status = status;
 	}
+
 	public Shop getShop() {
 		return shop;
 	}
+
 	public void setShop(Shop shop) {
 		this.shop = shop;
 	}

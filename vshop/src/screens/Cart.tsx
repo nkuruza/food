@@ -71,7 +71,7 @@ export default class CartScreen extends AuthenticatedScreen{
             this._clearCart();
             this.props.navigation.navigate("CustomerOrder", { order: response });
         }).catch(error => {
-            console.log("fucking error")
+            console.log("fucking error", error)
         });
     }
     _clearCart = () => {
