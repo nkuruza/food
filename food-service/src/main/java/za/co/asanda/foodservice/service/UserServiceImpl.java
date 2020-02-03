@@ -76,17 +76,16 @@ public class UserServiceImpl implements UserService {
 	public String encodePassword(String password) {
 		return ""; // passwordEncoder.encode(password);
 	}
-	
-	@Value("${keycloak.auth-server-url}") 
-    String kcUrl;
-	
-	@Value("${keycloak.realm}") 
-    String kcRealm;
-	
-	@Value("${keycloak.resource}") 
-    String kcResource;
 
-// TODO REFACTOR THIS NONSENSE
+	@Value("${keycloak.auth-server-url}")
+	String kcUrl;
+
+	@Value("${keycloak.realm}")
+	String kcRealm;
+
+	@Value("${keycloak.resource}")
+	String kcResource;
+
 	@Override
 	public Long addNew(UserDto userDto) {
 		User user = new User();
@@ -102,26 +101,30 @@ public class UserServiceImpl implements UserService {
 			shop.setOwner(user);
 			shop = shopRepo.save(shop);
 		}
+		addSSOUser(username, userDto.getRole());
+
+		return user.getId();
+	}
+
+	private void addSSOUser(String username, String role) {
 		String apiUser = System.getenv("KEYCLOAK_API_USER");
 		String apiPass = System.getenv("KEYCLOAK_API_PASS");
 		String apiClient = System.getenv("KEYCLOAK_API_CLIENT");
 		String apiRealm = System.getenv("KEYCLOAK_API_REALM");
-		
-		Keycloak keycloak = KeycloakBuilder.builder().serverUrl(kcUrl).realm(apiRealm)
-				.username(apiUser).password(apiPass).clientId(apiClient)
+
+		Keycloak keycloak = KeycloakBuilder.builder().serverUrl(kcUrl).realm(apiRealm).username(apiUser)
+				.password(apiPass).clientId(apiClient)
 				.resteasyClient(new ResteasyClientBuilder().connectionPoolSize(10).build()).build();
 
 		RealmResource realmResource = keycloak.realm(kcRealm);
 
 		ClientRepresentation clientRep = realmResource.clients().findByClientId(kcResource).get(0);
-		RoleRepresentation clientRoleRep = realmResource.clients().get(clientRep.getId()).roles().get(userDto.getRole())
+		RoleRepresentation clientRoleRep = realmResource.clients().get(clientRep.getId()).roles().get(role)
 				.toRepresentation();
 
 		UserRepresentation kuser = realmResource.users().search(username).get(0);
 		realmResource.users().get(kuser.getId()).roles().clientLevel(clientRep.getId())
 				.add(Arrays.asList(clientRoleRep));
-
-		return user.getId();
 	}
 
 	private String whoami() {

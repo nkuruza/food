@@ -3,7 +3,7 @@ import { FlatList, View, TouchableHighlight, Text } from 'react-native';
 import styles from '../style';
 import { FoodApi } from '../service/FoodApi';
 import AuthenticatedScreen from './AuthenticatedScreen';
-import MerchantShop from '../component/MerchantShop';
+import MarketShop from '../component/MarketShop';
 
 
 
@@ -11,6 +11,7 @@ import MerchantShop from '../component/MerchantShop';
 
 export default class Market extends AuthenticatedScreen{
     signInComplete(): void {
+        //TODO get the location of the user before listing shops... List shops by radius.
         FoodApi.listShops().then(response => {
             this.setState({ shops: response });
         });
@@ -35,16 +36,15 @@ export default class Market extends AuthenticatedScreen{
         <View style={styles.itemSeparator} />
     )
     _renderItem = ({ item }) => (
-        <MerchantShop
+        <MarketShop
             shop={item}
-            onMerchantShopItemAction={this._onPressItem}
+            onItemAction={this._onPressItem}
         />
     )
     render() {
         return (
             <View>
                 <FlatList
-                    ItemSeparatorComponent={this._itemSeparator}
                     data={this.state.shops}
                     keyExtractor={this._keyExtractor}
                     renderItem={this._renderItem} />

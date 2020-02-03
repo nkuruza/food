@@ -2,17 +2,22 @@ import React, { Component } from 'react';
 import { FlatList, View, TouchableHighlight, Text, Image } from 'react-native';
 import styles from '../style';
 import NumberInput from '../component/NumberInput'
+import AuthenticatedScreen from './AuthenticatedScreen';
 
-export default class Product extends Component<any>{
+export default class Product extends AuthenticatedScreen {
+    signInComplete(): void {
+        //throw new Error("Method not implemented.");
+    }
     constructor(props) {
         super(props);
+        this.state = { count: 1 };
     }
     componentDidMount() {
-
+        super.componentDidMount();
     }
     _addToCart = () => {
         let item = this.props.navigation.state.params.item;
-        this.props.navigation.state.params.addToCart(item, 1);
+        this.props.navigation.state.params.addToCart(item, this.state.count);
         this.props.navigation.pop();
     }
     render() {
@@ -24,11 +29,11 @@ export default class Product extends Component<any>{
                 <Text>{item.description}</Text>
                 <View style={{ flexDirection: "row" }}>
                     <Text>X</Text>
-                    <NumberInput></NumberInput>
+                    <NumberInput value={this.state.count}></NumberInput>
+                    <TouchableHighlight style={styles.button} onPress={this._addToCart} underlayColor='#99d9f4'>
+                        <Text style={styles.buttonText}>Add to cart</Text>
+                    </TouchableHighlight>
                 </View>
-                <TouchableHighlight style={styles.button} onPress={this._addToCart} underlayColor='#99d9f4'>
-                    <Text style={styles.buttonText}>Add to cart</Text>
-                </TouchableHighlight>
             </View>
         )
     }

@@ -75,6 +75,25 @@ export default StyleSheet.create({
         flex: 2,
         margin: 5
     },
+    marketShop: {
+        marginBottom: 15
+    },
+    tagItem: {
+        marginRight: 10,
+        backgroundColor:"#cccccc",
+        paddingLeft: 5,
+        paddingRight: 5,
+        borderRadius: 5
+    },
+    marketShopImage: {
+        width: '100%',
+        height: undefined,
+        aspectRatio: 1,
+    },
+    marketShopImageContainer: {
+        height: 200,
+        overflow: "hidden"
+    },
     productImage: {
         height: 200,
         margin: 5
