@@ -7,8 +7,10 @@ export var CartService = {
         if (cart == null || (cart.size > 0 && cart.values().next().value.shop.id != product.shop.id))
             cart = new Map();
 
-        if (cart[key] != null)
-            cart[key].qty += qty;
+        if (cart[key] != null){
+            cart[key].qty = parseInt(cart[key] .qty, 10)
+            cart[key].qty += parseInt(qty, 10);
+        }
         else
             cart[key] = { product: product, qty: qty };
 

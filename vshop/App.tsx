@@ -12,6 +12,7 @@ import Orders from './src/screens/Orders';
 import Home from './src/screens/Home';
 import UserDetails from './src/screens/UserDetails';
 import LocationSelector from './src/screens/Map';
+import MarketShop from './src/screens/MarketShop'
 
 
 
@@ -24,10 +25,11 @@ const MainNavigator = createStackNavigator({
   Merchant: { screen: Merchant },
   ShopForm: { screen: ShopForm },
   Product: { screen: Product },
-  Cart: { screen: Cart },
+  Cart: { screen: Cart},
   CustomerOrder: { screen: CustomerOrder },
   Orders: { screen: Orders },
-  Map: { screen: LocationSelector }
+  Map: { screen: LocationSelector },
+  MarketShop: { screen: MarketShop }
 });
 
 const App = createAppContainer(MainNavigator);

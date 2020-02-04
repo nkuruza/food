@@ -4,9 +4,6 @@ import CartItem from '../component/CartItem';
 import styles from '../style';
 import { FoodApi } from '../service/FoodApi';
 import { CartService } from '../service/CartService';
-import { User } from '../model/User';
-import { Shop } from '../model/Shop';
-import { Cart } from '../model/Cart';
 import AuthenticatedScreen from './AuthenticatedScreen';
 
 export default class CartScreen extends AuthenticatedScreen{
@@ -19,7 +16,8 @@ export default class CartScreen extends AuthenticatedScreen{
                 <TouchableHighlight onPress={navigation.getParam('clearCart')} style={styles.headerButton}>
                     <Text>Clear</Text>
                 </TouchableHighlight>
-            )
+            ),
+            
         }
     }
 

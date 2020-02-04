@@ -29,7 +29,7 @@ export default class Market extends AuthenticatedScreen{
     _keyExtractor = (item) => `item-${item.id}`;
 
     _onPressItem = (item) => {
-        this.props.navigation.navigate("Store", { store: item, user: { id: 0 } });
+        this.props.navigation.navigate("MarketShop", { store: item, user: { id: 0 } });
     }
 
     _itemSeparator = () => (

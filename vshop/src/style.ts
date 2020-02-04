@@ -28,6 +28,10 @@ export default StyleSheet.create({
         alignSelf: 'stretch',
         justifyContent: 'center'
     },
+    productStepDown: { borderRadius: 50, width: 100, height: 100, borderWidth: 2, borderColor: '#dc7676', },
+    productStepUp: { borderRadius: 50, width: 100, height: 100, borderWidth: 2, borderColor: '#76dc76', },
+    productStepText: { textAlign: "center", textAlignVertical: "center", fontSize: 50, alignSelf: "stretch", flex: 1 },
+    counterText: { fontSize: 50, margin: 10, textAlignVertical: "center", },
     itemActionButton: {
         backgroundColor: '#48BBEC',
         borderColor: '#48BBEC',
@@ -80,7 +84,7 @@ export default StyleSheet.create({
     },
     tagItem: {
         marginRight: 10,
-        backgroundColor:"#cccccc",
+        backgroundColor: "#cccccc",
         paddingLeft: 5,
         paddingRight: 5,
         borderRadius: 5

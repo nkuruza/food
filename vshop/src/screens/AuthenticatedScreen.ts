@@ -1,5 +1,4 @@
 import { Component } from "react";
-import { Props } from "../utils/Common";
 import { AuthenticationApi } from "../service/Authentication";
 import { Base64 } from "../utils/Base64";
 import { FoodApi } from "../service/FoodApi";
@@ -11,7 +10,8 @@ export default abstract class AuthenticatedScreen extends Component<any, any>{
     protected user: any;
     protected roles: string[] = [];
     protected token: any;
-
+    protected title: string;
+    
     componentDidMount() {
         AUTH.getCachedAuth().then(token => {
             if (token) this.completeSignIn(token.accessToken);
