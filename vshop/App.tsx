@@ -18,14 +18,14 @@ import MarketShop from './src/screens/MarketShop'
 
 const MainNavigator = createStackNavigator({
   Home: { screen: Home },
-  UserDetails: {screen: UserDetails},
+  UserDetails: { screen: UserDetails },
   Market: { screen: Market },
   Store: { screen: Store },
   FoodItem: { screen: FoodItem },
   Merchant: { screen: Merchant },
   ShopForm: { screen: ShopForm },
   Product: { screen: Product },
-  Cart: { screen: Cart},
+  Cart: { screen: Cart },
   CustomerOrder: { screen: CustomerOrder },
   Orders: { screen: Orders },
   Map: { screen: LocationSelector },

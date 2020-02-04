@@ -32,9 +32,9 @@ export default class Home extends AuthenticatedScreen {
         if (this.roles.length == 0) this.props.navigation.navigate("UserDetails");
 
         if (this.roles[0] == "ROLE_MERCHANT")
-            this.props.navigation.navigate("Merchant");
+            this.props.navigation.replace("Merchant");
         else if (this.roles[0] == "ROLE_CUSTOMER")
-            this.props.navigation.navigate("Market");
+            this.props.navigation.replace("Market");
         else
             console.log("Fuck")
 
