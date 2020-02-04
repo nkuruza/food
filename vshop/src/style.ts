@@ -28,6 +28,25 @@ export default StyleSheet.create({
         alignSelf: 'stretch',
         justifyContent: 'center'
     },
+    productStepDown: { borderRadius: 50, width: 100, height: 100, borderWidth: 2, borderColor: '#dc7676', },
+    productStepUp: { borderRadius: 50, width: 100, height: 100, borderWidth: 2, borderColor: '#76dc76', },
+    productStepText: { textAlign: "center", textAlignVertical: "center", fontSize: 50, alignSelf: "stretch", flex: 1 },
+    counterText: { fontSize: 50, margin: 10, textAlignVertical: "center", },
+    itemActionButton: {
+        backgroundColor: '#48BBEC',
+        borderColor: '#48BBEC',
+        borderWidth: 1,
+        borderRadius: 8,
+        alignSelf: 'stretch',
+        justifyContent: 'center',
+        padding: 3,
+        marginRight: 2
+    },
+    itemActionButtonText: {
+        fontSize: 14,
+        color: 'white',
+        alignSelf: 'center'
+    },
     product: {
         backgroundColor: '#ffffff',
     },
@@ -46,6 +65,51 @@ export default StyleSheet.create({
         borderRadius: 15,
         width: 30,
         height: 30
+    },
+    shop: {
+        padding: 5,
+        margin: 10,
+        flexDirection: "column"
+    },
+    shopName: {
+
+    },
+    merchantShopImage: {
+        height: 100,
+        flex: 2,
+        margin: 5
+    },
+    marketShop: {
+        marginBottom: 15
+    },
+    tagItem: {
+        marginRight: 10,
+        backgroundColor: "#cccccc",
+        paddingLeft: 5,
+        paddingRight: 5,
+        borderRadius: 5
+    },
+    marketShopImage: {
+        width: '100%',
+        height: undefined,
+        aspectRatio: 1,
+    },
+    marketShopImageContainer: {
+        height: 200,
+        overflow: "hidden"
+    },
+    productImage: {
+        height: 200,
+        margin: 5
+    },
+    merchantShopDetails: {
+        height: 60,
+        flex: 3
+    },
+    itemActionBar: {
+        flexDirection: "row",
+        padding: 3,
+        backgroundColor: "#898989"
     },
     cartItemImage: {
         width: 30,
@@ -103,7 +167,7 @@ export default StyleSheet.create({
         fontSize: 26,
         flex: 2
     },
-    orderTotal: {  
+    orderTotal: {
         flex: 3
     },
     orderHeader: {
@@ -146,8 +210,13 @@ export default StyleSheet.create({
     },
     ready: {},
     customerAccepted: {},
-    mapStyle: {
-      width: Dimensions.get('window').width,
-      height: Dimensions.get('window').height,
+    map: {
+        width: "100%",
+        height: "80%",
+        paddingBottom: 100
+    },
+    mapThumbnail: {
+        width: 100,
+        height: 100,
     },
 });

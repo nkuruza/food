@@ -3,6 +3,8 @@ package za.co.asanda.foodservice.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -10,11 +12,13 @@ import org.springframework.stereotype.Service;
 
 import za.co.asanda.foodservice.model.Order;
 import za.co.asanda.foodservice.model.OrderLine;
+import za.co.asanda.foodservice.model.OrderStatus;
 import za.co.asanda.foodservice.model.OrderStatusType;
 import za.co.asanda.foodservice.model.User;
 import za.co.asanda.foodservice.repo.OrderRepo;
 import za.co.asanda.foodservice.repo.OrderStatusRepo;
 
+@Transactional
 @Service("orderService")
 public class OrderServiceImpl implements OrderService {
 	@Autowired
@@ -28,12 +32,16 @@ public class OrderServiceImpl implements OrderService {
 	@Override
 	public Order placeOrder(Order o) {
 		o.setDateCreated(LocalDateTime.now());
-		o.setStatus(orderStatusRepo.findOneByType(OrderStatusType.PLACED.name()));
+		OrderStatus status = orderStatusRepo.findOneByType(OrderStatusType.PLACED.name());
+		if(status == null) 
+			status = orderStatusRepo.save(OrderStatusType.PLACED.getValue());
+		o.setStatus(status);
+		
 		for (OrderLine line : o.getOrderLines())
 			line.setUnitPrice(line.getProduct().getPrice());
 		User customer = userService.findById(o.getCustomer().getId());
-		customer.setLat(o.getCustomer().getLat());
-		customer.setLon(o.getCustomer().getLon());
+		//customer.setLat(o.getCustomer().getLat());
+		//customer.setLon(o.getCustomer().getLon());
 		o.setCustomer(customer);
 		return repo.save(o);
 	}

@@ -3,6 +3,7 @@ package za.co.asanda.foodservice.service;
 import java.util.List;
 
 import za.co.asanda.foodservice.model.User;
+import za.co.asanda.foodservice.model.dto.UserDto;
 
 
 public interface UserService {
@@ -22,5 +23,7 @@ public interface UserService {
     boolean isUserSSOUnique(Integer id, String sso);
     
     String encodePassword(String password);
+
+	Long addNew(UserDto user);
      
 }

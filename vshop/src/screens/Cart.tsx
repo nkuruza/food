@@ -4,31 +4,41 @@ import CartItem from '../component/CartItem';
 import styles from '../style';
 import { FoodApi } from '../service/FoodApi';
 import { CartService } from '../service/CartService';
-import { User } from '../model/User';
-import { Shop } from '../model/Shop';
-import { Cart } from '../model/Cart';
+import AuthenticatedScreen from './AuthenticatedScreen';
 
-export default class CartScreen extends Component<{navigation:any, shop: Shop, cart: Cart},{user: User}>{
+export default class CartScreen extends AuthenticatedScreen{
+    signInComplete(): void {
+        
+    }
     static navigationOptions = ({ navigation }) => {
         return {
             headerRight: (
                 <TouchableHighlight onPress={navigation.getParam('clearCart')} style={styles.headerButton}>
                     <Text>Clear</Text>
                 </TouchableHighlight>
-            )
+            ),
+            
         }
     }
+
     constructor(props) {
         super(props);
-        let shopId = this.props.navigation.getParam('shopId');
+        this.state = {
+            data: [],
+         }
+        let shopId = props.navigation.getParam('shopId');
+        CartService.getCart(shopId).then(items => {
+            this.setState({data: items, shopId: shopId})
+        });
         this.props.navigation.setParams({ clearCart: this._clearCart })
     }
     componentDidMount() {
+        super.componentDidMount();
         this.refresh();
     }
 
     refresh() {
-        
+
     }
     _keyExtractor = (item) => `item-${item.product.id}`;
 
@@ -44,12 +54,11 @@ export default class CartScreen extends Component<{navigation:any, shop: Shop, c
             onPressItem={this._onPressItem}
         />
     )
-    
+
     _placeOrder = () => {
         let coords: Position = {};
-        let customer = this.state.user;
+        let customer = this.user;
         CartService.getCart(this.state.shopId).then(lines => {
-            console.log(lines);
             let order = {
                 shop: lines[0].product.shop,
                 orderLines: lines,
@@ -57,10 +66,10 @@ export default class CartScreen extends Component<{navigation:any, shop: Shop, c
             }
             return FoodApi.placeOrder(order);
         }).then(response => {
-            console.log("ORDER SUCCESS");
-            console.log(response);
             this._clearCart();
             this.props.navigation.navigate("CustomerOrder", { order: response });
+        }).catch(error => {
+            console.log("fucking error", error)
         });
     }
     _clearCart = () => {
@@ -70,8 +79,9 @@ export default class CartScreen extends Component<{navigation:any, shop: Shop, c
     }
     render() {
         let total = 0;
-        for (item of this.state.data)
-            total += (item.product.price * item.qty);
+        if (this.state.data)
+            for (item of this.state.data)
+                total += (item.product.price * item.qty);
         return (
             <ScrollView>
                 <FlatList

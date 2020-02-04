@@ -1,16 +1,21 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { FlatList, View, TouchableHighlight, Text } from 'react-native';
-import MerchantItem from '../component/MerchantItem';
 import styles from '../style';
 import { FoodApi } from '../service/FoodApi';
-import { AuthenticationApi } from '../service/Authentication';
+import AuthenticatedScreen from './AuthenticatedScreen';
+import MarketShop from '../component/MarketShop';
 
 
-type Props = {};
 
-let AUTH: AuthenticationApi = AuthenticationApi.getInstance();
 
-export default class Market extends Component<Props>{
+
+export default class Market extends AuthenticatedScreen{
+    signInComplete(): void {
+        //TODO get the location of the user before listing shops... List shops by radius.
+        FoodApi.listShops().then(response => {
+            this.setState({ shops: response });
+        });
+    }
 
     constructor(props) {
         super(props);
@@ -18,46 +23,28 @@ export default class Market extends Component<Props>{
     }
 
     componentDidMount() {
-
-        AUTH.getCachedAuth().then(token => {
-            if (token) this.completeSignIn();
-            else
-                AUTH.signIn().then(token => {
-                    if (token) this.completeSignIn();
-                });
-        });
-    }
-
-    completeSignIn() {
-        FoodApi.listShops().then(response => {
-            this.setState({ shops: response });
-        });
+        super.componentDidMount();
     }
 
     _keyExtractor = (item) => `item-${item.id}`;
 
     _onPressItem = (item) => {
-        this.props.navigation.navigate("Store", { shop: item, user: { id: 0 } });
+        this.props.navigation.navigate("MarketShop", { store: item, user: { id: 0 } });
     }
 
     _itemSeparator = () => (
         <View style={styles.itemSeparator} />
     )
     _renderItem = ({ item }) => (
-        <MerchantItem
-            item={item}
-            onPressItem={this._onPressItem}
-            title={item.name}
+        <MarketShop
+            shop={item}
+            onItemAction={this._onPressItem}
         />
     )
-    _merchantLogin = () => {
-        this.props.navigation.navigate("Merchant");
-    }
     render() {
         return (
             <View>
                 <FlatList
-                    ItemSeparatorComponent={this._itemSeparator}
                     data={this.state.shops}
                     keyExtractor={this._keyExtractor}
                     renderItem={this._renderItem} />

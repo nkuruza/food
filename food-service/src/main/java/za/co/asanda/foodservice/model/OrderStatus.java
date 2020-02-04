@@ -15,6 +15,14 @@ public class OrderStatus {
 	@Column(nullable = false)
 	private String type;
 
+	public OrderStatus() {
+
+	}
+
+	public OrderStatus(String type) {
+		this.type = type;
+	}
+
 	public Integer getId() {
 		return id;
 	}

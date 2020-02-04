@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import za.co.asanda.foodservice.model.User;
+import za.co.asanda.foodservice.model.dto.UserDto;
 import za.co.asanda.foodservice.service.ApiKeyService;
 import za.co.asanda.foodservice.service.UserService;
 
@@ -39,13 +40,7 @@ public class UserController {
 	@GetMapping("/username")
 	public String getUsername() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		String roles = "";
-		Iterator<? extends GrantedAuthority> it = authentication.getAuthorities().iterator();
-		
-		while (it.hasNext()) {
-			roles += it.next().getAuthority();
-		}
-		return authentication.getName() + "roles: " + roles;
+		return authentication.getName();
 	}
 	@GetMapping("/me")
 	public User whoAmI() {
@@ -58,5 +53,10 @@ public class UserController {
 	@GetMapping("/mapkey")
 	public String getMapKey() {
 		return apiKeyService.getByName("googlemaps");
+	}
+	
+	@PostMapping("/new")
+	public Long newUser(@RequestBody UserDto user) {
+		return userService.addNew(user);
 	}
 }

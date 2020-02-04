@@ -1,28 +1,44 @@
 import React, { Component, } from 'react';
 import { FlatList, View, TouchableHighlight, Text } from 'react-native';
-import MerchantItem from '../component/MerchantItem';
 import styles from '../style';
-import { FoodApi } from '../service/FoodApi';
-import { AuthenticationApi } from '../service/Authentication';
-import { Base64 } from '../utils/Base64';
-import { Props } from '../utils/Common';
 import AuthenticatedScreen from './AuthenticatedScreen';
 
 
 
 
-export default class Home extends AuthenticatedScreen{
+export default class Home extends AuthenticatedScreen {
 
     constructor(props) {
         super(props);
         this.state = { shops: [] }
     }
-
+    willFocusSubscription:any
     componentDidMount() {
         super.componentDidMount();
+
+        this.willFocusSubscription = this.props.navigation.addListener(
+            'willFocus',
+            () => {
+                //super.signIn();
+            }
+        );
     }
 
-    
+    componentWillUnmount() {
+        this.willFocusSubscription.remove();
+    }
+
+    signInComplete() {
+        if (this.roles.length == 0) this.props.navigation.navigate("UserDetails");
+
+        if (this.roles[0] == "ROLE_MERCHANT")
+            this.props.navigation.replace("Merchant");
+        else if (this.roles[0] == "ROLE_CUSTOMER")
+            this.props.navigation.replace("Market");
+        else
+            console.log("Fuck")
+
+    }
 
     _keyExtractor = (item) => `item-${item.id}`;
 
@@ -32,13 +48,6 @@ export default class Home extends AuthenticatedScreen{
 
     _itemSeparator = () => (
         <View style={styles.itemSeparator} />
-    )
-    _renderItem = ({ item }) => (
-        <MerchantItem
-            item={item}
-            onPressItem={this._onPressItem}
-            title={item.name}
-        />
     )
     _merchantLogin = () => {
         this.props.navigation.navigate("Merchant");

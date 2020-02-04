@@ -1,47 +1,55 @@
 import React, { Component } from 'react';
 import { FlatList, View, TouchableHighlight, Text } from 'react-native';
-import StoreItem from '../component/StoreItem';
 import styles from '../style';
 import { FoodApi } from '../service/FoodApi';
 import { StorageHelper } from '../service/Storage';
 import { CartService } from '../service/CartService';
-import { Shop } from '../model/Shop';
-import { User } from '../model/User';
 import { Product } from '../model/Product';
 import AuthenticatedScreen from './AuthenticatedScreen';
+import MarketProductItem from '../component/MarketProductItem';
 
 
 
-export default class Store extends AuthenticatedScreen {
-    
+export default class MarketShop extends AuthenticatedScreen {
+
     static navigationOptions = ({ navigation }) => {
+        let count = navigation.getParam('numCartItems');
         return {
             headerRight: (
                 <View style={styles.headerRight}>
-                    <TouchableHighlight onPress={navigation.getParam('viewCart')} style={styles.headerButton}>
-                        <Text>{navigation.getParam('numCartItems')}</Text>
-                    </TouchableHighlight>
+                    {
+                        count > 0 ?
+                            <TouchableHighlight onPress={navigation.getParam('viewCart')} style={styles.headerButton}>
+                                <Text>{count}</Text>
+                            </TouchableHighlight>
+                            : null
+                    }
                 </View>
-            )
+            ),
+            title: navigation.getParam('store').name
         }
     }
 
     signInComplete(): void {
-
+        CartService.count(this.state.shop.id)
+            .then(num => {
+                this.props.navigation.setParams({ numCartItems: num });
+            });
     }
 
     constructor(props) {
         super(props);
-        //this.props.navigation.setParams({ numCartItems: 0 });
         this.props.navigation.setParams({ viewCart: this._viewCart })
+        let shop = this.props.navigation.getParam('store');
         this.state = {
-            shop: this.props.navigation.getParam('store'),
-            cart:[]
+            shop: shop,
+            cart: []
         };
+
     }
 
     componentDidMount() {
-        super.componentDidMount();       
+        super.componentDidMount();
         this.getShopItems();
     }
 
@@ -66,7 +74,7 @@ export default class Store extends AuthenticatedScreen {
         });
     }
 
-    addToCart(product, qty) {
+    addToCart(product, qty: number) {
         CartService.add(product, qty).then(() => {
             return CartService.count(this.state.shop.id)
         }).then(num => {
@@ -74,29 +82,15 @@ export default class Store extends AuthenticatedScreen {
         });
     }
 
-    isMyShop() {
-        console.log(this.state)
-        return this.state.shop.owner && this.user && this.state.shop.owner.username == this.user.preferred_username;
-    }
 
     _viewCart = () => {
         console.log(this.state.cart.values());
         this.props.navigation.navigate('Cart', {
-            shopId: this.state.shop.id
+            shopId: this.state.shop.id,
+            shopp: this.state.shop
         })
     }
 
-    _createItem = () => {
-        this.props.navigation.navigate("FoodItem", {
-            shopId: this.state.shop.id,
-            onGoBack: () => {
-                this.getShopItems();
-            },
-            addToCart: (item: Product, qty: number) => {
-                this.addToCart(item, qty);
-            }
-        });
-    }
     /**
      * This needs to move somewhere safe...
      */
@@ -104,22 +98,14 @@ export default class Store extends AuthenticatedScreen {
         <View style={styles.itemSeparator} />
     )
     _renderItem = ({ item }) => (
-        <StoreItem
+        <MarketProductItem
             product={item}
-            onProductItemAction={this._onPressItem}
+            onItemAction={this._onPressItem}
         />
     );
     render() {
         return (
-            <View>
-                <Text style={styles.titleText}>{this.state.shop.name}</Text>
-                {
-                    this.isMyShop() &&
-                    <TouchableHighlight style={styles.button} onPress={this._createItem} underlayColor='#99d9f4'>
-                        <Text style={styles.buttonText}>Create</Text>
-                    </TouchableHighlight>
-                }
-                
+            <View style={styles.container}>
                 <FlatList
                     ItemSeparatorComponent={this._itemSeparator}
                     data={this.state.shop.products}
