@@ -22,6 +22,10 @@ public class ProductController {
 	public Product addProduct(@RequestBody Product product, @PathVariable("id") long shopId) {
 		return productService.addProduct(product, shopId);
 	}
+	@PostMapping("/update")
+	public Product updateProduct(@RequestBody Product product) {
+		return productService.updateProduct(product);
+	}
 	@GetMapping("/list/{id}")
 	public Set<Product> getUserProducts(@PathVariable("id") long id){
 		return productService.listByShopId(id);

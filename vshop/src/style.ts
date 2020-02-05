@@ -34,13 +34,14 @@ export default StyleSheet.create({
     counterText: { fontSize: 50, margin: 10, textAlignVertical: "center", },
     itemActionButton: {
         backgroundColor: '#48BBEC',
-        borderColor: '#48BBEC',
+        minWidth: 50,
         borderWidth: 1,
-        borderRadius: 8,
+        borderRadius: 5,
         alignSelf: 'stretch',
         justifyContent: 'center',
-        padding: 3,
-        marginRight: 2
+        paddingLeft: 5,
+        paddingRight: 5,
+        marginRight: 5
     },
     itemActionButtonText: {
         fontSize: 14,

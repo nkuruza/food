@@ -20,19 +20,23 @@ export default class MerchantShop extends React.PureComponent<MerchantShopProps>
     _onOrdersPressed = () => {
         this.props.onMerchantShopItemAction(this.props.shop, "orders");
     }
+    _onEditPressed = () => {
+        this.props.onMerchantShopItemAction(this.props.shop, "edit");
+    }
     render() {
         return (
             <View style={styles.shop}>
                 <View style={styles.itemActionBar}>
                     <TouchableOpacity style={styles.itemActionButton} onPress={this._onViewPressed}>
                         <Text style={styles.itemActionButtonText}>view</Text>
+                    
                     </TouchableOpacity>
-                    {
-                        this.props.role == "ROLE_MERCHANT" ?
-                            <TouchableOpacity style={styles.itemActionButton} onPress={this._onOrdersPressed}>
-                                <Text style={styles.itemActionButtonText}>{this.props.orders.length} order{this.props.orders.length != 1 ? "s" : ""}</Text>
-                            </TouchableOpacity>
-                            : null}
+                    <TouchableOpacity style={styles.itemActionButton} onPress={this._onOrdersPressed}>
+                        <Text style={styles.itemActionButtonText}>{this.props.orders.length} order{this.props.orders.length != 1 ? "s" : ""}</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.itemActionButton} onPress={this._onOrdersPressed}>
+                        <Text style={styles.itemActionButtonText}>edit</Text>
+                    </TouchableOpacity>
                 </View>
                 <View style={{ flexDirection: "row", borderWidth: 1, }}>
                     <Image source={require('../img/roast.png')} style={styles.merchantShopImage} />

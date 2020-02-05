@@ -12,7 +12,9 @@ import Orders from './src/screens/Orders';
 import Home from './src/screens/Home';
 import UserDetails from './src/screens/UserDetails';
 import LocationSelector from './src/screens/Map';
-import MarketShop from './src/screens/MarketShop'
+import MarketShop from './src/screens/MarketShop';
+import EditProduct from './src/screens/EditProduct';
+import MerchantOrder from './src/screens/MerchantOrder';
 
 
 
@@ -29,7 +31,9 @@ const MainNavigator = createStackNavigator({
   CustomerOrder: { screen: CustomerOrder },
   Orders: { screen: Orders },
   Map: { screen: LocationSelector },
-  MarketShop: { screen: MarketShop }
+  MarketShop: { screen: MarketShop },
+  EditProduct: {screen: EditProduct },
+  MerchantOrder: { screen: MerchantOrder}
 });
 
 const App = createAppContainer(MainNavigator);

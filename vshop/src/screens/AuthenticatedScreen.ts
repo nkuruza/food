@@ -24,7 +24,7 @@ export default abstract class AuthenticatedScreen extends Component<any, any>{
     signIn() {
         AUTH.signIn().then(token => {
             if (token) this.completeSignIn(token.accessToken);
-        });
+        }).catch(e => console.log("FUCK", e));
     }
 
     async refreshToken() {

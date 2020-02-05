@@ -26,18 +26,12 @@ export default class StoreItem extends React.PureComponent<StoreItemProps>{
                     <TouchableOpacity style={styles.itemActionButton} onPress={this._onViewPressed}>
                         <Text style={styles.itemActionButtonText}>view</Text>
                     </TouchableOpacity>
-                    {
-                        this.props.role == "ROLE_MERCHANT" ?
-                            <TouchableOpacity style={styles.itemActionButton} onPress={this._onEditPressed}>
-                                <Text style={styles.itemActionButtonText}>edit</Text>
-                            </TouchableOpacity>
-                            : null}
-                            {
-                        this.props.role == "ROLE_MERCHANT" ?
-                            <TouchableOpacity style={styles.itemActionButton} onPress={this._onDeletePressed}>
-                                <Text style={styles.itemActionButtonText}>delete</Text>
-                            </TouchableOpacity>
-                            : null}
+                    <TouchableOpacity style={styles.itemActionButton} onPress={this._onEditPressed}>
+                        <Text style={styles.itemActionButtonText}>edit</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.itemActionButton} onPress={this._onDeletePressed}>
+                        <Text style={styles.itemActionButtonText}>delete</Text>
+                    </TouchableOpacity>
                 </View>
                 <View style={{ flexDirection: "row", borderWidth: 1, }}>
                     <Image source={require('../img/roast.png')} style={styles.merchantShopImage} />

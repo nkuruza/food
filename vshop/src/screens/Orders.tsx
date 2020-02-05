@@ -56,7 +56,7 @@ export default class Orders extends AuthenticatedScreen {
 
     _viewOrder (order) {
         console.log("ORDER", order)
-        this.props.navigation.navigate("CustomerOrder", { order: order });
+        this.props.navigation.navigate("MerchantOrder", { order: order });
     }
 
     _onPressItem = (item) => {

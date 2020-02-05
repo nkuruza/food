@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
-import {  Text, View, ScrollView, FlatList } from 'react-native';
-import CartItem from '../component/CartItem';
+import { FlatList, View, TouchableHighlight, Text, ToastAndroid, ScrollView } from 'react-native';
 import styles from '../style';
+import { FoodApi } from '../service/FoodApi';
+import { StorageHelper } from '../service/Storage';
 import AuthenticatedScreen from './AuthenticatedScreen';
+import MerchantShop from '../component/MerchantShop';
+import { Shop } from '../model/Shop';
+import { Order } from '../model/Order';
+import CartItem from '../component/CartItem';
 
 
-export default class CustomerOrder extends AuthenticatedScreen {
+export default class MerchantOrder extends AuthenticatedScreen {
     signInComplete(): void {
         //throw new Error("Method not implemented.");
     }
@@ -25,7 +30,6 @@ export default class CustomerOrder extends AuthenticatedScreen {
     _renderItem = ({ item }) => (
         <CartItem
             item={item}
-            onPressItem={this._onPressItem}
         />
     )
     render() {

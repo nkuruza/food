@@ -6,11 +6,11 @@ import AuthenticatedScreen from './AuthenticatedScreen';
 import { FoodApi } from '../service/FoodApi';
 
 
-export default class FoodItem extends AuthenticatedScreen {
+export default class EditProduct extends AuthenticatedScreen {
 
     constructor(props) {
         super(props);
-        this.state = { item: { name: "", description: "", price: "0" }, shopId: 0, subs: [] } 
+        this.state = { product: this.props.navigation.getParam('product') }; 
     }
     signInComplete(): void {
 
@@ -25,71 +25,64 @@ export default class FoodItem extends AuthenticatedScreen {
 
     _nameValueChanged = (value) => {
         this.setState(prevState => {
-            let item = Object.assign({}, prevState.item);
-            item.name = value;
-            return { item };
+            let product = Object.assign({}, prevState.product);
+            product.name = value;
+            return { product };
         });
     }
 
     _descriptionValueChanged = (value) => {
         this.setState(prevState => {
-            let item = Object.assign({}, prevState.item);
-            item.description = value;
-            return { item };
+            let product = Object.assign({}, prevState.product);
+            product.description = value;
+            return { product };
         });
     }
 
-    _priceValueChanged = (value) => {
+    _priceValueChanged = (value:any) => {
         this.setState(prevState => {
-            let item = Object.assign({}, prevState.item);
-            item.price = value;
-            return { item };
+            let product = Object.assign({}, prevState.product);
+            product.price = value;
+            return { product };
         });
     }
     _saveFood = () => {
-        FoodApi.addShopItem(this.state.shopId, this.state.item).then(response => {
+        FoodApi.updateShopItem(this.state.product).then(response => {
             console.log(response);
             this.props.navigation.state.params.onGoBack();
-            this.props.navigation.goBack();
-        });
+            this.props.navigation.pop();
+        }).catch(e => console.log("FUCK EDIT PRODUCT: ", e));
     }
-    _keyExtractor = item => `item-${item.id}`;
+    _keyExtractor = product => `product-${product.id}`;
     _itemSeparator = () => (
         <View style={styles.itemSeparator} />
-    )
-    _renderItem = (item) => (
-        <View style={{ flex: 1 }}>
-            <Switch value={item.selected}></Switch>
-            <Text>Item: {item.name}</Text>
-        </View>
     )
 
     render() {
         return (
-            <ScrollView>
+            <ScrollView style={{paddingRight: 10, paddingLeft: 10}}>
 
                 <TextInput
                     style={{ height: 40, borderBottomWidth: 1, marginBottom: 10 }}
                     placeholder="Name"
                     onChangeText={this._nameValueChanged}
-                    value={this.state.item.name}
+                    value={this.state.product.name}
                 />
                 <TextInput
-                    style={{ height: 40, borderBottomWidth: 1, marginBottom: 10 }}
-                    placeholder="Description"
+                    style={{ borderBottomWidth: 1, marginBottom: 10 }}
+                    placeholder="Address"
+                    multiline
+                    numberOfLines={4}
                     onChangeText={this._descriptionValueChanged}
-                    value={this.state.item.description}
+                    value={this.state.product.description}
                 />
                 <TextInput
 
                     style={{ height: 40, borderBottomWidth: 1, marginBottom: 10 }}
                     placeholder="Price"
                     onChangeText={this._priceValueChanged}
-                    value={this.state.item.price}
+                    value={this.state.product.price + ""}
                 />
-
-                <Text>Sides</Text>
-
                 <TouchableHighlight style={styles.button} onPress={this._saveFood} underlayColor='#99d9f4'>
                     <Text style={styles.buttonText}>Save</Text>
                 </TouchableHighlight>
