@@ -1,20 +1,12 @@
 import React from 'react';
 import { Text, View, TouchableOpacity, Image, Dimensions } from 'react-native';
 import styles from '../style';
-import { Shop } from '../model/Shop';
+import { ActionableItem } from '../model/ActionableItem';
 
-export interface MarketShopProps {
-    shop: Shop;
-    role?: string;
-    onItemAction: {
-        (item: Shop, action: string): void;
-    }
-}
-
-export default class MarketShop extends React.PureComponent<MarketShopProps> {
+export default class MarketShop extends React.PureComponent<ActionableItem> {
 
     _onItemPressed = () => {
-        this.props.onItemAction(this.props.shop, "view");
+        this.props.onItemAction(this.props.item, "view");
     }
     render() {
         return (
@@ -23,7 +15,7 @@ export default class MarketShop extends React.PureComponent<MarketShopProps> {
                     <Image style={styles.marketShopImage} source={require('../img/roast.png')} />
                 </View>
                 <View style={{ marginLeft: 10, }}>
-                    <Text style={{ fontSize: 18, fontWeight: "bold", }}>{this.props.shop.name}, {this.props.shop.address}</Text>
+                    <Text style={{ fontSize: 18, fontWeight: "bold", }}>{this.props.item.name}, {this.props.item.address}</Text>
                     <Text>Category</Text>
                 </View>
                 <View style={{ flexDirection: "row", marginLeft: 10 }}>

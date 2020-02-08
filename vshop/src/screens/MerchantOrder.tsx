@@ -1,22 +1,66 @@
 import React, { Component } from 'react';
-import { FlatList, View, TouchableHighlight, Text, ToastAndroid, ScrollView } from 'react-native';
+import { FlatList, View, TouchableHighlight, Text, ScrollView } from 'react-native';
 import styles from '../style';
-import { FoodApi } from '../service/FoodApi';
-import { StorageHelper } from '../service/Storage';
 import AuthenticatedScreen from './AuthenticatedScreen';
-import MerchantShop from '../component/MerchantShop';
-import { Shop } from '../model/Shop';
-import { Order } from '../model/Order';
 import CartItem from '../component/CartItem';
+import { Order } from '../model/Order';
+import { FoodApi } from '../service/FoodApi';
 
+let renderHeader = (status, acceptOrder, rejectOrder, prepare, ready) => {
+    if (status == 'PLACED')
+        return (<View style={styles.headerRight}>
+
+            <TouchableHighlight onPress={rejectOrder} style={styles.headerButton}>
+                <Text style={{ fontSize: 12 }}>Reject</Text>
+            </TouchableHighlight>
+            <TouchableHighlight onPress={acceptOrder} style={styles.headerButton}>
+                <Text style={{ fontSize: 12 }}>Accept</Text>
+            </TouchableHighlight>
+        </View>);
+
+    if (status == 'ACCEPTED')
+        return (<View style={styles.headerRight}>
+
+            <TouchableHighlight onPress={prepare} style={styles.headerButton}>
+                <Text style={{ fontSize: 12 }}>Start Preparing</Text>
+            </TouchableHighlight>
+        </View>);
+    if (status == 'PREPARING')
+        return (<View style={styles.headerRight}>
+
+            <TouchableHighlight onPress={ready} style={styles.headerButton}>
+                <Text style={{ fontSize: 12 }}>Ready</Text>
+            </TouchableHighlight>
+        </View>);
+}
 
 export default class MerchantOrder extends AuthenticatedScreen {
+    static navigationOptions = ({ navigation }) => {
+        let order: Order = navigation.getParam('order');
+        let acceptOrder = navigation.getParam('acceptOrder');
+        let rejectOrder = navigation.getParam('rejectOrder');
+        let prepare = navigation.getParam('prepare');
+        let ready = navigation.getParam('ready');
+        let username = order.customer.username;
+        let title: string = `${username}'${username.endsWith('s') ? '' : 's'} order`;
+
+
+
+        return {
+            headerRight: renderHeader(order.status.type, acceptOrder, rejectOrder, prepare, ready),
+            title: title
+        }
+    }
     signInComplete(): void {
         //throw new Error("Method not implemented.");
     }
     constructor(props) {
         super(props);
         this.state = { order: { shop: {} } };
+        this.props.navigation.setParams({ acceptOrder: this._acceptOrder })
+        this.props.navigation.setParams({ rejectOrder: this._rejectOrder })
+        this.props.navigation.setParams({ prepare: this._prepare })
+        this.props.navigation.setParams({ ready: this._ready })
     }
     componentDidMount() {
         super.componentDidMount();
@@ -24,9 +68,33 @@ export default class MerchantOrder extends AuthenticatedScreen {
         console.log(order);
         this.setState({ order: order });
     }
+    _acceptOrder = () => {
+        this.setStatus("ACCEPTED")
+    }
+
+    _rejectOrder = () => {
+        this.setStatus("REJECTED")
+    }
+
+    _prepare = () => {
+        this.setStatus("PREPARING")
+    }
+
+    _ready = () => {
+        this.setStatus("READY")
+    }
+
+    setStatus(status: string) {
+        FoodApi.updateOrderStatus({ orderId: this.state.order.id, status: status }).then(response => {
+            this.setState({order: response})
+            this.props.navigation.setParams({order: response});
+        }).catch(e => console.log(e));
+    }
     _itemSeparator = () => (
-        <View style={styles.itemSeparator} /> 
+        <View style={styles.itemSeparator} />
     )
+    _keyExtractor = (item) => `item-${item.id}`;
+
     _renderItem = ({ item }) => (
         <CartItem
             item={item}
@@ -50,9 +118,10 @@ export default class MerchantOrder extends AuthenticatedScreen {
                 <FlatList
                     ItemSeparatorComponent={this._itemSeparator}
                     data={this.state.order.orderLines}
+                    keyExtractor={this._keyExtractor}
                     renderItem={this._renderItem} />
                 <View>
-                    <Text>{total}</Text>
+                    <Text>TOTAL: R {total}</Text>
                 </View>
             </ScrollView>
         )

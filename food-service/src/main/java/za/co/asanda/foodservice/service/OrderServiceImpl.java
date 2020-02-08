@@ -33,15 +33,15 @@ public class OrderServiceImpl implements OrderService {
 	public Order placeOrder(Order o) {
 		o.setDateCreated(LocalDateTime.now());
 		OrderStatus status = orderStatusRepo.findOneByType(OrderStatusType.PLACED.name());
-		if(status == null) 
+		if (status == null)
 			status = orderStatusRepo.save(OrderStatusType.PLACED.getValue());
 		o.setStatus(status);
-		
+
 		for (OrderLine line : o.getOrderLines())
 			line.setUnitPrice(line.getProduct().getPrice());
 		User customer = userService.findById(o.getCustomer().getId());
-		//customer.setLat(o.getCustomer().getLat());
-		//customer.setLon(o.getCustomer().getLon());
+		// customer.setLat(o.getCustomer().getLat());
+		// customer.setLon(o.getCustomer().getLon());
 		o.setCustomer(customer);
 		return repo.save(o);
 	}
@@ -58,8 +58,13 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
-	public Order updateOrderStatus(Order o, OrderStatusType ost) {
-		// TODO Auto-generated method stub
+	public Order updateOrderStatus(long orderId, OrderStatusType ost) {
+		Order order = repo.getOne(orderId);
+		OrderStatus status = orderStatusRepo.findOneByType(ost.name());
+		if(order != null && status != null) {
+			order.setStatus(status);
+			return repo.save(order);
+		}
 		return null;
 	}
 

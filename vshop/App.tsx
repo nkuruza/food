@@ -33,7 +33,7 @@ const MainNavigator = createStackNavigator({
   Map: { screen: LocationSelector },
   MarketShop: { screen: MarketShop },
   EditProduct: {screen: EditProduct },
-  MerchantOrder: { screen: MerchantOrder}
+  MerchantOrder: { screen: MerchantOrder  }
 });
 
 const App = createAppContainer(MainNavigator);

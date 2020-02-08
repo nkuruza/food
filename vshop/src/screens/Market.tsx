@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, View, TouchableHighlight, Text } from 'react-native';
+import { FlatList, View } from 'react-native';
 import styles from '../style';
 import { FoodApi } from '../service/FoodApi';
 import AuthenticatedScreen from './AuthenticatedScreen';
@@ -37,7 +37,7 @@ export default class Market extends AuthenticatedScreen{
     )
     _renderItem = ({ item }) => (
         <MarketShop
-            shop={item}
+            item={item}
             onItemAction={this._onPressItem}
         />
     )

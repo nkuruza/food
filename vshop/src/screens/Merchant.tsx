@@ -11,9 +11,8 @@ import { Order } from '../model/Order';
 
 export default class Merchant extends AuthenticatedScreen {
     signInComplete(): void {
-        console.log("about to list shops")
         this.listShops();
-        this.listMyShopOrders()
+        this.listMyShopOrders();
     }
     constructor(props) {
         super(props);
@@ -22,6 +21,22 @@ export default class Merchant extends AuthenticatedScreen {
     componentDidMount() {
         super.componentDidMount();
 
+    }
+    listShops() {
+        FoodApi.listMyShops().then(response => {
+            this.setState({ shops: response });
+            
+        })
+            .catch(e => {
+                if (e.response.status === 401) {
+                    console.log('unauthorized')
+                    ToastAndroid.show("You are not allowed to list shops", ToastAndroid.LONG)
+                }
+                else {
+                    console.log(e);
+                }
+
+            });
     }
     listMyShopOrders() {
         FoodApi.myShopOrders().then(response => {
@@ -48,24 +63,6 @@ export default class Merchant extends AuthenticatedScreen {
         console.log("SHOPS", shops)
     }
 
-    listShops() {
-        FoodApi.listMyShops().then(response => {
-
-            this.setState({ shops: response });
-        })
-
-            .catch(e => {
-                if (e.response.status === 401) {
-                    console.log('unauthorized')
-                    ToastAndroid.show("You are not allowed to list shops", ToastAndroid.LONG)
-                }
-                else {
-                    console.log(e);
-                }
-
-            });
-    }
-
     getShopOrders(id: number): Order[] {
         let orders: Order[] = [];
         for (let order of this.state.orders) {
@@ -88,14 +85,12 @@ export default class Merchant extends AuthenticatedScreen {
     _keyExtractor = (item) => `item-${item.id}`;
 
 
-    _onItemAction = (shop: Shop, action: string) => {
-        console.log("ACTION")
+    _onItemAction = ({shop}, action: string) => {
         if (action == "orders")
             this.props.navigation.navigate("Orders", { shopId: shop.id });
         else if (action == "view")
             this.props.navigation.navigate("Store", { store: shop });
 
-        console.log("ACTION")
     }
 
     _itemSeparator = () => (
@@ -103,10 +98,8 @@ export default class Merchant extends AuthenticatedScreen {
     )
     _renderItem = ({ item }) => (
         <MerchantShop
-        role={super.getRole()}
-            orders={this.getShopOrders(item.id)}
-            shop={item}
-            onMerchantShopItemAction={this._onItemAction}
+            item={{shop: item, orders: this.getShopOrders(item.id)}}
+            onItemAction={this._onItemAction}
         />
     )
     render() {

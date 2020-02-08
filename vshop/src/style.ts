@@ -143,6 +143,12 @@ export default StyleSheet.create({
         flexDirection: 'row',
         padding: 5,
     },
+    merchantOrderItem: {
+        alignSelf: 'stretch',
+        flex: 1,
+        flexDirection: 'row',
+        padding: 5,
+    },
     itemSeparator: {
         borderWidth: 1,
         borderColor: '#222',
@@ -150,12 +156,17 @@ export default StyleSheet.create({
         marginLeft: '7%'
     },
     headerRight: {
+        flexDirection: "row"
     },
     headerButton: {
         flexDirection: 'row',
         flex: 1,
-        width: 40, height: 20,
-        borderRadius: 10,
+        borderRadius: 5,
+        borderWidth: 1,
+        marginLeft: 3,
+        marginRight: 3,
+        paddingLeft: 5,
+        paddingRight: 5,
     },
     orderItem: {
         flexDirection: 'row',
@@ -194,13 +205,15 @@ export default StyleSheet.create({
         flex: 1
     },
     orderStatus: {
-        padding: 5,
-        flex: 1
+        marginLeft: 5,
+        marginRight: 5,
+        padding: 2,
+        flex: 1,
     },
     placed: {
         backgroundColor: '#dd2222'
     },
-    viewed: {
+    rejected: {
         backgroundColor: '#22ddff'
     },
     accepted: {

@@ -1,27 +1,18 @@
 import React from 'react';
 import { Text, View, TouchableOpacity, Image } from 'react-native';
 import styles from '../style';
-import { Shop } from '../model/Shop';
-import { Order } from '../model/Order';
+import { ActionableItem } from '../model/ActionableItem';
 
-export interface MerchantShopProps {
-    shop: Shop;
-    role?: string;
-    orders?: Order[];
-    onMerchantShopItemAction: {
-        (item: Shop, action: string): void;
-    }
-}
 
-export default class MerchantShop extends React.PureComponent<MerchantShopProps> {
+export default class MerchantShop extends React.PureComponent<ActionableItem> {
     _onViewPressed = () => {
-        this.props.onMerchantShopItemAction(this.props.shop, "view");
+        this.props.onItemAction(this.props.item, "view");
     }
     _onOrdersPressed = () => {
-        this.props.onMerchantShopItemAction(this.props.shop, "orders");
+        this.props.onItemAction(this.props.item, "orders");
     }
     _onEditPressed = () => {
-        this.props.onMerchantShopItemAction(this.props.shop, "edit");
+        this.props.onItemAction(this.props.item, "edit");
     }
     render() {
         return (
@@ -32,7 +23,7 @@ export default class MerchantShop extends React.PureComponent<MerchantShopProps>
                     
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.itemActionButton} onPress={this._onOrdersPressed}>
-                        <Text style={styles.itemActionButtonText}>{this.props.orders.length} order{this.props.orders.length != 1 ? "s" : ""}</Text>
+                        <Text style={styles.itemActionButtonText}>{this.props.item.orders.length} order{this.props.item.orders.length != 1 ? "s" : ""}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.itemActionButton} onPress={this._onOrdersPressed}>
                         <Text style={styles.itemActionButtonText}>edit</Text>
@@ -41,8 +32,8 @@ export default class MerchantShop extends React.PureComponent<MerchantShopProps>
                 <View style={{ flexDirection: "row", borderWidth: 1, }}>
                     <Image source={require('../img/roast.png')} style={styles.merchantShopImage} />
                     <View style={styles.merchantShopDetails}>
-                        <Text style={{ fontSize: 18, fontWeight: "bold", alignSelf: "center" }}>{this.props.shop.name}</Text>
-                        <Text>{this.props.shop.address}</Text>
+                        <Text style={{ fontSize: 18, fontWeight: "bold", alignSelf: "center" }}>{this.props.item.shop.name}</Text>
+                        <Text>{this.props.item.shop.address}</Text>
                     </View>
                 </View>
             </View>

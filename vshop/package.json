@@ -9,7 +9,7 @@
     "postinstall": "patch-package"
   },
   "dependencies": {
-    "expo": "^35.0.0",
+    "expo": "^35.0.1",
     "expo-app-auth": "^7.0.0",
     "expo-jwt": "^1.2.0",
     "expo-location": "~7.0.0",

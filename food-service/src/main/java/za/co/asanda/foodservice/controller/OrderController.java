@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import za.co.asanda.foodservice.model.Order;
+import za.co.asanda.foodservice.model.dto.OrderStatusDto;
 import za.co.asanda.foodservice.service.OrderService;
 
 @RestController
@@ -29,5 +30,9 @@ public class OrderController {
 	@GetMapping("/mine")
 	public List<Order> ownerOrders(){
 		return orderService.listMyShopsOrders();
+	}
+	@PostMapping("/status")
+	public Order updateStatus(@RequestBody OrderStatusDto dto) {
+		return orderService.updateOrderStatus(dto.getOrderId(), dto.getStatus());
 	}
 }

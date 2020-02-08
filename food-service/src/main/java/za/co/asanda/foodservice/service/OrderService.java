@@ -10,5 +10,5 @@ public interface OrderService {
 	List<Order> listOrdersByShop(Long shopId);
 	List<Order> listPlacedOrders();
 	List<Order> listMyShopsOrders();
-	Order updateOrderStatus(Order o, OrderStatusType ost);
+	Order updateOrderStatus(long orderId, OrderStatusType ost);
 }

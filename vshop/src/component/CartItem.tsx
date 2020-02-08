@@ -3,9 +3,10 @@ import { Text, View, TouchableOpacity, Image } from 'react-native';
 import styles from '../style';
 import { Common } from '../utils/Common';
 
-export default class CartItem extends React.PureComponent<{onPressItem?:any, item: any}> {
+export default class CartItem extends React.PureComponent<{ onPressItem?: any, item: any }> {
     _onPress = () => {
-        this.props.onPressItem(this.props.item);
+        if (this.props.onPressItem)
+            this.props.onPressItem(this.props.item);
     }
     render() {
         //console.log(this.props.item)
@@ -22,7 +23,7 @@ export default class CartItem extends React.PureComponent<{onPressItem?:any, ite
                     <Text> X {this.props.item.qty}</Text>
                 </View>
                 <View style={styles.cartItemPrice}>
-                    <Text>{Common.formatMoney(this.props.item.product.price * this.props.item.qty)}</Text>
+                    <Text>R {Common.formatMoney(this.props.item.product.price * this.props.item.qty)}</Text>
                 </View>
             </TouchableOpacity>
         )
