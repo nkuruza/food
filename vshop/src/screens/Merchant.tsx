@@ -5,12 +5,14 @@ import { FoodApi } from '../service/FoodApi';
 import { StorageHelper } from '../service/Storage';
 import AuthenticatedScreen from './AuthenticatedScreen';
 import MerchantShop from '../component/MerchantShop';
-import { Shop } from '../model/Shop';
 import { Order } from '../model/Order';
 
 
 export default class Merchant extends AuthenticatedScreen {
     signInComplete(): void {
+        this.refresh()
+    }
+    refresh(){
         this.listShops();
         this.listMyShopOrders();
     }

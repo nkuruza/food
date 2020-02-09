@@ -6,48 +6,51 @@ import CartItem from '../component/CartItem';
 import { Order } from '../model/Order';
 import { FoodApi } from '../service/FoodApi';
 
-let renderHeader = (status, acceptOrder, rejectOrder, prepare, ready) => {
+let renderHeader = (status, nextStatus, rejectOrder, collect) => {
+
     if (status == 'PLACED')
         return (<View style={styles.headerRight}>
 
             <TouchableHighlight onPress={rejectOrder} style={styles.headerButton}>
                 <Text style={{ fontSize: 12 }}>Reject</Text>
             </TouchableHighlight>
-            <TouchableHighlight onPress={acceptOrder} style={styles.headerButton}>
-                <Text style={{ fontSize: 12 }}>Accept</Text>
+            <TouchableHighlight onPress={nextStatus} style={styles.headerButton}>
+                <Text style={{ fontSize: 12 }}>{STATUS_MAP[status].label}</Text>
             </TouchableHighlight>
         </View>);
 
-    if (status == 'ACCEPTED')
+    if (status == 'ACCEPTED' || status == 'PREPARING' || (collect && status == 'READY'))
         return (<View style={styles.headerRight}>
 
-            <TouchableHighlight onPress={prepare} style={styles.headerButton}>
-                <Text style={{ fontSize: 12 }}>Start Preparing</Text>
+            <TouchableHighlight onPress={nextStatus} style={styles.headerButton}>
+                <Text style={{ fontSize: 12 }}>{STATUS_MAP[status].label}</Text>
             </TouchableHighlight>
         </View>);
-    if (status == 'PREPARING')
-        return (<View style={styles.headerRight}>
 
-            <TouchableHighlight onPress={ready} style={styles.headerButton}>
-                <Text style={{ fontSize: 12 }}>Ready</Text>
-            </TouchableHighlight>
-        </View>);
+
+}
+
+const STATUS_MAP = {
+    "PLACED": { next: "ACCEPTED", label: "Accept" },
+    "ACCEPTED": { next: "PREPARING", label: "Start Perparing" },
+    "PREPARING": { next: "READY", label: "Ready" },
+    "READY": { next: "CUSTOMER_ACCEPTED", label: "Customer Collect" },
 }
 
 export default class MerchantOrder extends AuthenticatedScreen {
     static navigationOptions = ({ navigation }) => {
+        // refactor this nonsense
         let order: Order = navigation.getParam('order');
-        let acceptOrder = navigation.getParam('acceptOrder');
+        let nextStatus = navigation.getParam('nextStatus');
         let rejectOrder = navigation.getParam('rejectOrder');
-        let prepare = navigation.getParam('prepare');
-        let ready = navigation.getParam('ready');
+        let collect = navigation.getParam('collect');
         let username = order.customer.username;
         let title: string = `${username}'${username.endsWith('s') ? '' : 's'} order`;
 
 
 
         return {
-            headerRight: renderHeader(order.status.type, acceptOrder, rejectOrder, prepare, ready),
+            headerRight: renderHeader(order.status.type, nextStatus, rejectOrder, collect),
             title: title
         }
     }
@@ -57,10 +60,12 @@ export default class MerchantOrder extends AuthenticatedScreen {
     constructor(props) {
         super(props);
         this.state = { order: { shop: {} } };
-        this.props.navigation.setParams({ acceptOrder: this._acceptOrder })
-        this.props.navigation.setParams({ rejectOrder: this._rejectOrder })
-        this.props.navigation.setParams({ prepare: this._prepare })
-        this.props.navigation.setParams({ ready: this._ready })
+        this.props.navigation.setParams(
+            {
+                nextStatus: this._nextStatus,
+                rejectOrder: this._rejectOrder
+            }
+        );
     }
     componentDidMount() {
         super.componentDidMount();
@@ -68,8 +73,8 @@ export default class MerchantOrder extends AuthenticatedScreen {
         console.log(order);
         this.setState({ order: order });
     }
-    _acceptOrder = () => {
-        this.setStatus("ACCEPTED")
+    _nextStatus = () => {
+        this.setStatus(STATUS_MAP[this.state.order.status.type].next)
     }
 
     _rejectOrder = () => {
@@ -86,8 +91,10 @@ export default class MerchantOrder extends AuthenticatedScreen {
 
     setStatus(status: string) {
         FoodApi.updateOrderStatus({ orderId: this.state.order.id, status: status }).then(response => {
-            this.setState({order: response})
-            this.props.navigation.setParams({order: response});
+            this.setState({ order: response })
+            this.props.navigation.setParams({ order: response });
+            if (response.status.type == "CUSTOMER_ACCEPTED")
+                this.props.navigation.pop();
         }).catch(e => console.log(e));
     }
     _itemSeparator = () => (

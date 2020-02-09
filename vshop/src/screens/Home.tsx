@@ -12,7 +12,7 @@ export default class Home extends AuthenticatedScreen {
         super(props);
         this.state = { shops: [] }
     }
-    willFocusSubscription:any
+    
     componentDidMount() {
         super.componentDidMount();
 
@@ -24,9 +24,7 @@ export default class Home extends AuthenticatedScreen {
         );
     }
 
-    componentWillUnmount() {
-        this.willFocusSubscription.remove();
-    }
+    
 
     signInComplete() {
         if (this.roles.length == 0) this.props.navigation.navigate("UserDetails");

@@ -1,17 +1,27 @@
 import React, { Component } from 'react';
-import {  Text, View, ScrollView, FlatList } from 'react-native';
+import { Text, View, ScrollView, FlatList, TouchableHighlight } from 'react-native';
 import CartItem from '../component/CartItem';
 import styles from '../style';
 import AuthenticatedScreen from './AuthenticatedScreen';
+import QRCode from 'react-native-qrcode';
 
 
 export default class CustomerOrder extends AuthenticatedScreen {
+    static navigationOptions = ({ navigation }) => {
+        return {
+            headerRight: (<TouchableHighlight onPress={navigation.getParam('showScan')} style={styles.headerButton}>
+                <Text>View Order</Text>
+            </TouchableHighlight>),
+            title: 'Market'
+        }
+    }
     signInComplete(): void {
         //throw new Error("Method not implemented.");
     }
     constructor(props) {
         super(props);
         this.state = { order: { shop: {} } };
+        this.props.navigation.setParams({ showCode: this._showCode })
     }
     componentDidMount() {
         super.componentDidMount();
@@ -19,13 +29,15 @@ export default class CustomerOrder extends AuthenticatedScreen {
         console.log(order);
         this.setState({ order: order });
     }
+    _showCode = () => {
+
+    }
     _itemSeparator = () => (
-        <View style={styles.itemSeparator} /> 
+        <View style={styles.itemSeparator} />
     )
     _renderItem = ({ item }) => (
         <CartItem
             item={item}
-            onPressItem={this._onPressItem}
         />
     )
     render() {
@@ -48,8 +60,18 @@ export default class CustomerOrder extends AuthenticatedScreen {
                     data={this.state.order.orderLines}
                     renderItem={this._renderItem} />
                 <View>
-                    <Text>{total}</Text>
+                    <Text>R {total}</Text>
                 </View>
+                <View style={{alignItems: "center", paddingTop: 10}}>
+                <QRCode
+                    
+                    value={`${this.state.order.id}`}
+                    size={250}
+                    bgColor="#000"
+                    fgColor="#fff"
+                />
+                </View>
+                
             </ScrollView>
         )
     }

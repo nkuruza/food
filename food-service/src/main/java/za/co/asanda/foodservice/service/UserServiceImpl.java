@@ -127,7 +127,8 @@ public class UserServiceImpl implements UserService {
 				.add(Arrays.asList(clientRoleRep));
 	}
 
-	private String whoami() {
+	@Override
+	public String whoami() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		return authentication.getName();

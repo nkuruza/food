@@ -48,6 +48,12 @@ export var FoodApi = {
     updateOrderStatus: async (order) => {
         return post(`/orders/status`, order, null);
     },
+    getPendigOrder: async () => {
+        return get(`/orders/pending`);
+    },
+    getOrderById: async(orderId) => {
+        return get(`/orders/${orderId}`);
+    },
     myShopOrders: async () => {
         return get(`/orders/mine`);
     },

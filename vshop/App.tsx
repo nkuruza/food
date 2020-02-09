@@ -15,6 +15,7 @@ import LocationSelector from './src/screens/Map';
 import MarketShop from './src/screens/MarketShop';
 import EditProduct from './src/screens/EditProduct';
 import MerchantOrder from './src/screens/MerchantOrder';
+import ScanCode from './src/screens/ScanCode';
 
 
 
@@ -33,7 +34,8 @@ const MainNavigator = createStackNavigator({
   Map: { screen: LocationSelector },
   MarketShop: { screen: MarketShop },
   EditProduct: {screen: EditProduct },
-  MerchantOrder: { screen: MerchantOrder  }
+  MerchantOrder: { screen: MerchantOrder  },
+  ScanCode: {screen: ScanCode}
 });
 
 const App = createAppContainer(MainNavigator);

@@ -6,8 +6,6 @@ import java.util.List;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import za.co.asanda.foodservice.model.Order;
@@ -48,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public List<Order> listOrdersByShop(Long shopId) {
-		return repo.findByShopId(shopId);
+		return repo.findByShopIdAndStatusTypeNot(shopId, OrderStatusType.CUSTOMER_ACCEPTED.name());
 	}
 
 	@Override
@@ -70,12 +68,17 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public List<Order> listMyShopsOrders() {
-		Long ownerId = 0L;
-		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-		User me = userService.findByUsername(authentication.getName());
-		if (me != null)
-			ownerId = me.getId();
-		return repo.findByShopOwnerId(ownerId);
+		return repo.findByShopOwnerUsernameAndStatusTypeNot(userService.whoami(), OrderStatusType.CUSTOMER_ACCEPTED.name());
+	}
+
+	@Override
+	public Order getMyPendingOrder() {
+		return repo.findByCustomerUsernameAndStatusTypeNot(userService.whoami(), OrderStatusType.CUSTOMER_ACCEPTED.name());
+	}
+
+	@Override
+	public Order getOrder(long orderId) {
+		return repo.findById(orderId).orElse(null);
 	}
 
 }

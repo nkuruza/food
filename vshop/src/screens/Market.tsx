@@ -1,5 +1,5 @@
 import React from 'react';
-import { FlatList, View } from 'react-native';
+import { FlatList, View, TouchableOpacity, TouchableHighlight, Text } from 'react-native';
 import styles from '../style';
 import { FoodApi } from '../service/FoodApi';
 import AuthenticatedScreen from './AuthenticatedScreen';
@@ -9,21 +9,39 @@ import MarketShop from '../component/MarketShop';
 
 
 
-export default class Market extends AuthenticatedScreen{
+export default class Market extends AuthenticatedScreen {
+    static navigationOptions = ({ navigation }) => {
+        return {
+            headerRight: (<TouchableHighlight onPress={navigation.getParam('orders')} style={styles.headerButton}>
+                <Text>View Order</Text>
+            </TouchableHighlight>),
+            title: 'Market'
+        }
+    }
     signInComplete(): void {
         //TODO get the location of the user before listing shops... List shops by radius.
         FoodApi.listShops().then(response => {
             this.setState({ shops: response });
         });
+        FoodApi.getPendigOrder().then(res => {
+            console.log('PENDING', res)
+            this.setState({ order: res });
+        })
+
     }
 
     constructor(props) {
         super(props);
-        this.state = { shops: [] }
+        this.state = { shops: [] };
+        this.props.navigation.setParams({ orders: this._viewOrders })
     }
 
     componentDidMount() {
         super.componentDidMount();
+    }
+
+    _viewOrders = () => {
+        this.props.navigation.navigate("CustomerOrder", { order: this.state.order });
     }
 
     _keyExtractor = (item) => `item-${item.id}`;

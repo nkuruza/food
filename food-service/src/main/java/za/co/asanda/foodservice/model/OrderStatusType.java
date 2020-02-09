@@ -7,7 +7,7 @@ public enum OrderStatusType {
 	ACCEPTED(new OrderStatus("ACCEPTED")),
 	PREPARING(new OrderStatus("PREPARING")), 
 	READY(new OrderStatus("READY")),
-	CUSTOMER_ACCEPTED(new OrderStatus("CUSTOMER ACCEPTED"));
+	CUSTOMER_ACCEPTED(new OrderStatus("CUSTOMER_ACCEPTED"));
 	//@formatter:on
 	private OrderStatus value;
 

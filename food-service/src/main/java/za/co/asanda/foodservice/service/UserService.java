@@ -25,5 +25,7 @@ public interface UserService {
     String encodePassword(String password);
 
 	Long addNew(UserDto user);
+	
+	String whoami();
      
 }

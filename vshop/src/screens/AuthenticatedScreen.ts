@@ -11,7 +11,9 @@ export default abstract class AuthenticatedScreen extends Component<any, any>{
     protected roles: string[] = [];
     protected token: any;
     protected title: string;
-    
+
+    willFocusSubscription: any
+
     componentDidMount() {
         AUTH.getCachedAuth().then(token => {
             if (token) this.completeSignIn(token.accessToken);
@@ -19,6 +21,21 @@ export default abstract class AuthenticatedScreen extends Component<any, any>{
         }).catch(error => {
             this.signIn();
         });
+
+        this.willFocusSubscription = this.props.navigation.addListener(
+            'willFocus',
+            () => {
+                this.refresh();
+            }
+        );
+    }
+    componentWillUnmount() {
+        if (this.willFocusSubscription)
+            this.willFocusSubscription.remove();
+    }
+
+    refresh() {
+
     }
 
     signIn() {

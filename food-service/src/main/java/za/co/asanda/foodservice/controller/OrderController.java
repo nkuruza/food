@@ -31,8 +31,16 @@ public class OrderController {
 	public List<Order> ownerOrders(){
 		return orderService.listMyShopsOrders();
 	}
+	@GetMapping("/{id}")
+	public Order getOrder(@PathVariable("id") Long orderId){
+		return orderService.getOrder(orderId);
+	}
 	@PostMapping("/status")
 	public Order updateStatus(@RequestBody OrderStatusDto dto) {
 		return orderService.updateOrderStatus(dto.getOrderId(), dto.getStatus());
+	}
+	@GetMapping("/pending")
+	public Order getPending(){
+		return orderService.getMyPendingOrder();
 	}
 }
