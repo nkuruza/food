@@ -3,7 +3,7 @@ import { checkStatus } from "../utils/apiUtils";
 import { StorageHelper } from './Storage';
 import { Common } from "../utils/Common";
 
-var url = "https://dev.asandasystems.co.za:8080";
+var url = "https://dev.asandasystems.co.za/food-service";
 
 export var FoodApi = {
     signUp: async (user) => {

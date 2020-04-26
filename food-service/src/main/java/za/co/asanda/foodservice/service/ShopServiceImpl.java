@@ -32,7 +32,6 @@ public class ShopServiceImpl implements ShopService {
 
 	@Override
 	public List<Shop> listShops() {
-		
 		return repo.findAll();
 	}
 

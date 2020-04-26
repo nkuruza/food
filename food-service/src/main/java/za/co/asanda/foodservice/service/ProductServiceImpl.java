@@ -43,8 +43,7 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public Product updateProduct(Product product) {
-		// TODO Auto-generated method stub
-		return null;
+		return productRepo.save(product);
 	}
 
 	@Override

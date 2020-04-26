@@ -10,5 +10,7 @@ public interface OrderService {
 	List<Order> listOrdersByShop(Long shopId);
 	List<Order> listPlacedOrders();
 	List<Order> listMyShopsOrders();
-	Order updateOrderStatus(Order o, OrderStatusType ost);
+	Order getOrder(long orderId);
+	Order getMyPendingOrder();
+	Order updateOrderStatus(long orderId, OrderStatusType ost);
 }

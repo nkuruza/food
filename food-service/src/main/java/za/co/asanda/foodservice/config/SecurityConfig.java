@@ -1,56 +1,44 @@
 package za.co.asanda.foodservice.config;
 
-import javax.sql.DataSource;
-
+import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
-import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
+import org.springframework.security.web.authentication.AuthenticationFailureHandler;
+import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
+import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
+import org.springframework.security.web.session.HttpSessionEventPublisher;
+
+import za.co.asanda.foodservice.handlers.AsandaAuthenticationFailureHandler;
 
 @Configuration
-@EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
+@ComponentScan({ "za.co.asanda.foodservice.controller", "za.co.asanda.foodservice.service",
+		"za.co.asanda.foodservice.repo" })
+public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
+	
 	@Autowired
-	@Qualifier("foodUserDetailsService")
-	private UserDetailsService userDetailsService;
-
+	private AuthenticationEntryPoint unauthorizedHandler;
+	
 	@Autowired
-	private DataSource dataSource;
-
+	private AccessDeniedHandler accessDeniedHandler;
+	
 	@Autowired
-	private RestAuthenticationEntryPoint authEntryPoint;
-
-	@Autowired
-	private AuthenticationSuccessHandler successHandler;
-
-	@Autowired
-	private FoodAccessDeniedHandler accessDeniedHandler;
-
-	private SimpleUrlAuthenticationFailureHandler failureHandler = new SimpleUrlAuthenticationFailureHandler();
-
-	public SecurityConfig() {
-		super();
-		SecurityContextHolder.setStrategyName(SecurityContextHolder.MODE_INHERITABLETHREADLOCAL);
+	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
+		auth.authenticationProvider(keycloakAuthenticationProvider());
 	}
 
-	@Autowired
-	public void configureGlobalSecurity(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(userDetailsService);
-		auth.authenticationProvider(authenticationProvider());
+	@Bean
+	public ServletListenerRegistrationBean<HttpSessionEventPublisher> httpSessionEventPublisher() {
+		return new ServletListenerRegistrationBean<HttpSessionEventPublisher>(new HttpSessionEventPublisher());
 	}
 
 	@Bean
@@ -59,40 +47,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	}
 
 	@Bean
-	public DaoAuthenticationProvider authenticationProvider() {
-		DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
-		authenticationProvider.setUserDetailsService(userDetailsService);
-		authenticationProvider.setPasswordEncoder(passwordEncoder());
-		return authenticationProvider;
+	@Override
+	protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
+		return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
 	}
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.csrf().disable()
-        .authorizeRequests()
-        .and()
-        .exceptionHandling()
-        .accessDeniedHandler(accessDeniedHandler)
-        .authenticationEntryPoint(authEntryPoint)
-        .and()
-        .authorizeRequests()
-        .antMatchers("/", "/login", "/users/add", "/products/list/**").permitAll()
-        .antMatchers("/users/username").authenticated()
-        .antMatchers("/products/add", "/products/remove/**", "/products/update").hasRole("MERCHANT")
-        .and()
-        .formLogin()
-        .successHandler(successHandler)
-        .failureHandler(failureHandler)
-        .and()
-        .httpBasic()
-        .and()
-        .logout();
+		super.configure(http);
+		http.authorizeRequests()
+				.antMatchers("/orders/place").hasRole("CUSTOMER")
+				.antMatchers("/shops/save").hasRole("MERCHANT")
+				.anyRequest().authenticated()
+			.and().exceptionHandling()
+				.accessDeniedHandler(accessDeniedHandler)
+				.authenticationEntryPoint(unauthorizedHandler)
+			.and().csrf().disable();
 	}
-
 	@Bean
-	public PersistentTokenRepository persistentTokenRepository() {
-		JdbcTokenRepositoryImpl tokenRepositoryImpl = new JdbcTokenRepositoryImpl();
-		tokenRepositoryImpl.setDataSource(dataSource);
-		return tokenRepositoryImpl;
+	public AuthenticationFailureHandler asandaAuthenticationFailureHandler() {
+		return new AsandaAuthenticationFailureHandler();
 	}
 }
