@@ -3,8 +3,8 @@ import { checkStatus } from "../utils/apiUtils";
 import { Common, MediaType } from "../utils/Common";
 import { AuthenticationApi } from "./Authentication";
 
-//var url = "https://dev.asandasystems.co.za/food-service";
-var url = "http://192.168.1.2:8081";
+var url = "https://dev.asandasystems.co.za/food-service";
+//var url = "http://192.168.1.2:8081";
 
 const authApi = AuthenticationApi.getInstance();
 
