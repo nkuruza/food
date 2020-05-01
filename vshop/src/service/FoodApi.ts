@@ -51,7 +51,7 @@ export var FoodApi = {
     getPendigOrder: async () => {
         return get(`/orders/pending`);
     },
-    getOrderById: async(orderId) => {
+    getOrderById: async (orderId) => {
         return get(`/orders/${orderId}`);
     },
     myShopOrders: async () => {
@@ -75,7 +75,7 @@ var post = async (endpoint: string, data: any, form: boolean) => {
 var restCall = async (endpoint: string, method?: string, data?: any, form?: boolean) => {
     let contentType = MediaType.APPLICATION_JSON;
     let body = JSON.stringify(data);
-    if(form){
+    if (form) {
         contentType = 'application/x-www-form-urlencoded';
         Common.serializeJSON(data);
     }
@@ -100,11 +100,16 @@ var restCall = async (endpoint: string, method?: string, data?: any, form?: bool
         req.body = body;
     return fetch(`${url}${endpoint}`, req).then(checkStatus)
         .then(response => {
-            console.log(response)
-            return response.json();
-        }).catch(error =>{
-            console.log("ERROR", error)
+            try {
+                return response.json();
+            }
+            catch (e) {
+                return response;
+            }
+
+        }).catch(error => {
             console.log("API Service Error")
+            console.log("ERROR", error)
             throw error;
         });
 }
