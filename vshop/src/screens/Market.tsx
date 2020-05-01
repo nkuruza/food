@@ -13,7 +13,7 @@ export default class Market extends AuthenticatedScreen {
     static navigationOptions = ({ navigation }) => {
         return {
             headerRight: (<TouchableHighlight onPress={navigation.getParam('orders')} style={styles.headerButton}>
-                <Text>View Order</Text>
+                <Text>View Orders</Text>
             </TouchableHighlight>),
             title: 'Market'
         }
@@ -41,7 +41,7 @@ export default class Market extends AuthenticatedScreen {
     }
 
     _viewOrders = () => {
-        this.props.navigation.navigate("CustomerOrder", { order: this.state.order });
+        this.props.navigation.navigate("CustomerOrders");
     }
 
     _keyExtractor = (item) => `item-${item.id}`;

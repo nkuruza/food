@@ -70,6 +70,11 @@ public class OrderServiceImpl implements OrderService {
 	public List<Order> listMyShopsOrders() {
 		return repo.findByShopOwnerUsernameAndStatusTypeNot(userService.whoami(), OrderStatusType.CUSTOMER_ACCEPTED.name());
 	}
+	
+	@Override
+	public List<Order> listOrdersByCustomer() {
+		return repo.findByCustomerUsername(userService.whoami());
+	}
 
 	@Override
 	public Order getMyPendingOrder() {

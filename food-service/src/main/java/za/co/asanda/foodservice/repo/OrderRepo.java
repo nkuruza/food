@@ -12,6 +12,6 @@ public interface OrderRepo extends JpaRepository<Order, Long> {
 	List<Order> findByShopOwnerId(long ownerId);
 	List<Order> findByShopOwnerUsername(String username);
 	List<Order> findByShopOwnerUsernameAndStatusTypeNot(String username, String type);
-	Order findByCustomerUsername(String username);
+	List<Order> findByCustomerUsername(String username);
 	Order findByCustomerUsernameAndStatusTypeNot(String username, String type);
 }

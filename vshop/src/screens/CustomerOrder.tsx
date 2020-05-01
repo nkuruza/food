@@ -58,7 +58,9 @@ export default class CustomerOrder extends AuthenticatedScreen {
                 <FlatList
                     ItemSeparatorComponent={this._itemSeparator}
                     data={this.state.order.orderLines}
-                    renderItem={this._renderItem} />
+                    renderItem={this._renderItem} 
+                    keyExtractor={(item) => "item" + item.id}
+                    />
                 <View>
                     <Text>R {total}</Text>
                 </View>

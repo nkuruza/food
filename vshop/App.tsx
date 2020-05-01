@@ -16,6 +16,7 @@ import MarketShop from './src/screens/MarketShop';
 import EditProduct from './src/screens/EditProduct';
 import MerchantOrder from './src/screens/MerchantOrder';
 import ScanCode from './src/screens/ScanCode';
+import CustomerOrders from './src/screens/CustomerOrders';
 
 
 
@@ -31,6 +32,7 @@ const MainNavigator = createStackNavigator({
   Cart: { screen: Cart },
   CustomerOrder: { screen: CustomerOrder },
   Orders: { screen: Orders },
+  CustomerOrders: { screen: CustomerOrders },
   Map: { screen: LocationSelector },
   MarketShop: { screen: MarketShop },
   EditProduct: {screen: EditProduct },
