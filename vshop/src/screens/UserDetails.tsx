@@ -5,6 +5,7 @@ import { FoodApi } from '../service/FoodApi';
 import AuthenticatedScreen from './AuthenticatedScreen';
 import MapView, { Marker } from 'react-native-maps';
 import LocationAPi from '../service/LocationApi';
+import OneSelector from '../component/OneSelector'
 
 
 
@@ -17,7 +18,7 @@ export default class UserDetails extends AuthenticatedScreen {
     constructor(props) {
         super(props);
         this.state = {
-            userRole: "ROLE_CUSTOMER",
+            userRole: undefined,
             shop: { name: "", address: "", lat: 0, lon: 0 },
             marker: null
         }
@@ -101,6 +102,10 @@ export default class UserDetails extends AuthenticatedScreen {
         });
     }
 
+    _onSelectorAction = (value: string) => {
+        this.setState({ userRole: value })
+    }
+
 
     _logout = () => {
         super.logout();
@@ -109,15 +114,11 @@ export default class UserDetails extends AuthenticatedScreen {
     render() {
         return (
             <View style={styles.container}>
-                <Text style={styles.titleText}>What will you be using VShop as?</Text>
-                <Picker
-                    selectedValue={this.state.userRole}
-                    style={{ height: 40, borderBottomWidth: 1, marginBottom: 10 }}
-                    onValueChange={this._roleValueChanged}>
-
-                    <Picker.Item label="Customer" value="ROLE_CUSTOMER" />
-                    <Picker.Item label="Merchant" value="ROLE_MERCHANT" />
-                </Picker>
+                <OneSelector title="What kind of a user are you?" 
+                onItemAction={this._onSelectorAction} 
+                list={[{ label: "Customer", value: "ROLE_CUSTOMER" }, { label: "Merchant", value: "ROLE_MERCHANT" }]}>
+                    
+                </OneSelector>
                 {
                     this.state.userRole == "ROLE_MERCHANT" ?
                         <TextInput
@@ -159,14 +160,13 @@ export default class UserDetails extends AuthenticatedScreen {
                         : null
                 }
 
-                <TouchableHighlight style={styles.button} onPress={this._onSavePressed} underlayColor='#99d9f4'>
-                    <Text style={styles.buttonText}>Save</Text>
-                </TouchableHighlight>
-
-                <TouchableHighlight style={styles.button} onPress={this._logout} underlayColor='#99d9f4'>
-                    <Text style={styles.buttonText}>Logout</Text>
-                </TouchableHighlight>
-
+                {
+                    this.state.userRole != undefined ?
+                        <TouchableHighlight style={styles.button} onPress={this._onSavePressed} underlayColor='#99d9f4'>
+                            <Text style={styles.buttonText}>Save</Text>
+                        </TouchableHighlight>
+                        : null
+                }
             </View>
 
         )

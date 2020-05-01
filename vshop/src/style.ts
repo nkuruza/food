@@ -28,6 +28,41 @@ export default StyleSheet.create({
         alignSelf: 'stretch',
         justifyContent: 'center'
     },
+    selectorText: {
+        fontSize: 12,
+        color: 'white',
+        alignSelf: 'center'
+    },
+    selectorButton: {
+        backgroundColor: '#48BBEC',
+        borderColor: '#48BBEC',
+        borderWidth: 1,
+        borderRadius: 3,
+        margin: 2,
+        alignSelf: 'stretch',
+        justifyContent: 'center',
+        flex:2
+    },
+    selectorTextSelected: {
+        fontSize: 13,
+        color: '#222',
+        alignSelf: 'center'
+    },
+    selectorButtonSelected: {
+        backgroundColor: '#78EBFC',
+        borderColor: '#48BBEC',
+        borderWidth: 1,
+        borderRadius: 3,
+        margin:2,
+        alignSelf: 'stretch',
+        justifyContent: 'center',
+        flex:3
+    },
+    selectorTitleText: {
+        fontSize: 15,
+        color: '#ccc',
+        alignSelf: 'center'
+    },
     productStepDown: { borderRadius: 50, width: 100, height: 100, borderWidth: 2, borderColor: '#dc7676', },
     productStepUp: { borderRadius: 50, width: 100, height: 100, borderWidth: 2, borderColor: '#76dc76', },
     productStepText: { textAlign: "center", textAlignVertical: "center", fontSize: 50, alignSelf: "stretch", flex: 1 },
