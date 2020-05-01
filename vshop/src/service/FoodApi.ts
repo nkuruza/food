@@ -100,9 +100,11 @@ var restCall = async (endpoint: string, method?: string, data?: any, form?: bool
         req.body = body;
     return fetch(`${url}${endpoint}`, req).then(checkStatus)
         .then(response => {
+            console.log(response)
             return response.json();
         }).catch(error =>{
             console.log("ERROR", error)
+            console.log("API Service Error")
             throw error;
         });
 }

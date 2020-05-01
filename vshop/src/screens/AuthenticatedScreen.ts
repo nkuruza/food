@@ -56,7 +56,10 @@ export default abstract class AuthenticatedScreen extends Component<any, any>{
 
         FoodApi.whoami().then(u => {
             this.user.id = u.id;
-        })
+        }).catch ((e) =>{
+            console.log(e);
+            console.log("no whomai info at this point");
+        });
 
         if (user.resource_access["vshop-server"])
             this.roles = user.resource_access["vshop-server"].roles;
