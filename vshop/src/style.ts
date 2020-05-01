@@ -61,7 +61,7 @@ export default StyleSheet.create({
     selectorTitleText: {
         fontSize: 15,
         color: '#ccc',
-        alignSelf: 'center'
+        alignSelf: 'flex-start'
     },
     productStepDown: { borderRadius: 50, width: 100, height: 100, borderWidth: 2, borderColor: '#dc7676', },
     productStepUp: { borderRadius: 50, width: 100, height: 100, borderWidth: 2, borderColor: '#76dc76', },
