@@ -43,4 +43,8 @@ public class OrderController {
 	public Order getPending(){
 		return orderService.getMyPendingOrder();
 	}
+	@GetMapping("/mine/customer")
+	public List<Order>  getMyOrders(){
+		return orderService.listOrdersByCustomer();
+	}
 }

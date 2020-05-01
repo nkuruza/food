@@ -57,6 +57,9 @@ export var FoodApi = {
     myShopOrders: async () => {
         return get(`/orders/mine`);
     },
+    listCustomerOrders: async () => {
+        return get(`/orders/mine/customer`);
+    },
     listShopOrders: async (shopId) => {
         return get(`/orders/shop/${shopId}`);
     },
