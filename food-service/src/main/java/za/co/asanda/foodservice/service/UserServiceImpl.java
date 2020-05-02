@@ -3,6 +3,9 @@ package za.co.asanda.foodservice.service;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+
 import za.co.asanda.foodservice.model.Shop;
 import za.co.asanda.foodservice.model.User;
 import za.co.asanda.foodservice.model.dto.UserDto;
@@ -132,6 +135,18 @@ public class UserServiceImpl implements UserService {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		return authentication.getName();
+	}
+	
+	@Autowired
+	private HttpServletRequest request;
+	
+	@Override
+	public void logout() {
+		try {
+			request.logout();
+		} catch (ServletException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

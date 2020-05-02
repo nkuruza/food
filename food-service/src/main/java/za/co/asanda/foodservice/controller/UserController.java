@@ -57,4 +57,9 @@ public class UserController {
 	public Long newUser(@RequestBody UserDto user) {
 		return userService.addNew(user);
 	}
+	
+	@GetMapping("/logout")
+	public void logout() {
+		userService.logout();
+	}
 }

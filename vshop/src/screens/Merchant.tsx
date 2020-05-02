@@ -9,10 +9,22 @@ import { Order } from '../model/Order';
 
 
 export default class Merchant extends AuthenticatedScreen {
+    static navigationOptions = ({ navigation }) => {
+        return {
+            headerRight: (
+                <View style={{ flexDirection: "row" }}>
+                    <TouchableHighlight onPress={navigation.getParam('logout')} style={styles.headerButton}>
+                        <Text>Logout</Text>
+                    </TouchableHighlight>
+                </View>
+            ),
+            title: 'My Shops'
+        }
+    }
     signInComplete(): void {
         this.refresh()
     }
-    refresh(){
+    refresh() {
         this.listShops();
         this.listMyShopOrders();
     }
@@ -27,7 +39,7 @@ export default class Merchant extends AuthenticatedScreen {
     listShops() {
         FoodApi.listMyShops().then(response => {
             this.setState({ shops: response });
-            
+
         })
             .catch(e => {
                 if (e.response.status === 401) {
@@ -87,7 +99,7 @@ export default class Merchant extends AuthenticatedScreen {
     _keyExtractor = (item) => `item-${item.id}`;
 
 
-    _onItemAction = ({shop}, action: string) => {
+    _onItemAction = ({ shop }, action: string) => {
         if (action == "orders")
             this.props.navigation.navigate("Orders", { shopId: shop.id });
         else if (action == "view")
@@ -100,7 +112,7 @@ export default class Merchant extends AuthenticatedScreen {
     )
     _renderItem = ({ item }) => (
         <MerchantShop
-            item={{shop: item, orders: this.getShopOrders(item.id)}}
+            item={{ shop: item, orders: this.getShopOrders(item.id) }}
             onItemAction={this._onItemAction}
         />
     )
