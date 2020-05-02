@@ -27,7 +27,7 @@ const MainNavigator = createStackNavigator({
   Store: { screen: Store },
   FoodItem: { screen: FoodItem },
   Merchant: { screen: Merchant },
-  ShopForm: { screen: ShopForm },
+  ShopForm: { screen: ShopForm, navigationOptions:{title: "Create Shop"}  },
   Product: { screen: Product },
   Cart: { screen: Cart },
   CustomerOrder: { screen: CustomerOrder },
