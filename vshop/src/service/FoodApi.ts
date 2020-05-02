@@ -40,13 +40,13 @@ export var FoodApi = {
         return get(`/shops/mine`)
     },
     saveShop: async (shop) => {
-        return post(`/shops/save`, shop, null);
+        return post(`/shops/save`, shop);
     },
     placeOrder: async (order) => {
-        return post(`/orders/place`, order, null);
+        return post(`/orders/place`, order);
     },
     updateOrderStatus: async (order) => {
-        return post(`/orders/status`, order, null);
+        return post(`/orders/status`, order);
     },
     getPendigOrder: async () => {
         return get(`/orders/pending`);
@@ -65,13 +65,19 @@ export var FoodApi = {
     },
     mapKey: async () => {
         return get("/users/mapkey")
+    },
+    logout: async () => {
+        return get("/users/logout");
+    },
+    ssologout: async ():Promise<any> => {
+        return post('https://auth.asandasystems.co.za/auth/realms/virtual-shop/protocol/openid-connect/logout', { client_id: "vshop-server" }, true);
     }
 }
 
 var get = async (endpoint: string) => {
     return restCall(endpoint);
 }
-var post = async (endpoint: string, data: any, form: boolean) => {
+var post = async (endpoint: string, data: any, form?: boolean) => {
     return restCall(endpoint, 'POST', data, form || null);
 }
 

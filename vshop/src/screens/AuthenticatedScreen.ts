@@ -2,6 +2,7 @@ import { Component } from "react";
 import { AuthenticationApi } from "../service/Authentication";
 import { Base64 } from "../utils/Base64";
 import { FoodApi } from "../service/FoodApi";
+import { BackHandler } from "react-native";
 
 let AUTH: AuthenticationApi = AuthenticationApi.getInstance();
 
@@ -13,6 +14,11 @@ export default abstract class AuthenticatedScreen extends Component<any, any>{
     protected title: string;
 
     willFocusSubscription: any
+
+    constructor(props){
+        super(props);
+        this.props.navigation.setParams({ logout: this._logout });
+    }
 
     componentDidMount() {
         AUTH.getCachedAuth().then(token => {
@@ -56,7 +62,7 @@ export default abstract class AuthenticatedScreen extends Component<any, any>{
 
         FoodApi.whoami().then(u => {
             this.user.id = u.id;
-        }).catch ((e) =>{
+        }).catch((e) => {
             console.log(e);
             console.log("no whomai info at this point");
         });
@@ -79,10 +85,17 @@ export default abstract class AuthenticatedScreen extends Component<any, any>{
     }
     abstract signInComplete(): void;
 
+    _logout = () => {
+        this.logout();
+    }
+
     logout() {
         AUTH.getCachedAuth().then(token => {
-            AUTH.signOut(token);
-        })
+            AUTH.signOut(token).then((v) => {
+                console.log("LOGOUT", v);
+                this.props.navigation.replace("Home");
+            });
+        });
 
     }
 }

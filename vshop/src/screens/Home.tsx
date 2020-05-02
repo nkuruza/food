@@ -17,6 +17,10 @@ export default class Home extends AuthenticatedScreen {
         super.componentDidMount();
     }
 
+    referesh(){
+        this.signIn();
+    }
+
 
 
     signInComplete() {

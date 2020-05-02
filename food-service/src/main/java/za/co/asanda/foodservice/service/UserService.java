@@ -27,5 +27,7 @@ public interface UserService {
 	Long addNew(UserDto user);
 	
 	String whoami();
+	
+	void logout();
      
 }
