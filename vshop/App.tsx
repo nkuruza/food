@@ -1,5 +1,5 @@
 import { createAppContainer } from 'react-navigation';
-import { createStackNavigator } from 'react-navigation-stack';
+import { createStackNavigator, NavigationStackScreenComponent } from 'react-navigation-stack';
 import Store from './src/screens/Store';
 import FoodItem from './src/screens/FoodItem';
 import Market from './src/screens/Market';
@@ -23,21 +23,21 @@ import CustomerOrders from './src/screens/CustomerOrders';
 const MainNavigator = createStackNavigator({
   Home: { screen: Home },
   UserDetails: { screen: UserDetails },
-  Market: { screen: Market },
+  Market: { screen: Market as NavigationStackScreenComponent },
   Store: { screen: Store },
   FoodItem: { screen: FoodItem },
-  Merchant: { screen: Merchant },
-  ShopForm: { screen: ShopForm, navigationOptions:{title: "Create Shop"}  },
+  Merchant: { screen: Merchant as NavigationStackScreenComponent },
+  ShopForm: { screen: ShopForm },
   Product: { screen: Product },
   Cart: { screen: Cart },
-  CustomerOrder: { screen: CustomerOrder },
-  Orders: { screen: Orders },
+  CustomerOrder: { screen: CustomerOrder as NavigationStackScreenComponent },
+  Orders: { screen: Orders as NavigationStackScreenComponent },
   CustomerOrders: { screen: CustomerOrders },
   Map: { screen: LocationSelector },
-  MarketShop: { screen: MarketShop },
-  EditProduct: {screen: EditProduct },
-  MerchantOrder: { screen: MerchantOrder  },
-  ScanCode: {screen: ScanCode}
+  MarketShop: { screen: MarketShop as NavigationStackScreenComponent },
+  EditProduct: { screen: EditProduct },
+  MerchantOrder: { screen: MerchantOrder as NavigationStackScreenComponent },
+  ScanCode: { screen: ScanCode }
 });
 
 const App = createAppContainer(MainNavigator);

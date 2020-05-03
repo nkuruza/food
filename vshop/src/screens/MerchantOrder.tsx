@@ -118,19 +118,19 @@ export default class MerchantOrder extends AuthenticatedScreen {
         let dateCreated = new Date(this.state.order.dateCreated).toLocaleDateString('en-za', dateOptions);
         let status = this.state.order.status ? this.state.order.status.type : '';
         return (
-            <ScrollView>
+            <View>
                 <Text>{name}</Text>
                 <Text>{dateCreated}</Text>
                 <Text>{status}</Text>
+
                 <FlatList
                     ItemSeparatorComponent={this._itemSeparator}
                     data={this.state.order.orderLines}
                     keyExtractor={this._keyExtractor}
                     renderItem={this._renderItem} />
-                <View>
-                    <Text>TOTAL: R {total}</Text>
-                </View>
-            </ScrollView>
+
+                <Text>TOTAL: R {total}</Text>
+            </View>
         )
     }
 }

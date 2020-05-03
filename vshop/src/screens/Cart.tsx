@@ -10,7 +10,7 @@ export default class CartScreen extends AuthenticatedScreen{
     signInComplete(): void {
         
     }
-    static navigationOptions = ({ navigation }) => {
+    /*static navigationOptions = ({ navigation }) => {
         return {
             headerRight: (
                 <TouchableHighlight onPress={navigation.getParam('clearCart')} style={styles.headerButton}>
@@ -19,7 +19,7 @@ export default class CartScreen extends AuthenticatedScreen{
             ),
             
         }
-    }
+    }*/
 
     constructor(props) {
         super(props);
