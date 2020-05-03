@@ -55,12 +55,16 @@ export default class Market extends AuthenticatedScreen {
     _itemSeparator = () => (
         <View style={styles.itemSeparator} />
     )
-    _renderItem = ({ item }) => (
-        <MarketShop
-            item={item}
-            onItemAction={this._onPressItem}
-        />
-    )
+    _renderItem = ({ item }) => {
+        item.token = this.token;
+        console.log(item);
+        return (
+            <MarketShop
+                item={item}
+                onItemAction={this._onPressItem}
+            />
+        )
+    }
     render() {
         return (
             <View>

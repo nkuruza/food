@@ -12,8 +12,8 @@ export var FoodApi = {
     signUp: async (user) => {
         return post(`/users/add`, user, null);
     },
-    newUser: async (user) => {
-        return post(`/users/new`, user, null);
+    newUser: async (role, name, address, lon, lat, image) => {
+        return postUser(role, name, address, lon, lat, image);
     },
     whoami: async () => {
         return get(`/users/me`)
@@ -72,6 +72,9 @@ export var FoodApi = {
     },
     getImage: async (name) => {
         return get(`/files/download/${name}`);
+    },
+    getImageUrl: (name) => {
+        return `${url}/files/download/${name}`
     }
 }
 
@@ -106,19 +109,62 @@ var postShop = async (shop) => {
             Authorization: "Bearer " + auth.accessToken
         },
     }).then(checkStatus)
-    .then(response => {
-        try {
-            return response.json();
-        }
-        catch (e) {
-            return response;
-        }
+        .then(response => {
+            try {
+                return response.json();
+            }
+            catch (e) {
+                return response;
+            }
 
-    }).catch(error => {
-        console.log("API Service Error")
-        console.log("ERROR", error)
-        throw error;
-    });
+        }).catch(error => {
+            console.log("API Service Error")
+            console.log("ERROR", error)
+            throw error;
+        });
+
+}
+
+var postUser = async (role, name, address, lon, lat, image) => {
+    let filename = null;
+    let type = null;
+    let auth = await authApi.getCachedAuth();
+    let formData = new FormData();
+    let path = null;
+    
+    let req = {
+        method: 'POST',
+        headers: {
+            Authorization: "Bearer " + auth.accessToken
+        }
+    }
+    if (role == "ROLE_MERCHANT" && image != null) {
+        filename = image.split('/').pop();
+        let match = /\.(\w+)$/.exec(filename);
+        type = match ? `image/${match[1]}` : `image`;
+        formData.append('image', { uri: image, name: filename, type });
+        formData.append('name', name)
+        formData.append('address', address)
+        formData.append('lon', lon)
+        formData.append('lat', lat)
+        formData.append('role', role)
+        req.body = formData;
+        req.headers["Content-Type"] = 'multipart/form-data'
+        path = "/users/new";
+    }
+    else {
+        path = "/users/newcustomer";
+    }
+    console.log(`HERE IS THE YRL: ${url}${path}`);
+
+    return await fetch(`${url}${path}`, req).then(checkStatus)
+        .then(response => {
+            return response;
+        }).catch(error => {
+            console.log("API Service Error")
+            console.log("ERROR", error)
+            throw error;
+        });
 
 }
 

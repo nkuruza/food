@@ -12,12 +12,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 import za.co.asanda.foodservice.model.Shop;
 import za.co.asanda.foodservice.service.ShopService;
+import za.co.asanda.foodservice.service.UserService;
 
 @RestController
 @RequestMapping("/shops")
 public class ShopController {
 	@Autowired
 	private ShopService service;
+	@Autowired
+	private UserService userService;
+	
 	@GetMapping("/list")
 	public List<Shop> listAllShops(){
 		return service.listShops();
@@ -34,6 +38,7 @@ public class ShopController {
 		shop.setAddress(address);
 		shop.setLat(lat);
 		shop.setLon(lon);
+		shop.setOwner(userService.findByUsername(userService.whoami()));
 		return service.saveShop(shop, image);
 	}
 }

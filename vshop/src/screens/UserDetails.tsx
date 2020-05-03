@@ -1,27 +1,35 @@
 import React from 'react';
-import { FlatList, View, TextInput, Picker, Text, TouchableHighlight } from 'react-native';
+import { FlatList, View, TextInput, Picker, Text, TouchableHighlight, Dimensions, Image } from 'react-native';
 import styles from '../style';
 import { FoodApi } from '../service/FoodApi';
 import AuthenticatedScreen from './AuthenticatedScreen';
 import MapView, { Marker } from 'react-native-maps';
 import LocationAPi from '../service/LocationApi';
 import OneSelector from '../component/OneSelector'
+import * as ImagePicker from 'expo-image-picker';
+import Constants from 'expo-constants';
+import * as Permissions from 'expo-permissions';
 
 
 
 
 export default class UserDetails extends AuthenticatedScreen {
-    signInComplete(): void {
-
-    }
+    
+    private aspectX: number = 16;
+    private aspectY: number = 7;
 
     constructor(props) {
         super(props);
         this.state = {
             userRole: undefined,
             shop: { name: "", address: "", lat: 0, lon: 0 },
-            marker: null
+            marker: null,
+            step: 0
         }
+    }
+
+    signInComplete(): void {
+
     }
 
     componentDidMount() {
@@ -72,12 +80,11 @@ export default class UserDetails extends AuthenticatedScreen {
         if (this.state.userRole == "ROLE_MERCHANT") {
             user.shop = this.state.shop;
         }
-        FoodApi.newUser(user).then(response => {
+        let shop = this.state.shop;
+        FoodApi.newUser(this.state.userRole, shop.name, shop.address, shop.lon, shop.lat, shop.image).then(response => {
+            console.log("User Added", response)
             if (response > 0) {
-                super.refreshToken().then(() => {
-                    this.props.navigation.pop();
-                });
-
+                super.signIn();
             }
         })
     }
@@ -102,6 +109,45 @@ export default class UserDetails extends AuthenticatedScreen {
         });
     }
 
+    _onPrevPressed = () => {
+        this.setState({ step: this.state.step - 1 });
+    }
+
+    _onNextPressed = () => {
+        this.setState({ step: this.state.step + 1 });
+    }
+
+    getPermissionAsync = async () => {
+        if (Constants.platform.ios) {
+            const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+            if (status !== 'granted') {
+                alert('Sorry, we need camera roll permissions to make this work!');
+            }
+        }
+    };
+
+    _pickImage = async () => {
+        try {
+            let result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaTypeOptions.All,
+                allowsEditing: true,
+                aspect: [16, 7],
+                quality: 1,
+            });
+            if (!result.cancelled) {
+                this.setState(prevState => {
+                    let shop = Object.assign({}, prevState.shop);
+                    shop.image = result.uri;
+                    return { shop };
+                });
+            }
+
+            console.log(result);
+        } catch (E) {
+            console.log(E);
+        }
+    };
+
     _onSelectorAction = (value: string) => {
         this.setState({ userRole: value })
     }
@@ -112,6 +158,7 @@ export default class UserDetails extends AuthenticatedScreen {
     }
 
     render() {
+        const { image } = this.state.shop;
         return (
             <View style={styles.container}>
                 <OneSelector title="What kind of a user are you?" 
@@ -121,43 +168,63 @@ export default class UserDetails extends AuthenticatedScreen {
                 </OneSelector>
                 {
                     this.state.userRole == "ROLE_MERCHANT" ?
-                        <TextInput
-                            style={{ height: 40, borderBottomWidth: 1, marginBottom: 10 }}
-                            placeholder="Name of the shop"
-                            onChangeText={this._nameValueChanged}
-                            value={this.state.shop.name}
-                        /> : null
-                }
-                {
-                    this.state.userRole == "ROLE_MERCHANT" ?
-                        <TextInput
-                            style={{ height: 100, borderBottomWidth: 1, marginBottom: 10 }}
-                            placeholder="Address"
-                            multiline
-                            numberOfLines={4}
-                            onChangeText={this._addressValueChanged}
-                            value={this.state.shop.address}
-                        /> : null}
-                {
-                    this.state.userRole == "ROLE_MERCHANT" && this.state.location ?
-                        <TouchableHighlight style={{ width: 80 }} onPress={this._onMapPressed} underlayColor='#99d9f4'>
-                            <MapView
-                                zoomEnabled={true}
-                                showsUserLocation={true}
-                                initialRegion={{
-                                    latitude: this.state.location.coords.latitude,
-                                    longitude: this.state.location.coords.longitude,
-                                    latitudeDelta: 0.0922,
-                                    longitudeDelta: 0.0421,
-                                }} style={styles.mapThumbnail}>
-                                {
-                                    this.state.marker ?
-                                        <Marker key={1} coordinate={this.state.marker.latlng} />
-                                        : null
-                                }
-                            </MapView>
-                        </TouchableHighlight>
-                        : null
+                    <View style={styles.container}>
+                    {
+                        this.state.step == 0 ?
+                            <View style={{ flexDirection: "column" }}>
+                                <TextInput
+                                    style={{ height: 40, borderBottomWidth: 1, marginBottom: 10 }}
+                                    placeholder="Name of the shop"
+                                    onChangeText={this._nameValueChanged}
+                                    value={this.state.shop.name}
+                                />
+                                <View style={{
+                                    height: this.aspectY * (Dimensions.get("window").width - 40) / this.aspectX,
+                                    width: Dimensions.get("window").width - 40,
+                                    backgroundColor: "#eee",
+                                    borderWidth: 0.5,
+                                    borderColor: "#red",
+                                    marginBottom: 5
+                                }}>
+                                    {image ? (
+                                        <Image source={{ uri: image }} style={{ flex: 1 }} />
+                                    ) : (
+                                            <View />
+                                        )}
+                                </View>
+                                <TouchableHighlight style={styles.button} onPress={this._pickImage} underlayColor='#99d9f4'>
+                                    <Text style={styles.buttonText}>Select Image</Text>
+                                </TouchableHighlight>
+                                <TouchableHighlight style={styles.button} onPress={this._onNextPressed} underlayColor='#99d9f4'>
+                                    <Text style={styles.buttonText}>Next</Text>
+                                </TouchableHighlight>
+                            </View>
+                            : null
+                    }
+    
+                    {
+                        this.state.step == 1 ?
+                            <View>
+                                <TextInput
+                                    style={{ height: 40, borderBottomWidth: 1, marginBottom: 10 }}
+                                    placeholder="Address"
+                                    onChangeText={this._addressValueChanged}
+                                    value={this.state.shop.address}
+                                />
+                                <TouchableHighlight style={styles.button} onPress={this._onMapPressed} underlayColor='#99d9f4'>
+                                    <Text style={styles.buttonText}>Select location</Text>
+                                </TouchableHighlight>
+                                <View style={{ flexDirection: "row" }}>
+                                    <TouchableHighlight style={styles.button} onPress={this._onPrevPressed} underlayColor='#99d9f4'>
+                                        <Text style={styles.buttonText}>Prev</Text>
+                                    </TouchableHighlight>
+                                    <TouchableHighlight style={styles.button} onPress={this._onSavePressed} underlayColor='#99d9f4'>
+                                        <Text style={styles.buttonText}>Save</Text>
+                                    </TouchableHighlight>
+                                </View>
+                            </View> : null
+                    }
+                </View> : null
                 }
 
                 {

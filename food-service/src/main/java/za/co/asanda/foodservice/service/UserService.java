@@ -2,8 +2,9 @@ package za.co.asanda.foodservice.service;
 
 import java.util.List;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import za.co.asanda.foodservice.model.User;
-import za.co.asanda.foodservice.model.dto.UserDto;
 
 
 public interface UserService {
@@ -24,7 +25,9 @@ public interface UserService {
     
     String encodePassword(String password);
 
-	Long addNew(UserDto user);
+	Long addNew();
+	
+	Long addNew(String role, MultipartFile image, String name, String address, Double lon, Double lat);
 	
 	String whoami();
 	

@@ -2,6 +2,7 @@ import React from 'react';
 import { Text, View, TouchableOpacity, Image, Dimensions } from 'react-native';
 import styles from '../style';
 import { ActionableItem } from '../model/ActionableItem';
+import { FoodApi } from '../service/FoodApi';
 
 export default class MarketShop extends React.PureComponent<ActionableItem> {
 
@@ -12,7 +13,7 @@ export default class MarketShop extends React.PureComponent<ActionableItem> {
         return (
             <TouchableOpacity style={styles.marketShop} onPress={this._onItemPressed}>
                 <View style={styles.marketShopImageContainer}>
-                    <Image style={styles.marketShopImage} source={require('../img/roast.png')} />
+                    <Image style={styles.marketShopImage} source={{ uri: FoodApi.getImageUrl(this.props.item.image), headers: { Authorization: "Bearer " + this.props.item.token } }} />
                 </View>
                 <View style={{ marginLeft: 10, }}>
                     <Text style={{ fontSize: 18, fontWeight: "bold", }}>{this.props.item.name}, {this.props.item.address}</Text>
