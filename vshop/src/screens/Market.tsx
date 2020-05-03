@@ -12,7 +12,7 @@ import MarketShop from '../component/MarketShop';
 export default class Market extends AuthenticatedScreen {
     static navigationOptions = ({ navigation }) => {
         return {
-            headerRight: (
+            headerRight: () => (
                 <View style={{ flexDirection: "row" }}>
                     <TouchableHighlight onPress={navigation.getParam('orders')} style={styles.headerButton}>
                         <Text>View Orders</Text>

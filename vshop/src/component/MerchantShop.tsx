@@ -5,6 +5,9 @@ import { ActionableItem } from '../model/ActionableItem';
 
 
 export default class MerchantShop extends React.PureComponent<ActionableItem> {
+    componentDidMount(){
+        //FoodApi.getImage(this.props.item)
+    }
     _onViewPressed = () => {
         this.props.onItemAction(this.props.item, "view");
     }
@@ -30,7 +33,7 @@ export default class MerchantShop extends React.PureComponent<ActionableItem> {
                     </TouchableOpacity>
                 </View>
                 <View style={{ flexDirection: "row", borderWidth: 1, }}>
-                    <Image source={require('../img/roast.png')} style={styles.merchantShopImage} />
+                    <Image source={{ uri: `https://dev.asandasystems.co.za/food-service/files/download/${this.props.item.shop.image}`, headers: {Authorization: "Bearer " + this.props.item.shop.token} }} style={styles.merchantShopImage} />
                     <View style={styles.merchantShopDetails}>
                         <Text style={{ fontSize: 18, fontWeight: "bold", alignSelf: "center" }}>{this.props.item.shop.name}</Text>
                         <Text>{this.props.item.shop.address}</Text>

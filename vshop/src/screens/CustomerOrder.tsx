@@ -3,13 +3,12 @@ import { Text, View, ScrollView, FlatList, TouchableHighlight } from 'react-nati
 import CartItem from '../component/CartItem';
 import styles from '../style';
 import AuthenticatedScreen from './AuthenticatedScreen';
-import QRCode from 'react-native-qrcode';
 
 
 export default class CustomerOrder extends AuthenticatedScreen {
     static navigationOptions = ({ navigation }) => {
         return {
-            headerRight: (<TouchableHighlight onPress={navigation.getParam('showScan')} style={styles.headerButton}>
+            headerRight: () => (<TouchableHighlight onPress={navigation.getParam('showScan')} style={styles.headerButton}>
                 <Text>View Order</Text>
             </TouchableHighlight>),
             title: 'Market'
@@ -58,22 +57,16 @@ export default class CustomerOrder extends AuthenticatedScreen {
                 <FlatList
                     ItemSeparatorComponent={this._itemSeparator}
                     data={this.state.order.orderLines}
-                    renderItem={this._renderItem} 
+                    renderItem={this._renderItem}
                     keyExtractor={(item) => "item" + item.id}
-                    />
+                />
                 <View>
                     <Text>R {total}</Text>
                 </View>
-                <View style={{alignItems: "center", paddingTop: 10}}>
-                <QRCode
-                    
-                    value={`${this.state.order.id}`}
-                    size={250}
-                    bgColor="#000"
-                    fgColor="#fff"
-                />
+                <View style={{ alignItems: "center", paddingTop: 10 }}>
+
                 </View>
-                
+
             </ScrollView>
         )
     }

@@ -40,7 +40,8 @@ export var FoodApi = {
         return get(`/shops/mine`)
     },
     saveShop: async (shop) => {
-        return post(`/shops/save`, shop);
+        //return post(`/shops/save`, shop, true);
+        return postShop(shop)
     },
     placeOrder: async (order) => {
         return post(`/orders/place`, order);
@@ -69,8 +70,8 @@ export var FoodApi = {
     logout: async () => {
         return get("/users/logout");
     },
-    ssologout: async ():Promise<any> => {
-        return post('https://auth.asandasystems.co.za/auth/realms/virtual-shop/protocol/openid-connect/logout', { client_id: "vshop-server" }, true);
+    getImage: async (name) => {
+        return get(`/files/download/${name}`);
     }
 }
 
@@ -79,6 +80,46 @@ var get = async (endpoint: string) => {
 }
 var post = async (endpoint: string, data: any, form?: boolean) => {
     return restCall(endpoint, 'POST', data, form || null);
+}
+
+var postShop = async (shop) => {
+
+    let filename = shop.image.split('/').pop();
+    let match = /\.(\w+)$/.exec(filename);
+    let type = match ? `image/${match[1]}` : `image`;
+
+    let auth = await authApi.getCachedAuth();
+
+
+    let formData = new FormData();
+    formData.append('image', { uri: shop.image, name: filename, type });
+    formData.append('name', shop.name)
+    formData.append('address', shop.address)
+    formData.append('lon', shop.lon)
+    formData.append('lat', shop.lat)
+
+    return await fetch(`${url}/shops/save`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: "Bearer " + auth.accessToken
+        },
+    }).then(checkStatus)
+    .then(response => {
+        try {
+            return response.json();
+        }
+        catch (e) {
+            return response;
+        }
+
+    }).catch(error => {
+        console.log("API Service Error")
+        console.log("ERROR", error)
+        throw error;
+    });
+
 }
 
 var restCall = async (endpoint: string, method?: string, data?: any, form?: boolean) => {

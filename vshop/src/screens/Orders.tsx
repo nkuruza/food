@@ -9,18 +9,19 @@ import { TouchableHighlight } from 'react-native-gesture-handler';
 
 
 export default class Orders extends AuthenticatedScreen {
-    static navigationOptions = ({navigation}) => {
+    static navigationOptions = ({ navigation }) => {
         return {
-            headerRight:(<TouchableHighlight onPress={navigation.getParam('scanCode')} style={styles.headerButton}>
-            <Text>Scan Order</Text>
-        </TouchableHighlight>), 
+            headerRight: () => (
+                <TouchableHighlight onPress={navigation.getParam('scanCode')} style={styles.headerButton}>
+                    <Text>Scan Order</Text>
+                </TouchableHighlight>),
             title: "Orders"
         }
     }
     signInComplete(): void {
         this.refresh();
     }
-    refresh(){
+    refresh() {
         let shopId = this.props.navigation.getParam('shopId')
         FoodApi.listShopOrders(shopId).then(orders => {
             this.setState({ orders: orders });
@@ -34,7 +35,7 @@ export default class Orders extends AuthenticatedScreen {
     componentDidMount() {
         super.componentDidMount();
     }
-    componentWillUnmount(){
+    componentWillUnmount() {
         super.componentWillUnmount();
     }
 

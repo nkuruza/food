@@ -15,7 +15,7 @@ export default class MarketShop extends AuthenticatedScreen {
     static navigationOptions = ({ navigation }) => {
         let count = navigation.getParam('numCartItems');
         return {
-            headerRight: (
+            headerRight: () => (
                 <View style={styles.headerRight}>
                     {
                         count > 0 ?

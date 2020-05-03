@@ -11,7 +11,7 @@ import { Order } from '../model/Order';
 export default class Merchant extends AuthenticatedScreen {
     static navigationOptions = ({ navigation }) => {
         return {
-            headerRight: (
+            headerRight: () => (
                 <View style={{ flexDirection: "row" }}>
                     <TouchableHighlight onPress={navigation.getParam('logout')} style={styles.headerButton}>
                         <Text>Logout</Text>
@@ -25,6 +25,7 @@ export default class Merchant extends AuthenticatedScreen {
         this.refresh()
     }
     refresh() {
+        console.log("ACCESS:", this.token)
         this.listShops();
         this.listMyShopOrders();
     }
@@ -110,15 +111,19 @@ export default class Merchant extends AuthenticatedScreen {
     _itemSeparator = () => (
         <View style={styles.itemSeparator} />
     )
-    _renderItem = ({ item }) => (
-        <MerchantShop
-            item={{ shop: item, orders: this.getShopOrders(item.id) }}
-            onItemAction={this._onItemAction}
-        />
-    )
+    _renderItem = ({ item }) => {
+        item.token = this.token;
+        return (
+
+            <MerchantShop
+                item={{ shop: item, orders: this.getShopOrders(item.id) }}
+                onItemAction={this._onItemAction}
+            />
+        )
+    }
     render() {
         return (
-            <ScrollView>
+            <View>
                 <TouchableHighlight style={styles.button} onPress={this._createShop} underlayColor='#99d9f4'>
                     <Text style={styles.buttonText}>Create Shop</Text>
                 </TouchableHighlight>
@@ -128,7 +133,7 @@ export default class Merchant extends AuthenticatedScreen {
                     data={this.state.shops}
                     keyExtractor={this._keyExtractor}
                     renderItem={this._renderItem} />
-            </ScrollView>
+            </View>
         )
     }
 }
