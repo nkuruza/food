@@ -10,10 +10,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import za.co.asanda.foodservice.model.User;
-import za.co.asanda.foodservice.model.dto.UserDto;
 import za.co.asanda.foodservice.service.ApiKeyService;
 import za.co.asanda.foodservice.service.UserService;
 
@@ -54,8 +55,13 @@ public class UserController {
 	}
 	
 	@PostMapping("/new")
-	public Long newUser(@RequestBody UserDto user) {
-		return userService.addNew(user);
+	public Long saveUser(String role, @RequestParam("image") MultipartFile image, String name, String address, Double lon, Double lat) {
+		return userService.addNew(role, image, name, address, lon, lat);
+	}
+	
+	@PostMapping("/newcustomer")
+	public Long saveUser() {
+		return userService.addNew();
 	}
 	
 	@GetMapping("/logout")

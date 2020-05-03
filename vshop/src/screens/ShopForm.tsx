@@ -129,7 +129,6 @@ export default class ShopForm extends AuthenticatedScreen {
 
     render() {
         const { image } = this.state.shop;
-        console.log("IMAGE", image)
         return (
             <View style={styles.container}>
                 {
