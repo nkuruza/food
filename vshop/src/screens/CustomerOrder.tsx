@@ -1,17 +1,26 @@
 import React, { Component } from 'react';
-import {  Text, View, ScrollView, FlatList } from 'react-native';
+import { Text, View, ScrollView, FlatList, TouchableHighlight } from 'react-native';
 import CartItem from '../component/CartItem';
 import styles from '../style';
 import AuthenticatedScreen from './AuthenticatedScreen';
 
 
 export default class CustomerOrder extends AuthenticatedScreen {
+    static navigationOptions = ({ navigation }) => {
+        return {
+            headerRight: () => (<TouchableHighlight onPress={navigation.getParam('showScan')} style={styles.headerButton}>
+                <Text>View Order</Text>
+            </TouchableHighlight>),
+            title: 'Market'
+        }
+    }
     signInComplete(): void {
         //throw new Error("Method not implemented.");
     }
     constructor(props) {
         super(props);
         this.state = { order: { shop: {} } };
+        this.props.navigation.setParams({ showCode: this._showCode })
     }
     componentDidMount() {
         super.componentDidMount();
@@ -19,20 +28,22 @@ export default class CustomerOrder extends AuthenticatedScreen {
         console.log(order);
         this.setState({ order: order });
     }
+    _showCode = () => {
+
+    }
     _itemSeparator = () => (
-        <View style={styles.itemSeparator} /> 
+        <View style={styles.itemSeparator} />
     )
     _renderItem = ({ item }) => (
         <CartItem
             item={item}
-            onPressItem={this._onPressItem}
         />
     )
     render() {
         var dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit', hour12: true };
         let total = 0;
         if (this.state.order.orderLines) {
-            for (line of this.state.order.orderLines)
+            for (let line of this.state.order.orderLines)
                 total += (line.qty * line.product.price)
         }
         let name = this.state.order.shop.name;
@@ -46,10 +57,16 @@ export default class CustomerOrder extends AuthenticatedScreen {
                 <FlatList
                     ItemSeparatorComponent={this._itemSeparator}
                     data={this.state.order.orderLines}
-                    renderItem={this._renderItem} />
+                    renderItem={this._renderItem}
+                    keyExtractor={(item) => "item" + item.id}
+                />
                 <View>
-                    <Text>{total}</Text>
+                    <Text>R {total}</Text>
                 </View>
+                <View style={{ alignItems: "center", paddingTop: 10 }}>
+
+                </View>
+
             </ScrollView>
         )
     }

@@ -5,15 +5,29 @@ import { FoodApi } from '../service/FoodApi';
 import { StorageHelper } from '../service/Storage';
 import AuthenticatedScreen from './AuthenticatedScreen';
 import MerchantShop from '../component/MerchantShop';
-import { Shop } from '../model/Shop';
 import { Order } from '../model/Order';
 
 
 export default class Merchant extends AuthenticatedScreen {
+    static navigationOptions = ({ navigation }) => {
+        return {
+            headerRight: () => (
+                <View style={{ flexDirection: "row" }}>
+                    <TouchableHighlight onPress={navigation.getParam('logout')} style={styles.headerButton}>
+                        <Text>Logout</Text>
+                    </TouchableHighlight>
+                </View>
+            ),
+            title: 'My Shops'
+        }
+    }
     signInComplete(): void {
-        console.log("about to list shops")
+        this.refresh()
+    }
+    refresh() {
+        console.log("ACCESS:", this.token)
         this.listShops();
-        this.listMyShopOrders()
+        this.listMyShopOrders();
     }
     constructor(props) {
         super(props);
@@ -22,6 +36,22 @@ export default class Merchant extends AuthenticatedScreen {
     componentDidMount() {
         super.componentDidMount();
 
+    }
+    listShops() {
+        FoodApi.listMyShops().then(response => {
+            this.setState({ shops: response });
+
+        })
+            .catch(e => {
+                if (e.response.status === 401) {
+                    console.log('unauthorized')
+                    ToastAndroid.show("You are not allowed to list shops", ToastAndroid.LONG)
+                }
+                else {
+                    console.log(e);
+                }
+
+            });
     }
     listMyShopOrders() {
         FoodApi.myShopOrders().then(response => {
@@ -48,24 +78,6 @@ export default class Merchant extends AuthenticatedScreen {
         console.log("SHOPS", shops)
     }
 
-    listShops() {
-        FoodApi.listMyShops().then(response => {
-
-            this.setState({ shops: response });
-        })
-
-            .catch(e => {
-                if (e.response.status === 401) {
-                    console.log('unauthorized')
-                    ToastAndroid.show("You are not allowed to list shops", ToastAndroid.LONG)
-                }
-                else {
-                    console.log(e);
-                }
-
-            });
-    }
-
     getShopOrders(id: number): Order[] {
         let orders: Order[] = [];
         for (let order of this.state.orders) {
@@ -88,30 +100,30 @@ export default class Merchant extends AuthenticatedScreen {
     _keyExtractor = (item) => `item-${item.id}`;
 
 
-    _onItemAction = (shop: Shop, action: string) => {
-        console.log("ACTION")
+    _onItemAction = ({ shop }, action: string) => {
         if (action == "orders")
             this.props.navigation.navigate("Orders", { shopId: shop.id });
         else if (action == "view")
             this.props.navigation.navigate("Store", { store: shop });
 
-        console.log("ACTION")
     }
 
     _itemSeparator = () => (
         <View style={styles.itemSeparator} />
     )
-    _renderItem = ({ item }) => (
-        <MerchantShop
-        role={super.getRole()}
-            orders={this.getShopOrders(item.id)}
-            shop={item}
-            onMerchantShopItemAction={this._onItemAction}
-        />
-    )
+    _renderItem = ({ item }) => {
+        item.token = this.token;
+        return (
+
+            <MerchantShop
+                item={{ shop: item, orders: this.getShopOrders(item.id) }}
+                onItemAction={this._onItemAction}
+            />
+        )
+    }
     render() {
         return (
-            <ScrollView>
+            <View>
                 <TouchableHighlight style={styles.button} onPress={this._createShop} underlayColor='#99d9f4'>
                     <Text style={styles.buttonText}>Create Shop</Text>
                 </TouchableHighlight>
@@ -121,7 +133,7 @@ export default class Merchant extends AuthenticatedScreen {
                     data={this.state.shops}
                     keyExtractor={this._keyExtractor}
                     renderItem={this._renderItem} />
-            </ScrollView>
+            </View>
         )
     }
 }

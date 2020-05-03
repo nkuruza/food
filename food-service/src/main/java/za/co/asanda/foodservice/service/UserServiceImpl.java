@@ -3,10 +3,11 @@ package za.co.asanda.foodservice.service;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+
 import za.co.asanda.foodservice.model.Shop;
 import za.co.asanda.foodservice.model.User;
-import za.co.asanda.foodservice.model.dto.UserDto;
-import za.co.asanda.foodservice.repo.ShopRepo;
 import za.co.asanda.foodservice.repo.UserRepository;
 
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
@@ -22,6 +23,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service("userService")
 @Transactional
@@ -31,7 +33,7 @@ public class UserServiceImpl implements UserService {
 	private UserRepository userRepo;
 
 	@Autowired
-	private ShopRepo shopRepo;
+	private ShopService shopService;
 
 	public User save(User user) {
 
@@ -87,7 +89,7 @@ public class UserServiceImpl implements UserService {
 	String kcResource;
 
 	@Override
-	public Long addNew(UserDto userDto) {
+	public Long addNew() {
 		User user = new User();
 		String username = whoami();
 		user.setUsername(username);
@@ -96,13 +98,31 @@ public class UserServiceImpl implements UserService {
 
 		if (user.getId() == null)
 			System.out.println("Problem");
-		if (userDto.getShop() != null && userDto.getRole().equals("ROLE_MERCHANT")) {
-			Shop shop = userDto.getShop();
-			shop.setOwner(user);
-			shop = shopRepo.save(shop);
-		}
-		addSSOUser(username, userDto.getRole());
 
+		addSSOUser(username, "ROLE_CUSTOMER");
+
+		return user.getId();
+	}
+
+	@Override
+	public Long addNew(String role, MultipartFile image, String name, String address, Double lon, Double lat) {
+		User user = new User();
+		String username = whoami();
+		user.setUsername(username);
+		user = userRepo.save(user);
+
+		if (user.getId() == null)
+			System.out.println("Problem");
+		if (role.equals("ROLE_MERCHANT")) {
+			Shop shop = new Shop();
+			shop.setAddress(address);
+			shop.setName(name);
+			shop.setLon(lon);
+			shop.setLat(lat);
+			shop.setOwner(user);
+			shop = shopService.saveShop(shop, image);
+		}
+		addSSOUser(username, role);
 		return user.getId();
 	}
 
@@ -127,10 +147,23 @@ public class UserServiceImpl implements UserService {
 				.add(Arrays.asList(clientRoleRep));
 	}
 
-	private String whoami() {
+	@Override
+	public String whoami() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
 		return authentication.getName();
+	}
+
+	@Autowired
+	private HttpServletRequest request;
+
+	@Override
+	public void logout() {
+		try {
+			request.logout();
+		} catch (ServletException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

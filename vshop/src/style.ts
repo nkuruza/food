@@ -28,19 +28,55 @@ export default StyleSheet.create({
         alignSelf: 'stretch',
         justifyContent: 'center'
     },
+    selectorText: {
+        fontSize: 12,
+        color: 'white',
+        alignSelf: 'center'
+    },
+    selectorButton: {
+        backgroundColor: '#48BBEC',
+        borderColor: '#48BBEC',
+        borderWidth: 1,
+        borderRadius: 3,
+        margin: 2,
+        alignSelf: 'stretch',
+        justifyContent: 'center',
+        flex:2
+    },
+    selectorTextSelected: {
+        fontSize: 13,
+        color: '#222',
+        alignSelf: 'center'
+    },
+    selectorButtonSelected: {
+        backgroundColor: '#78EBFC',
+        borderColor: '#48BBEC',
+        borderWidth: 1,
+        borderRadius: 3,
+        margin:2,
+        alignSelf: 'stretch',
+        justifyContent: 'center',
+        flex:3
+    },
+    selectorTitleText: {
+        fontSize: 15,
+        color: '#ccc',
+        alignSelf: 'flex-start'
+    },
     productStepDown: { borderRadius: 50, width: 100, height: 100, borderWidth: 2, borderColor: '#dc7676', },
     productStepUp: { borderRadius: 50, width: 100, height: 100, borderWidth: 2, borderColor: '#76dc76', },
     productStepText: { textAlign: "center", textAlignVertical: "center", fontSize: 50, alignSelf: "stretch", flex: 1 },
     counterText: { fontSize: 50, margin: 10, textAlignVertical: "center", },
     itemActionButton: {
         backgroundColor: '#48BBEC',
-        borderColor: '#48BBEC',
+        minWidth: 50,
         borderWidth: 1,
-        borderRadius: 8,
+        borderRadius: 5,
         alignSelf: 'stretch',
         justifyContent: 'center',
-        padding: 3,
-        marginRight: 2
+        paddingLeft: 5,
+        paddingRight: 5,
+        marginRight: 5
     },
     itemActionButtonText: {
         fontSize: 14,
@@ -142,6 +178,12 @@ export default StyleSheet.create({
         flexDirection: 'row',
         padding: 5,
     },
+    merchantOrderItem: {
+        alignSelf: 'stretch',
+        flex: 1,
+        flexDirection: 'row',
+        padding: 5,
+    },
     itemSeparator: {
         borderWidth: 1,
         borderColor: '#222',
@@ -149,12 +191,17 @@ export default StyleSheet.create({
         marginLeft: '7%'
     },
     headerRight: {
+        flexDirection: "row"
     },
     headerButton: {
         flexDirection: 'row',
         flex: 1,
-        width: 40, height: 20,
-        borderRadius: 10,
+        borderRadius: 5,
+        borderWidth: 1,
+        marginLeft: 3,
+        marginRight: 3,
+        paddingLeft: 5,
+        paddingRight: 5,
     },
     orderItem: {
         flexDirection: 'row',
@@ -193,13 +240,15 @@ export default StyleSheet.create({
         flex: 1
     },
     orderStatus: {
-        padding: 5,
-        flex: 1
+        marginLeft: 5,
+        marginRight: 5,
+        padding: 2,
+        flex: 1,
     },
     placed: {
         backgroundColor: '#dd2222'
     },
-    viewed: {
+    rejected: {
         backgroundColor: '#22ddff'
     },
     accepted: {

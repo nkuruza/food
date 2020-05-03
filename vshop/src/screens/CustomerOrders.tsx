@@ -5,16 +5,12 @@ import { FoodApi } from '../service/FoodApi';
 import { OrderLine } from '../model/OrderLine';
 import AuthenticatedScreen from './AuthenticatedScreen';
 import MerchantOrderItem from '../component/MerchantOrderItem';
-import { TouchableHighlight } from 'react-native-gesture-handler';
+import CustomerOrderItem from '../component/CustomerOrderItem';
 
 
-export default class Orders extends AuthenticatedScreen {
-    static navigationOptions = ({ navigation }) => {
+export default class CustomerOrders extends AuthenticatedScreen {
+    static navigationOptions = ({}) => {
         return {
-            headerRight: () => (
-                <TouchableHighlight onPress={navigation.getParam('scanCode')} style={styles.headerButton}>
-                    <Text>Scan Order</Text>
-                </TouchableHighlight>),
             title: "Orders"
         }
     }
@@ -22,25 +18,20 @@ export default class Orders extends AuthenticatedScreen {
         this.refresh();
     }
     refresh() {
-        let shopId = this.props.navigation.getParam('shopId')
-        FoodApi.listShopOrders(shopId).then(orders => {
+        
+        FoodApi.listCustomerOrders().then(orders => {
             this.setState({ orders: orders });
         })
     }
     constructor(props) {
         super(props);
         this.state = { data: [] };
-        this.props.navigation.setParams({ scanCode: this._scanCode })
     }
     componentDidMount() {
         super.componentDidMount();
     }
     componentWillUnmount() {
         super.componentWillUnmount();
-    }
-
-    _scanCode = () => {
-        this.props.navigation.navigate("ScanCode");
     }
 
     getTotal(lines: OrderLine[]) {
@@ -55,11 +46,11 @@ export default class Orders extends AuthenticatedScreen {
     )
 
     _viewOrder = (order) => {
-        this.props.navigation.navigate("MerchantOrder", { order: order });
+        this.props.navigation.navigate("CustomerOrder", { order: order });
     }
 
     _renderItem = ({ item }) => (
-        <MerchantOrderItem
+        <CustomerOrderItem
             item={item}
             onItemAction={this._viewOrder}
         />
