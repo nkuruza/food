@@ -6,7 +6,6 @@ import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
-import za.co.asanda.foodservice.model.Shop;
 import za.co.asanda.foodservice.model.User;
 import za.co.asanda.foodservice.repo.UserRepository;
 
@@ -28,6 +27,15 @@ import org.springframework.web.multipart.MultipartFile;
 @Service("userService")
 @Transactional
 public class UserServiceImpl implements UserService {
+
+	@Value("${keycloak.auth-server-url}")
+	String kcUrl;
+
+	@Value("${keycloak.realm}")
+	String kcRealm;
+
+	@Value("${keycloak.resource}")
+	String kcResource;
 
 	@Autowired
 	private UserRepository userRepo;
@@ -79,15 +87,6 @@ public class UserServiceImpl implements UserService {
 		return ""; // passwordEncoder.encode(password);
 	}
 
-	@Value("${keycloak.auth-server-url}")
-	String kcUrl;
-
-	@Value("${keycloak.realm}")
-	String kcRealm;
-
-	@Value("${keycloak.resource}")
-	String kcResource;
-
 	@Override
 	public Long addNew() {
 		User user = new User();
@@ -113,16 +112,10 @@ public class UserServiceImpl implements UserService {
 
 		if (user.getId() == null)
 			System.out.println("Problem");
-		if (role.equals("ROLE_MERCHANT")) {
-			Shop shop = new Shop();
-			shop.setAddress(address);
-			shop.setName(name);
-			shop.setLon(lon);
-			shop.setLat(lat);
-			shop.setOwner(user);
-			shop = shopService.saveShop(shop, image);
-		}
-		addSSOUser(username, role);
+		if (role.equals("ROLE_MERCHANT"))
+			shopService.saveShop(image, username, address, lon, lat);
+		if (!role.equals("ROLE_ADMIN"))
+			addSSOUser(username, role);
 		return user.getId();
 	}
 

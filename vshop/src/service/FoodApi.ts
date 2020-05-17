@@ -1,10 +1,11 @@
-
+// TODO REFACTOR THIS NONSENSE
 import { checkStatus } from "../utils/apiUtils";
 import { Common, MediaType } from "../utils/Common";
 import { AuthenticationApi } from "./Authentication";
 
-var url = "https://dev.asandasystems.co.za/food-service";
-//var url = "http://192.168.1.2:8081";
+//TODO read the below from a config file.
+//var url = "https://dev.asandasystems.co.za/food-service";
+var url = "http://192.168.1.2:8081";
 
 const authApi = AuthenticationApi.getInstance();
 
@@ -36,11 +37,13 @@ export var FoodApi = {
     listShops: async () => {
         return get(`/shops/list`);
     },
+    listMarketShops: async (loc) => {
+        return post(`/shops/market`, loc);
+    },
     listMyShops: async () => {
         return get(`/shops/mine`)
     },
     saveShop: async (shop) => {
-        //return post(`/shops/save`, shop, true);
         return postShop(shop)
     },
     placeOrder: async (order) => {

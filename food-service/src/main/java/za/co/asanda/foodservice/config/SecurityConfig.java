@@ -72,6 +72,7 @@ public class SecurityConfig extends KeycloakWebSecurityConfigurerAdapter {
         	authorizeRequests()
 				.antMatchers("/orders/place").hasRole("CUSTOMER")
 				.antMatchers("/shops/save").hasRole("MERCHANT")
+				.antMatchers("/admin/**").hasRole("ADMIN")
 				.anyRequest().authenticated()
 			.and().exceptionHandling()
 				.accessDeniedHandler(accessDeniedHandler)

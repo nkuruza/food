@@ -9,6 +9,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
 @Entity
 public class Shop implements Serializable {
@@ -19,13 +21,16 @@ public class Shop implements Serializable {
 	private Long id;
 	@Column(nullable = false)
 	private String name;
-	@Column(nullable = false)
-	private String address;
-	private Double lat;
-	private Double lon;
 	private String image;
 	@ManyToOne(fetch = FetchType.LAZY)
 	private User owner;
+	@OneToOne
+	private Location location;
+	
+	private boolean approved = false;
+	
+	@Transient
+	private double distance;
 
 	public Long getId() {
 		return id;
@@ -43,30 +48,6 @@ public class Shop implements Serializable {
 		this.name = name;
 	}
 
-	public String getAddress() {
-		return address;
-	}
-
-	public void setAddress(String address) {
-		this.address = address;
-	}
-
-	public Double getLat() {
-		return lat;
-	}
-
-	public void setLat(Double lat) {
-		this.lat = lat;
-	}
-
-	public Double getLon() {
-		return lon;
-	}
-
-	public void setLon(Double lon) {
-		this.lon = lon;
-	}
-
 	public String getImage() {
 		return image;
 	}
@@ -81,6 +62,30 @@ public class Shop implements Serializable {
 
 	public void setOwner(User owner) {
 		this.owner = owner;
+	}
+
+	public Location getLocation() {
+		return location;
+	}
+
+	public void setLocation(Location location) {
+		this.location = location;
+	}
+
+	public boolean isApproved() {
+		return approved;
+	}
+
+	public void setApproved(boolean approved) {
+		this.approved = approved;
+	}
+
+	public double getDistance() {
+		return distance;
+	}
+
+	public void setDistance(double distance) {
+		this.distance = distance;
 	}
 
 }

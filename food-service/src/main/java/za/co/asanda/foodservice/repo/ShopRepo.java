@@ -8,4 +8,5 @@ import za.co.asanda.foodservice.model.Shop;
 
 public interface ShopRepo extends JpaRepository<Shop, Long> {
 	List<Shop> findByOwnerUsername(String username);
+	List<Shop> findByApproved(boolean approved);
 }

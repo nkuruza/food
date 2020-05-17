@@ -4,6 +4,7 @@ import styles from '../style';
 import { FoodApi } from '../service/FoodApi';
 import AuthenticatedScreen from './AuthenticatedScreen';
 import MarketShop from '../component/MarketShop';
+import LocationAPi from '../service/LocationApi';
 
 
 
@@ -26,9 +27,14 @@ export default class Market extends AuthenticatedScreen {
         }
     }
     signInComplete(): void {
-        FoodApi.listShops().then(response => {
-            this.setState({ shops: response });
+        let locApi = new LocationAPi();
+        locApi.getLocation().then(location => {
+            let loc = { lon: location.coords.longitude, lat: location.coords.latitude };
+            FoodApi.listMarketShops(loc).then(response => {
+                this.setState({ shops: response });
+            });
         });
+
 
     }
 
@@ -57,7 +63,7 @@ export default class Market extends AuthenticatedScreen {
     )
     _renderItem = ({ item }) => {
         item.token = this.token;
-        console.log(item);
+        //console.log(item);
         return (
             <MarketShop
                 item={item}
