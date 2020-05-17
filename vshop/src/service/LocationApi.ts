@@ -23,7 +23,6 @@ export default class LocationAPi {
     }
 
     let location = await Location.getCurrentPositionAsync({});
-    console.log(location);
     return location;
   };  
 }

@@ -23,47 +23,52 @@ import za.co.asanda.foodservice.service.UserService;
 public class UserController {
 	@Autowired
 	UserService userService;
-	
+
 	@Autowired
 	ApiKeyService apiKeyService;
-	
+
 	@GetMapping("/list")
-	public List<User> getAllUsers(){
+	public List<User> getAllUsers() {
 		return userService.findAllUsers();
 	}
-	
+
 	@PostMapping("/add")
-	public User addUser(@RequestBody User user){
+	public User addUser(@RequestBody User user) {
 		return userService.save(user);
 	}
+
 	@GetMapping("/username")
 	public String getUsername() {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		return authentication.getName();
 	}
+
 	@GetMapping("/me")
 	public User whoAmI() {
 		return userService.findByUsername(getUsername());
 	}
+
 	@GetMapping("/encode/{password}")
 	public String encode(@PathVariable("password") String password) {
 		return userService.encodePassword(password);
 	}
+
 	@GetMapping("/mapkey")
 	public String getMapKey() {
 		return apiKeyService.getByName("googlemaps");
 	}
-	
+
 	@PostMapping("/new")
-	public Long saveUser(String role, @RequestParam("image") MultipartFile image, String name, String address, Double lon, Double lat) {
+	public Long saveUser(String role, @RequestParam("image") MultipartFile image, String name, String address,
+			Double lon, Double lat) {
 		return userService.addNew(role, image, name, address, lon, lat);
 	}
-	
+
 	@PostMapping("/newcustomer")
 	public Long saveUser() {
 		return userService.addNew();
 	}
-	
+
 	@GetMapping("/logout")
 	public void logout() {
 		userService.logout();

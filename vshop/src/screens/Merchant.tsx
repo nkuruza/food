@@ -1,26 +1,16 @@
 import React, { Component } from 'react';
-import { FlatList, View, TouchableHighlight, Text, ToastAndroid, ScrollView } from 'react-native';
+import { FlatList, View, Text, ToastAndroid, ScrollView } from 'react-native';
 import styles from '../style';
 import { FoodApi } from '../service/FoodApi';
 import { StorageHelper } from '../service/Storage';
 import AuthenticatedScreen from './AuthenticatedScreen';
 import MerchantShop from '../component/MerchantShop';
+import Menu from '../component/Menu';
 import { Order } from '../model/Order';
+import { TouchableHighlight } from 'react-native-gesture-handler';
 
 
 export default class Merchant extends AuthenticatedScreen {
-    static navigationOptions = ({ navigation }) => {
-        return {
-            headerRight: () => (
-                <View style={{ flexDirection: "row" }}>
-                    <TouchableHighlight onPress={navigation.getParam('logout')} style={styles.headerButton}>
-                        <Text>Logout</Text>
-                    </TouchableHighlight>
-                </View>
-            ),
-            title: 'My Shops'
-        }
-    }
     signInComplete(): void {
         this.refresh()
     }
@@ -94,18 +84,25 @@ export default class Merchant extends AuthenticatedScreen {
             }
         });
     }
-    _logout = () => {
-        super.logout();
-    }
+
     _keyExtractor = (item) => `item-${item.id}`;
 
 
     _onItemAction = ({ shop }, action: string) => {
         if (action == "orders")
-            this.props.navigation.navigate("Orders", { shopId: shop.id });
+            this.props.navigation.replace("Orders", { shopId: shop.id });
         else if (action == "view")
-            this.props.navigation.navigate("Store", { store: shop });
+            this.props.navigation.replace("Store", { store: shop });
 
+    }
+
+    _onMenuAction = (item: string, action: string) => {
+        switch (item) {
+            case "logout":
+                super.logout();
+                break;
+
+        }
     }
 
     _itemSeparator = () => (
@@ -123,16 +120,25 @@ export default class Merchant extends AuthenticatedScreen {
     }
     render() {
         return (
-            <View>
-                <TouchableHighlight style={styles.button} onPress={this._createShop} underlayColor='#99d9f4'>
-                    <Text style={styles.buttonText}>Create Shop</Text>
-                </TouchableHighlight>
+            <View style={{ flexDirection: "row" }}>
+                <View style={{ flex: 2 }}>
+                    <TouchableHighlight style={styles.button} onPress={this._createShop} underlayColor='#99d9f4'>
+                        <Text style={styles.buttonText}>Create Shop</Text>
+                    </TouchableHighlight>
 
-                <FlatList
-                    ItemSeparatorComponent={this._itemSeparator}
-                    data={this.state.shops}
-                    keyExtractor={this._keyExtractor}
-                    renderItem={this._renderItem} />
+                    <FlatList
+                        ItemSeparatorComponent={this._itemSeparator}
+                        data={this.state.shops}
+                        keyExtractor={this._keyExtractor}
+                        renderItem={this._renderItem} />
+                </View>
+                {
+                    this.state.showMenu ?
+                        <Menu onAction={this._onMenuAction} role={this.state.role}>
+
+                        </Menu> : null
+                }
+
             </View>
         )
     }

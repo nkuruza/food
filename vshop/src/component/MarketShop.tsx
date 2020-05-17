@@ -3,6 +3,7 @@ import { Text, View, TouchableOpacity, Image, Dimensions } from 'react-native';
 import styles from '../style';
 import { ActionableItem } from '../model/ActionableItem';
 import { FoodApi } from '../service/FoodApi';
+import { Common } from '../utils/Common';
 
 export default class MarketShop extends React.PureComponent<ActionableItem> {
 
@@ -20,8 +21,8 @@ export default class MarketShop extends React.PureComponent<ActionableItem> {
                     <Text>Category</Text>
                 </View>
                 <View style={{ flexDirection: "row", marginLeft: 10 }}>
-                    <Text style={styles.tagItem}>2km</Text>
-                    <Text style={styles.tagItem}>3/5</Text>
+                    <Text style={styles.tagItem}>{Common.formatDistance(this.props.item.distance)}</Text>
+                    <Text style={styles.tagItem}>6/10</Text>
                     <Text style={styles.tagItem}>20 - 30 minutes</Text>
                 </View>
             </TouchableOpacity>

@@ -1,23 +1,14 @@
 import React from 'react';
-import { View, FlatList, Text } from 'react-native';
+import { View, FlatList, Text, TouchableHighlight } from 'react-native';
 import styles from '../style';
 import { FoodApi } from '../service/FoodApi';
 import { OrderLine } from '../model/OrderLine';
 import AuthenticatedScreen from './AuthenticatedScreen';
 import MerchantOrderItem from '../component/MerchantOrderItem';
-import { TouchableHighlight } from 'react-native-gesture-handler';
 
 
 export default class Orders extends AuthenticatedScreen {
-    static navigationOptions = ({ navigation }) => {
-        return {
-            headerRight: () => (
-                <TouchableHighlight onPress={navigation.getParam('scanCode')} style={styles.headerButton}>
-                    <Text>Scan Order</Text>
-                </TouchableHighlight>),
-            title: "Orders"
-        }
-    }
+    
     signInComplete(): void {
         this.refresh();
     }
@@ -30,7 +21,6 @@ export default class Orders extends AuthenticatedScreen {
     constructor(props) {
         super(props);
         this.state = { data: [] };
-        this.props.navigation.setParams({ scanCode: this._scanCode })
     }
     componentDidMount() {
         super.componentDidMount();
@@ -66,12 +56,18 @@ export default class Orders extends AuthenticatedScreen {
     )
     render() {
         return (
-            <FlatList
-                data={this.state.orders}
-                renderItem={this._renderItem}
-                keyExtractor={(item) => "item" + item.id}
-                ItemSeparatorComponent={this._itemSeparator}
-            />
+            <View>
+                <TouchableHighlight onPress={this._scanCode} style={styles.button}>
+                    <Text style={styles.buttonText}>Scan Order</Text>
+                </TouchableHighlight>
+                <FlatList
+                    data={this.state.orders}
+                    renderItem={this._renderItem}
+                    keyExtractor={(item) => "item" + item.id}
+                    ItemSeparatorComponent={this._itemSeparator}
+                />
+            </View>
+
 
         )
     }

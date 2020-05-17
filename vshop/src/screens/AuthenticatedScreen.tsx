@@ -1,8 +1,10 @@
+import React from 'react';
 import { Component } from "react";
 import { AuthenticationApi } from "../service/Authentication";
 import { Base64 } from "../utils/Base64";
 import { FoodApi } from "../service/FoodApi";
-import { BackHandler } from "react-native";
+import { TouchableHighlight, Text } from "react-native";
+import styles from '../style';
 
 let AUTH: AuthenticationApi = AuthenticationApi.getInstance();
 
@@ -15,9 +17,17 @@ export default abstract class AuthenticatedScreen extends Component<any, any>{
 
     willFocusSubscription: any
 
-    constructor(props){
+    static navigationOptions = ({ navigation }) => {
+        return {
+            headerRight: () => (
+                <TouchableHighlight onPress={navigation.getParam('toggleMenu')} style={styles.headerButton}>
+                    <Text>Menu</Text>
+                </TouchableHighlight>)
+        }
+    }
+    constructor(props) {
         super(props);
-        this.props.navigation.setParams({ logout: this._logout });
+        this.props.navigation.setParams({ toggleMenu: this._toggleMenu });
     }
 
     componentDidMount() {
@@ -85,17 +95,14 @@ export default abstract class AuthenticatedScreen extends Component<any, any>{
     }
     abstract signInComplete(): void;
 
-    _logout = () => {
-        this.logout();
+    _toggleMenu = () => {
+        this.setState({showMenu: !this.state.showMenu})
     }
 
-    logout() {
-        AUTH.getCachedAuth().then(token => {
-            AUTH.signOut(token).then((v) => {
-                console.log("LOGOUT", v);
-                this.props.navigation.replace("Home");
-            });
-        });
-
+    async logout() {
+        let token = await AUTH.getCachedAuth();
+        if (token)
+            await AUTH.signOut(token);
+        this.props.navigation.replace("Home");
     }
 }

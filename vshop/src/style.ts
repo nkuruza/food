@@ -41,7 +41,7 @@ export default StyleSheet.create({
         margin: 2,
         alignSelf: 'stretch',
         justifyContent: 'center',
-        flex:2
+        flex: 2
     },
     selectorTextSelected: {
         fontSize: 13,
@@ -53,10 +53,10 @@ export default StyleSheet.create({
         borderColor: '#48BBEC',
         borderWidth: 1,
         borderRadius: 3,
-        margin:2,
+        margin: 2,
         alignSelf: 'stretch',
         justifyContent: 'center',
-        flex:3
+        flex: 3
     },
     selectorTitleText: {
         fontSize: 15,
@@ -268,4 +268,23 @@ export default StyleSheet.create({
         width: 100,
         height: 100,
     },
+    menuItem: {
+        backgroundColor: "#ccc",
+        borderBottomWidth: 1,
+        padding: 2,
+        flexDirection: "row",
+        height: 26,
+    },
+    menuItemIcon: {
+        flex: 1, 
+        alignSelf: "flex-start"
+    },
+    menuItemCount: {
+        borderWidth: 1, 
+        borderRadius: 10, 
+        width: 20, 
+        height: 20, 
+        textAlign: "center"
+    }
+
 });

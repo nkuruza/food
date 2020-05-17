@@ -6,6 +6,15 @@ export var Common = {
     },
     formatMoney: (money:number) => {
         return money.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    },
+    formatDistance: (meters: number) => {
+        let dist:number = meters;
+        let unit = "m";
+        if(meters > 1000){
+            dist = meters / 1000;
+            unit = "km";
+        }
+        return `${Math.round(dist * 10) / 10} ${unit}`
     }
 }
 export interface Props {
